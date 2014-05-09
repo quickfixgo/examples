@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/quickfix/errors"
-	"github.com/quickfixgo/quickfix/fix"
-	"github.com/quickfixgo/quickfix/fix/enum"
-	"github.com/quickfixgo/quickfix/log"
 	"github.com/quickfixgo/quickfix/message"
-	"github.com/quickfixgo/quickfix/settings"
+	"os"
 )
 
 type TradeClient struct {
@@ -39,42 +36,33 @@ func (e TradeClient) ToApp(msg message.MessageBuilder, sessionID quickfix.Sessio
 }
 
 func (e TradeClient) FromApp(msg message.Message, sessionID quickfix.SessionID) (reject errors.MessageRejectError) {
+	fmt.Println("FromApp: ", msg)
 	return
 }
 
 func main() {
-	globalSettings := settings.NewDictionary()
-	globalSettings.SetString(settings.SocketConnectHost, "127.0.0.1")
-	globalSettings.SetInt(settings.SocketConnectPort, 5001)
-	globalSettings.SetInt(settings.HeartBtInt, 30)
-	globalSettings.SetString(settings.SenderCompID, "TW")
-	globalSettings.SetString(settings.TargetCompID, "ISLD")
-	globalSettings.SetBool(settings.ResetOnLogon, true)
+	cfgFileName := "tradeclient.cfg"
+	cfg, err := os.Open(cfgFileName)
+	if err != nil {
+		fmt.Printf("Error opening %v, %v\n", cfgFileName, err)
+		return
+	}
 
-	appSettings := settings.NewApplicationSettings(globalSettings)
+	appSettings, err := quickfix.ParseSettings(cfg)
+	if err != nil {
+		fmt.Println("Error reading cfg,", err)
+		return
+	}
 
-	appSettings.AddSession("FIX40", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIX40))
+	app := TradeClient{}
+	fileLogFactory, err := quickfix.NewFileLogFactory(appSettings)
 
-	appSettings.AddSession("FIX41", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIX41))
+	if err != nil {
+		fmt.Println("Error creating file log factory,", err)
+		return
+	}
 
-	appSettings.AddSession("FIX42", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIX42))
-
-	appSettings.AddSession("FIX43", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIX43))
-
-	appSettings.AddSession("FIX44", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIX44))
-
-	appSettings.AddSession("FIX50", settings.NewDictionary().
-		SetString(settings.BeginString, fix.BeginString_FIXT11).
-		SetString(settings.DefaultApplVerID, enum.ApplVerID_FIX50))
-
-	app := new(TradeClient)
-
-	initiator, err := quickfix.NewInitiator(app, appSettings, log.ScreenLogFactory{})
+	initiator, err := quickfix.NewInitiator(app, appSettings, fileLogFactory)
 	if err != nil {
 		fmt.Printf("Unable to create Initiator: %s\n", err)
 		return

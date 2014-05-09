@@ -28,7 +28,7 @@ func queryAction() (string, error) {
 	return scanner.Text(), scanner.Err()
 }
 
-func queryVersion() (field.BeginString, error) {
+func queryVersion() (*field.BeginStringField, error) {
 	fmt.Println()
 	fmt.Println("1) FIX.4.0")
 	fmt.Println("2) FIX.4.1")
@@ -38,57 +38,49 @@ func queryVersion() (field.BeginString, error) {
 	fmt.Println("6) FIXT.1.1 (FIX.5.0)")
 	fmt.Print("BeginString: ")
 
-	var beginString field.BeginString
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return beginString, scanner.Err()
+		return nil, scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		beginString.Value = fix.BeginString_FIX40
+		return field.NewBeginString(fix.BeginString_FIX40), nil
 	case "2":
-		beginString.Value = fix.BeginString_FIX41
+		return field.NewBeginString(fix.BeginString_FIX41), nil
 	case "3":
-		beginString.Value = fix.BeginString_FIX42
+		return field.NewBeginString(fix.BeginString_FIX42), nil
 	case "4":
-		beginString.Value = fix.BeginString_FIX43
+		return field.NewBeginString(fix.BeginString_FIX43), nil
 	case "5":
-		beginString.Value = fix.BeginString_FIX44
+		return field.NewBeginString(fix.BeginString_FIX44), nil
 	case "6":
-		beginString.Value = fix.BeginString_FIXT11
+		return field.NewBeginString(fix.BeginString_FIXT11), nil
 	case "7":
-		beginString.Value = "A"
-	default:
-		return beginString, fmt.Errorf("unknown BeginString choice: %v", scanner.Text())
+		return field.NewBeginString("A"), nil
 	}
 
-	return beginString, nil
+	return nil, fmt.Errorf("unknown BeginString choice: %v", scanner.Text())
 }
 
-func queryClOrdID() (field.ClOrdID, error) {
+func queryClOrdID() (*field.ClOrdIDField, error) {
 	fmt.Print("ClOrdID: ")
-	var clOrdID field.ClOrdID
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	clOrdID.Value = scanner.Text()
-
-	return clOrdID, scanner.Err()
+	return field.NewClOrdID(scanner.Text()), scanner.Err()
 }
 
-func querySymbol() (field.Symbol, error) {
+func querySymbol() (*field.SymbolField, error) {
 	fmt.Println()
 	fmt.Print("Symbol: ")
+
 	scanner := bufio.NewScanner(os.Stdin)
-
-	var symbol field.Symbol
 	scanner.Scan()
-	symbol.Value = scanner.Text()
 
-	return symbol, scanner.Err()
+	return field.NewSymbol(scanner.Text()), scanner.Err()
 }
 
-func querySide() (field.Side, error) {
+func querySide() (*field.SideField, error) {
 
 	fmt.Println()
 	fmt.Println("1) Buy")
@@ -100,35 +92,32 @@ func querySide() (field.Side, error) {
 	fmt.Println("7) Cross Short Exempt")
 	fmt.Print("Side: ")
 
-	var side field.Side
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return side, scanner.Err()
+		return nil, scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		side.Value = enum.Side_BUY
+		return field.NewSide(enum.Side_BUY), nil
 	case "2":
-		side.Value = enum.Side_SELL
+		return field.NewSide(enum.Side_SELL), nil
 	case "3":
-		side.Value = enum.Side_SELL_SHORT
+		return field.NewSide(enum.Side_SELL_SHORT), nil
 	case "4":
-		side.Value = enum.Side_SELL_SHORT_EXEMPT
+		return field.NewSide(enum.Side_SELL_SHORT_EXEMPT), nil
 	case "5":
-		side.Value = enum.Side_CROSS
+		return field.NewSide(enum.Side_CROSS), nil
 	case "6":
-		side.Value = enum.Side_CROSS_SHORT
+		return field.NewSide(enum.Side_CROSS_SHORT), nil
 	case "7":
-		side.Value = "A"
-	default:
-		return side, fmt.Errorf("unknown side choice: %v", scanner.Text())
+		return field.NewSide("A"), nil
 	}
 
-	return side, nil
+	return nil, fmt.Errorf("unknown side choice: %v", scanner.Text())
 }
 
-func queryOrdType() (field.OrdType, error) {
+func queryOrdType() (*field.OrdTypeField, error) {
 	fmt.Println()
 	fmt.Println("1) Market")
 	fmt.Println("2) Limit")
@@ -136,29 +125,26 @@ func queryOrdType() (field.OrdType, error) {
 	fmt.Println("4) Stop Limit")
 	fmt.Print("OrdType: ")
 
-	var ordType field.OrdType
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return ordType, scanner.Err()
+		return nil, scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		ordType.Value = enum.OrdType_MARKET
+		return field.NewOrdType(enum.OrdType_MARKET), nil
 	case "2":
-		ordType.Value = enum.OrdType_LIMIT
+		return field.NewOrdType(enum.OrdType_LIMIT), nil
 	case "3":
-		ordType.Value = enum.OrdType_STOP
+		return field.NewOrdType(enum.OrdType_STOP), nil
 	case "4":
-		ordType.Value = enum.OrdType_STOP_LIMIT
-	default:
-		return ordType, fmt.Errorf("invalid ordtype choice: %v", scanner.Text())
+		return field.NewOrdType(enum.OrdType_STOP_LIMIT), nil
 	}
 
-	return ordType, nil
+	return nil, fmt.Errorf("invalid ordtype choice: %v", scanner.Text())
 }
 
-func queryTimeInForce() (field.TimeInForce, error) {
+func queryTimeInForce() (*field.TimeInForceField, error) {
 	fmt.Println()
 	fmt.Println("1) Day")
 	fmt.Println("2) IOC")
@@ -167,111 +153,104 @@ func queryTimeInForce() (field.TimeInForce, error) {
 	fmt.Println("5) GTX")
 	fmt.Print("TimeInForce: ")
 
-	var timeInForce field.TimeInForce
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return timeInForce, scanner.Err()
+		return nil, scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		timeInForce.Value = enum.TimeInForce_DAY
+		return field.NewTimeInForce(enum.TimeInForce_DAY), nil
 	case "2":
-		timeInForce.Value = enum.TimeInForce_IMMEDIATE_OR_CANCEL
+		return field.NewTimeInForce(enum.TimeInForce_IMMEDIATE_OR_CANCEL), nil
 	case "3":
-		timeInForce.Value = enum.TimeInForce_AT_THE_OPENING
+		return field.NewTimeInForce(enum.TimeInForce_AT_THE_OPENING), nil
 	case "4":
-		timeInForce.Value = enum.TimeInForce_GOOD_TILL_CANCEL
+		return field.NewTimeInForce(enum.TimeInForce_GOOD_TILL_CANCEL), nil
 	case "5":
-		timeInForce.Value = enum.TimeInForce_GOOD_TILL_CROSSING
-
-	default:
-		return timeInForce, fmt.Errorf("invalid choice: %v", scanner.Text())
+		return field.NewTimeInForce(enum.TimeInForce_GOOD_TILL_CROSSING), nil
 	}
 
-	return timeInForce, nil
+	return nil, fmt.Errorf("invalid choice: %v", scanner.Text())
 }
 
-func queryOrderQty() (field.OrderQty, error) {
+func queryOrderQty() (*field.OrderQtyField, error) {
 	fmt.Println()
 	fmt.Print("OrderQty: ")
 
-	var orderQty field.OrderQty
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return orderQty, scanner.Err()
+		return nil, scanner.Err()
 	}
 
-	var err error
-	orderQty.Value, err = strconv.ParseFloat(scanner.Text(), 64)
+	val, err := strconv.ParseFloat(scanner.Text(), 64)
+	if err != nil {
+		return nil, err
+	}
 
-	return orderQty, err
+	return field.NewOrderQty(val), err
 }
 
-func queryPrice() (field.Price, error) {
+func queryPrice() (*field.PriceField, error) {
 	fmt.Println()
 	fmt.Print("Price: ")
 
-	var price field.Price
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return price, scanner.Err()
+		return nil, scanner.Err()
 	}
 
-	var err error
-	price.Value, err = strconv.ParseFloat(scanner.Text(), 64)
-	return price, err
+	val, err := strconv.ParseFloat(scanner.Text(), 64)
+	if err != nil {
+		return nil, err
+	}
+	return field.NewPrice(val), nil
 }
 
-func queryStopPx() (field.StopPx, error) {
+func queryStopPx() (*field.StopPxField, error) {
 	fmt.Println()
 	fmt.Print("Stop Price: ")
 
-	var price field.StopPx
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return price, scanner.Err()
+		return nil, scanner.Err()
 	}
 
-	var err error
-	price.Value, err = strconv.ParseFloat(scanner.Text(), 64)
-	return price, err
+	val, err := strconv.ParseFloat(scanner.Text(), 64)
+	if err != nil {
+		return nil, err
+	}
+	return field.NewStopPx(val), nil
 }
 
-func querySenderCompID() (field.SenderCompID, error) {
+func querySenderCompID() (*field.SenderCompIDField, error) {
 	fmt.Println()
 	fmt.Print("SenderCompID: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 
-	var senderCompID field.SenderCompID
-	senderCompID.Value = scanner.Text()
-	return senderCompID, scanner.Err()
+	return field.NewSenderCompID(scanner.Text()), scanner.Err()
 }
 
-func queryTargetCompID() (field.TargetCompID, error) {
+func queryTargetCompID() (*field.TargetCompIDField, error) {
 	fmt.Println()
 	fmt.Print("TargetCompID: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 
-	var targetCompID field.TargetCompID
-	targetCompID.Value = scanner.Text()
-	return targetCompID, scanner.Err()
+	return field.NewTargetCompID(scanner.Text()), scanner.Err()
 }
 
-func queryTargetSubID() (field.TargetSubID, error) {
+func queryTargetSubID() (*field.TargetSubIDField, error) {
 	fmt.Println()
 	fmt.Print("TargetSubID: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 
-	var targetSubID field.TargetSubID
-	targetSubID.Value = scanner.Text()
-	return targetSubID, scanner.Err()
+	return field.NewTargetSubID(scanner.Text()), scanner.Err()
 }
 
 func queryConfirm(prompt string) bool {
@@ -338,7 +317,7 @@ func queryNewOrderSingle40() (fix40.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	builder = fix40.CreateNewOrderSingleBuilder(clOrdID, field.BuildHandlInst("1"), symbol, side, orderQty, ordType)
+	builder = fix40.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, orderQty, ordType)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
@@ -390,7 +369,7 @@ func queryNewOrderSingle41() (fix41.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	builder = fix41.CreateNewOrderSingleBuilder(clOrdID, field.BuildHandlInst("1"), symbol, side, ordType)
+	builder = fix41.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, ordType)
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
@@ -447,9 +426,9 @@ func queryNewOrderSingle42() (fix42.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	var transactTime field.TransactTime
+	transactTime := &field.TransactTimeField{}
 
-	builder = fix42.CreateNewOrderSingleBuilder(clOrdID, field.BuildHandlInst("1"), symbol, side, transactTime, ordType)
+	builder = fix42.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, transactTime, ordType)
 
 	orderQty, err := queryOrderQty()
 	if err != nil {
@@ -502,9 +481,9 @@ func queryNewOrderSingle43() (fix43.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	var transactTime field.TransactTime
+	transactTime := &field.TransactTimeField{}
 
-	builder = fix43.CreateNewOrderSingleBuilder(clOrdID, field.BuildHandlInst("1"), side, transactTime, ordType)
+	builder = fix43.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), side, transactTime, ordType)
 
 	symbol, err := querySymbol()
 	if err != nil {
@@ -563,11 +542,11 @@ func queryNewOrderSingle44() (fix44.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	var transactTime field.TransactTime
+	transactTime := &field.TransactTimeField{}
 
 	builder = fix44.CreateNewOrderSingleBuilder(clOrdID, side, transactTime, ordType)
 
-	builder.Body.Set(field.BuildHandlInst("1"))
+	builder.Body.Set(field.NewHandlInst("1"))
 	symbol, err := querySymbol()
 	if err != nil {
 		return builder, err
@@ -625,11 +604,11 @@ func queryNewOrderSingle50() (fix50.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	var transactTime field.TransactTime
+	transactTime := &field.TransactTimeField{}
 
 	builder = fix50.CreateNewOrderSingleBuilder(clOrdID, side, transactTime, ordType)
 
-	builder.Body.Set(field.BuildHandlInst("1"))
+	builder.Body.Set(field.NewHandlInst("1"))
 	symbol, err := querySymbol()
 	if err != nil {
 		return builder, err
