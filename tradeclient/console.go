@@ -7,13 +7,14 @@ import (
 	"github.com/quickfixgo/quickfix/fix"
 	"github.com/quickfixgo/quickfix/fix/enum"
 	"github.com/quickfixgo/quickfix/fix/field"
-	"github.com/quickfixgo/quickfix/fix40"
-	"github.com/quickfixgo/quickfix/fix41"
-	"github.com/quickfixgo/quickfix/fix42"
-	"github.com/quickfixgo/quickfix/fix43"
-	"github.com/quickfixgo/quickfix/fix44"
-	"github.com/quickfixgo/quickfix/fix50"
-	"github.com/quickfixgo/quickfix/message"
+
+	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
+	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
+	fix42nos "github.com/quickfixgo/quickfix/fix42/newordersingle"
+	fix43nos "github.com/quickfixgo/quickfix/fix43/newordersingle"
+	fix44nos "github.com/quickfixgo/quickfix/fix44/newordersingle"
+	fix50nos "github.com/quickfixgo/quickfix/fix50/newordersingle"
+
 	"os"
 	"strconv"
 	"strings"
@@ -263,7 +264,7 @@ func queryConfirm(prompt string) bool {
 	return strings.ToUpper(scanner.Text()) == "Y"
 }
 
-func queryHeader(header message.Header) error {
+func queryHeader(header quickfix.FieldMap) error {
 	senderCompID, err := querySenderCompID()
 	if err != nil {
 		return err
@@ -289,8 +290,8 @@ func queryHeader(header message.Header) error {
 	return nil
 }
 
-func queryNewOrderSingle40() (fix40.NewOrderSingleBuilder, error) {
-	var builder fix40.NewOrderSingleBuilder
+func queryNewOrderSingle40() (fix40nos.MessageBuilder, error) {
+	var builder fix40nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -317,20 +318,20 @@ func queryNewOrderSingle40() (fix40.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	builder = fix40.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, orderQty, ordType)
+	builder = fix40nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, orderQty, ordType)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -338,16 +339,16 @@ func queryNewOrderSingle40() (fix40.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
 
-func queryNewOrderSingle41() (fix41.NewOrderSingleBuilder, error) {
-	var builder fix41.NewOrderSingleBuilder
+func queryNewOrderSingle41() (fix41nos.MessageBuilder, error) {
+	var builder fix41nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -369,25 +370,25 @@ func queryNewOrderSingle41() (fix41.NewOrderSingleBuilder, error) {
 		return builder, err
 	}
 
-	builder = fix41.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, ordType)
+	builder = fix41nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, ordType)
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(orderQty)
+	builder.Body().Set(orderQty)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -395,16 +396,16 @@ func queryNewOrderSingle41() (fix41.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
 
-func queryNewOrderSingle42() (fix42.NewOrderSingleBuilder, error) {
-	var builder fix42.NewOrderSingleBuilder
+func queryNewOrderSingle42() (fix42nos.MessageBuilder, error) {
+	var builder fix42nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -428,26 +429,26 @@ func queryNewOrderSingle42() (fix42.NewOrderSingleBuilder, error) {
 
 	transactTime := &field.TransactTimeField{}
 
-	builder = fix42.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), symbol, side, transactTime, ordType)
+	builder = fix42nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, transactTime, ordType)
 
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(orderQty)
+	builder.Body().Set(orderQty)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -455,16 +456,16 @@ func queryNewOrderSingle42() (fix42.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
 
-func queryNewOrderSingle43() (fix43.NewOrderSingleBuilder, error) {
-	var builder fix43.NewOrderSingleBuilder
+func queryNewOrderSingle43() (fix43nos.MessageBuilder, error) {
+	var builder fix43nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -483,32 +484,32 @@ func queryNewOrderSingle43() (fix43.NewOrderSingleBuilder, error) {
 
 	transactTime := &field.TransactTimeField{}
 
-	builder = fix43.CreateNewOrderSingleBuilder(clOrdID, field.NewHandlInst("1"), side, transactTime, ordType)
+	builder = fix43nos.Builder(clOrdID, field.NewHandlInst("1"), side, transactTime, ordType)
 
 	symbol, err := querySymbol()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(symbol)
+	builder.Body().Set(symbol)
 
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(orderQty)
+	builder.Body().Set(orderQty)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -516,16 +517,16 @@ func queryNewOrderSingle43() (fix43.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
 
-func queryNewOrderSingle44() (fix44.NewOrderSingleBuilder, error) {
-	var builder fix44.NewOrderSingleBuilder
+func queryNewOrderSingle44() (fix44nos.MessageBuilder, error) {
+	var builder fix44nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -544,33 +545,33 @@ func queryNewOrderSingle44() (fix44.NewOrderSingleBuilder, error) {
 
 	transactTime := &field.TransactTimeField{}
 
-	builder = fix44.CreateNewOrderSingleBuilder(clOrdID, side, transactTime, ordType)
+	builder = fix44nos.Builder(clOrdID, side, transactTime, ordType)
 
-	builder.Body.Set(field.NewHandlInst("1"))
+	builder.Body().Set(field.NewHandlInst("1"))
 	symbol, err := querySymbol()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(symbol)
+	builder.Body().Set(symbol)
 
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(orderQty)
+	builder.Body().Set(orderQty)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -578,16 +579,16 @@ func queryNewOrderSingle44() (fix44.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
 
-func queryNewOrderSingle50() (fix50.NewOrderSingleBuilder, error) {
-	var builder fix50.NewOrderSingleBuilder
+func queryNewOrderSingle50() (fix50nos.MessageBuilder, error) {
+	var builder fix50nos.MessageBuilder
 
 	clOrdID, err := queryClOrdID()
 	if err != nil {
@@ -606,33 +607,33 @@ func queryNewOrderSingle50() (fix50.NewOrderSingleBuilder, error) {
 
 	transactTime := &field.TransactTimeField{}
 
-	builder = fix50.CreateNewOrderSingleBuilder(clOrdID, side, transactTime, ordType)
+	builder = fix50nos.Builder(clOrdID, side, transactTime, ordType)
 
-	builder.Body.Set(field.NewHandlInst("1"))
+	builder.Body().Set(field.NewHandlInst("1"))
 	symbol, err := querySymbol()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(symbol)
+	builder.Body().Set(symbol)
 
 	orderQty, err := queryOrderQty()
 	if err != nil {
 		return builder, err
 	}
-	builder.Body.Set(orderQty)
+	builder.Body().Set(orderQty)
 
 	timeInForce, err := queryTimeInForce()
 	if err != nil {
 		return builder, err
 	}
 
-	builder.Body.Set(timeInForce)
+	builder.Body().Set(timeInForce)
 	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
 		price, err := queryPrice()
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(price)
+		builder.Body().Set(price)
 	}
 
 	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
@@ -640,10 +641,10 @@ func queryNewOrderSingle50() (fix50.NewOrderSingleBuilder, error) {
 		if err != nil {
 			return builder, err
 		}
-		builder.Body.Set(stopPx)
+		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header)
+	queryHeader(builder.Header())
 
 	return builder, nil
 }
@@ -654,7 +655,7 @@ func queryEnterOrder() error {
 		return err
 	}
 
-	var order *message.MessageBuilder
+	var order *quickfix.MessageBuilder
 	switch beginString.Value {
 	case fix.BeginString_FIX40:
 		fix40Order, err := queryNewOrderSingle40()

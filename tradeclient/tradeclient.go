@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/errors"
-	"github.com/quickfixgo/quickfix/message"
 	"os"
 )
 
@@ -23,19 +21,19 @@ func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {
 	return
 }
 
-func (e TradeClient) FromAdmin(msg message.Message, sessionID quickfix.SessionID) (reject errors.MessageRejectError) {
+func (e TradeClient) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return
 }
 
-func (e TradeClient) ToAdmin(msg message.MessageBuilder, sessionID quickfix.SessionID) {
+func (e TradeClient) ToAdmin(msg quickfix.MessageBuilder, sessionID quickfix.SessionID) {
 	return
 }
 
-func (e TradeClient) ToApp(msg message.MessageBuilder, sessionID quickfix.SessionID) (err error) {
+func (e TradeClient) ToApp(msg quickfix.MessageBuilder, sessionID quickfix.SessionID) (err error) {
 	return
 }
 
-func (e TradeClient) FromApp(msg message.Message, sessionID quickfix.SessionID) (reject errors.MessageRejectError) {
+func (e TradeClient) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	fmt.Println("FromApp: ", msg)
 	return
 }
