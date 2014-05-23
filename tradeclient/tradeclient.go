@@ -60,7 +60,7 @@ func main() {
 		return
 	}
 
-	initiator, err := quickfix.NewInitiator(app, appSettings, fileLogFactory)
+	initiator, err := quickfix.NewInitiator(app, quickfix.NewMemoryStoreFactory(), appSettings, fileLogFactory)
 	if err != nil {
 		fmt.Printf("Unable to create Initiator: %s\n", err)
 		return

@@ -264,7 +264,7 @@ func queryConfirm(prompt string) bool {
 	return strings.ToUpper(scanner.Text()) == "Y"
 }
 
-func queryHeader(header quickfix.FieldMap) error {
+func queryHeader(header quickfix.MutableFieldMap) error {
 	senderCompID, err := querySenderCompID()
 	if err != nil {
 		return err
