@@ -443,22 +443,20 @@ func main() {
 		return
 	}
 
-	fileLogFactory, err := quickfix.NewFileLogFactory(appSettings)
-
-	if err != nil {
-		fmt.Println("Error creating file log factory,", err)
-		return
-	}
-
+	logFactory := quickfix.NewScreenLogFactory()
 	app := NewExecutor()
 
-	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, fileLogFactory)
+	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logFactory)
 	if err != nil {
 		fmt.Printf("Unable to create Acceptor: %s\n", err)
 		return
 	}
 
-	acceptor.Start()
+	err = acceptor.Start()
+	if err != nil {
+		fmt.Printf("Unable to start Acceptor: %s\n", err)
+		return
+	}
 
 	interrupt := make(chan os.Signal)
 	signal.Notify(interrupt)
