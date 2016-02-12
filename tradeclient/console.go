@@ -7,6 +7,13 @@ import (
 	"github.com/quickfixgo/quickfix/enum"
 	"github.com/quickfixgo/quickfix/field"
 
+	fix40cxl "github.com/quickfixgo/quickfix/fix40/ordercancelrequest"
+	fix41cxl "github.com/quickfixgo/quickfix/fix41/ordercancelrequest"
+	fix42cxl "github.com/quickfixgo/quickfix/fix42/ordercancelrequest"
+	fix43cxl "github.com/quickfixgo/quickfix/fix43/ordercancelrequest"
+	fix44cxl "github.com/quickfixgo/quickfix/fix44/ordercancelrequest"
+	fix50cxl "github.com/quickfixgo/quickfix/fix50/ordercancelrequest"
+
 	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
 	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
 	fix42nos "github.com/quickfixgo/quickfix/fix42/newordersingle"
@@ -23,6 +30,7 @@ import (
 func queryAction() (string, error) {
 	fmt.Println()
 	fmt.Println("1) Enter Order")
+	fmt.Println("2) Cancel Order")
 	fmt.Print("Action: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
@@ -66,6 +74,13 @@ func queryVersion() (string, error) {
 
 func queryClOrdID() (string, error) {
 	fmt.Print("ClOrdID: ")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	return scanner.Text(), scanner.Err()
+}
+
+func queryOrigClOrdID() (string, error) {
+	fmt.Print("OrigClOrdID: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	return scanner.Text(), scanner.Err()
@@ -307,20 +322,14 @@ func queryNewOrderSingle40() (msg quickfix.Message, err error) {
 		return
 	}
 
-	if fVal, err := queryOrderQty(); err != nil {
-		return msg, err
-	} else {
-		order.OrderQty = int(fVal)
-	}
-
 	if order.OrdType, err = queryOrdType(); err != nil {
 		return
 	}
 
-	if tif, err := queryTimeInForce(); err != nil {
+	if fVal, err := queryOrderQty(); err != nil {
 		return msg, err
 	} else {
-		order.TimeInForce = &tif
+		order.OrderQty = int(fVal)
 	}
 
 	switch order.OrdType {
@@ -339,6 +348,12 @@ func queryNewOrderSingle40() (msg quickfix.Message, err error) {
 		} else {
 			order.StopPx = &fVal
 		}
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
 	}
 
 	msg = quickfix.Marshal(order)
@@ -375,12 +390,6 @@ func queryNewOrderSingle41() (msg quickfix.Message, err error) {
 		order.OrderQty = &iVal
 	}
 
-	if tif, err := queryTimeInForce(); err != nil {
-		return msg, err
-	} else {
-		order.TimeInForce = &tif
-	}
-
 	switch order.OrdType {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		if fVal, err := queryPrice(); err != nil {
@@ -397,7 +406,12 @@ func queryNewOrderSingle41() (msg quickfix.Message, err error) {
 		} else {
 			order.StopPx = &fVal
 		}
+	}
 
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
 	}
 
 	msg = quickfix.Marshal(order)
@@ -434,12 +448,6 @@ func queryNewOrderSingle42() (msg quickfix.Message, err error) {
 		order.OrderQty = &fVal
 	}
 
-	if tif, err := queryTimeInForce(); err != nil {
-		return msg, err
-	} else {
-		order.TimeInForce = &tif
-	}
-
 	switch order.OrdType {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		if fVal, err := queryPrice(); err != nil {
@@ -456,6 +464,12 @@ func queryNewOrderSingle42() (msg quickfix.Message, err error) {
 		} else {
 			order.StopPx = &fVal
 		}
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
 	}
 
 	msg = quickfix.Marshal(order)
@@ -492,12 +506,6 @@ func queryNewOrderSingle43() (msg quickfix.Message, err error) {
 		order.OrderQtyData.OrderQty = &fVal
 	}
 
-	if tif, err := queryTimeInForce(); err != nil {
-		return msg, err
-	} else {
-		order.TimeInForce = &tif
-	}
-
 	switch order.OrdType {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		if fVal, err := queryPrice(); err != nil {
@@ -514,6 +522,12 @@ func queryNewOrderSingle43() (msg quickfix.Message, err error) {
 		} else {
 			order.StopPx = &fVal
 		}
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
 	}
 
 	msg = quickfix.Marshal(order)
@@ -553,12 +567,6 @@ func queryNewOrderSingle44() (msg quickfix.Message, err error) {
 		order.OrderQtyData.OrderQty = &fVal
 	}
 
-	if tif, err := queryTimeInForce(); err != nil {
-		return msg, err
-	} else {
-		order.TimeInForce = &tif
-	}
-
 	switch order.OrdType {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		if fVal, err := queryPrice(); err != nil {
@@ -575,6 +583,12 @@ func queryNewOrderSingle44() (msg quickfix.Message, err error) {
 		} else {
 			order.StopPx = &fVal
 		}
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
 	}
 
 	msg = quickfix.Marshal(order)
@@ -644,6 +658,203 @@ func queryNewOrderSingle50() (msg quickfix.Message, err error) {
 	return
 }
 
+func queryOrderCancelRequest40() (msg quickfix.Message, err error) {
+	cancel := fix40cxl.Message{
+		CxlType: "F",
+	}
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.Symbol, err = querySymbol(); err != nil {
+		return
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		cancel.OrderQty = int(fVal)
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryOrderCancelRequest41() (msg quickfix.Message, err error) {
+	var cancel fix41cxl.Message
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.Symbol, err = querySymbol(); err != nil {
+		return
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		iVal := int(fVal)
+		cancel.OrderQty = &iVal
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryOrderCancelRequest42() (msg quickfix.Message, err error) {
+	cancel := fix42cxl.Message{
+		TransactTime: time.Now(),
+	}
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.Symbol, err = querySymbol(); err != nil {
+		return
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		cancel.OrderQty = &fVal
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryOrderCancelRequest43() (msg quickfix.Message, err error) {
+	cancel := fix43cxl.Message{
+		TransactTime: time.Now(),
+	}
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		cancel.Instrument.Symbol = &sym
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		cancel.OrderQtyData.OrderQty = &fVal
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryOrderCancelRequest44() (msg quickfix.Message, err error) {
+	cancel := fix44cxl.Message{
+		TransactTime: time.Now(),
+	}
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		cancel.Instrument.Symbol = &sym
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		cancel.OrderQtyData.OrderQty = &fVal
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryOrderCancelRequest50() (msg quickfix.Message, err error) {
+	cancel := fix50cxl.Message{
+		TransactTime: time.Now(),
+	}
+
+	if cancel.OrigClOrdID, err = queryOrigClOrdID(); err != nil {
+		return
+	}
+
+	if cancel.ClOrdID, err = queryClOrdID(); err != nil {
+		return
+	}
+
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		cancel.Instrument.Symbol = &sym
+	}
+
+	if cancel.Side, err = querySide(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		cancel.OrderQtyData.OrderQty = &fVal
+	}
+
+	msg = cancel.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
 func queryEnterOrder() error {
 	beginString, err := queryVersion()
 	if err != nil {
@@ -679,4 +890,42 @@ func queryEnterOrder() error {
 	fmt.Println("Sending ", string(bytes))
 
 	return quickfix.Send(order)
+}
+
+func queryCancelOrder() error {
+	beginString, err := queryVersion()
+	if err != nil {
+		return err
+	}
+
+	var cxl quickfix.Message
+	switch beginString {
+	case enum.BeginStringFIX40:
+		cxl, err = queryOrderCancelRequest40()
+
+	case enum.BeginStringFIX41:
+		cxl, err = queryOrderCancelRequest41()
+
+	case enum.BeginStringFIX42:
+		cxl, err = queryOrderCancelRequest42()
+
+	case enum.BeginStringFIX43:
+		cxl, err = queryOrderCancelRequest43()
+
+	case enum.BeginStringFIX44:
+		cxl, err = queryOrderCancelRequest44()
+
+	case enum.BeginStringFIXT11:
+		cxl, err = queryOrderCancelRequest50()
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if queryConfirm("Send Cancel") {
+		return quickfix.Send(cxl)
+	}
+
+	return nil
 }
