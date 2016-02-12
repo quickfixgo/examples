@@ -21,6 +21,13 @@ import (
 	fix44nos "github.com/quickfixgo/quickfix/fix44/newordersingle"
 	fix50nos "github.com/quickfixgo/quickfix/fix50/newordersingle"
 
+	fix42mdr "github.com/quickfixgo/quickfix/fix42/marketdatarequest"
+	fix43mdr "github.com/quickfixgo/quickfix/fix43/marketdatarequest"
+	fix44mdr "github.com/quickfixgo/quickfix/fix44/marketdatarequest"
+	"github.com/quickfixgo/quickfix/fix50/instrmtmdreqgrp"
+	fix50mdr "github.com/quickfixgo/quickfix/fix50/marketdatarequest"
+	"github.com/quickfixgo/quickfix/fix50/mdreqgrp"
+
 	"os"
 	"strconv"
 	"strings"
@@ -31,6 +38,8 @@ func queryAction() (string, error) {
 	fmt.Println()
 	fmt.Println("1) Enter Order")
 	fmt.Println("2) Cancel Order")
+	fmt.Println("3) Request Market Test")
+	fmt.Println("4) Quit")
 	fmt.Print("Action: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
@@ -854,6 +863,74 @@ func queryOrderCancelRequest50() (msg quickfix.Message, err error) {
 	queryHeader(msg.Header)
 	return
 }
+func queryMarketDataRequest42() (msg quickfix.Message, err error) {
+	request := fix42mdr.Message{
+		MDReqID:                 "MARKETDATAID",
+		SubscriptionRequestType: enum.SubscriptionRequestType_SNAPSHOT,
+		MarketDepth:             0,
+		NoMDEntryTypes:          []fix42mdr.NoMDEntryTypes{fix42mdr.NoMDEntryTypes{MDEntryType: enum.MDEntryType_BID}},
+		NoRelatedSym:            []fix42mdr.NoRelatedSym{fix42mdr.NoRelatedSym{Symbol: "LNUX"}},
+	}
+
+	msg = request.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryMarketDataRequest43() (msg quickfix.Message, err error) {
+	request := fix43mdr.Message{
+		MDReqID:                 "MARKETDATAID",
+		SubscriptionRequestType: enum.SubscriptionRequestType_SNAPSHOT,
+		MarketDepth:             0,
+		NoMDEntryTypes:          []fix43mdr.NoMDEntryTypes{fix43mdr.NoMDEntryTypes{MDEntryType: enum.MDEntryType_BID}},
+	}
+
+	symbol := "LNUX"
+	var relatedSym fix43mdr.NoRelatedSym
+	relatedSym.Instrument.Symbol = &symbol
+	request.NoRelatedSym = []fix43mdr.NoRelatedSym{relatedSym}
+
+	msg = request.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryMarketDataRequest44() (msg quickfix.Message, err error) {
+	request := fix44mdr.Message{
+		MDReqID:                 "MARKETDATAID",
+		SubscriptionRequestType: enum.SubscriptionRequestType_SNAPSHOT,
+		MarketDepth:             0,
+		NoMDEntryTypes:          []fix44mdr.NoMDEntryTypes{fix44mdr.NoMDEntryTypes{MDEntryType: enum.MDEntryType_BID}},
+	}
+
+	symbol := "LNUX"
+	var relatedSym fix44mdr.NoRelatedSym
+	relatedSym.Instrument.Symbol = &symbol
+	request.NoRelatedSym = []fix44mdr.NoRelatedSym{relatedSym}
+
+	msg = request.Marshal()
+	queryHeader(msg.Header)
+	return
+}
+
+func queryMarketDataRequest50() (msg quickfix.Message, err error) {
+	request := fix50mdr.Message{
+		MDReqID:                 "MARKETDATAID",
+		SubscriptionRequestType: enum.SubscriptionRequestType_SNAPSHOT,
+		MarketDepth:             0,
+	}
+
+	request.MDReqGrp.NoMDEntryTypes = []mdreqgrp.NoMDEntryTypes{mdreqgrp.NoMDEntryTypes{enum.MDEntryType_BID}}
+
+	symbol := "LNUX"
+	var relatedSym instrmtmdreqgrp.NoRelatedSym
+	relatedSym.Instrument.Symbol = &symbol
+	request.InstrmtMDReqGrp.NoRelatedSym = []instrmtmdreqgrp.NoRelatedSym{relatedSym}
+
+	msg = request.Marshal()
+	queryHeader(msg.Header)
+	return
+}
 
 func queryEnterOrder() error {
 	beginString, err := queryVersion()
@@ -925,6 +1002,41 @@ func queryCancelOrder() error {
 
 	if queryConfirm("Send Cancel") {
 		return quickfix.Send(cxl)
+	}
+
+	return nil
+}
+
+func queryMarketDataRequest() error {
+	beginString, err := queryVersion()
+	if err != nil {
+		return err
+	}
+
+	var req quickfix.Message
+	switch beginString {
+	case enum.BeginStringFIX42:
+		req, err = queryMarketDataRequest42()
+
+	case enum.BeginStringFIX43:
+		req, err = queryMarketDataRequest43()
+
+	case enum.BeginStringFIX44:
+		req, err = queryMarketDataRequest44()
+
+	case enum.BeginStringFIXT11:
+		req, err = queryMarketDataRequest50()
+
+	default:
+		return fmt.Errorf("No test for version %v", beginString)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if queryConfirm("Send MarketDataRequest") {
+		return quickfix.Send(req)
 	}
 
 	return nil

@@ -7,33 +7,41 @@ import (
 	"os"
 )
 
+//TradeClient implements the quickfix.Application interface
 type TradeClient struct {
 }
 
+//OnCreate implemented as part of Application interface
 func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {
 	return
 }
 
+//OnLogon implemented as part of Application interface
 func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {
 	return
 }
 
+//OnLogout implemented as part of Application interface
 func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {
 	return
 }
 
+//FromAdmin implemented as part of Application interface
 func (e TradeClient) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return
 }
 
+//ToAdmin implemented as part of Application interface
 func (e TradeClient) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID) {
 	return
 }
 
+//ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) (err error) {
 	return
 }
 
+//FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
 func (e TradeClient) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	fmt.Printf("FromApp: %s\n", msg.String())
 	return
@@ -75,6 +83,7 @@ func main() {
 
 	initiator.Start()
 
+Loop:
 	for {
 		action, err := queryAction()
 		if err != nil {
@@ -88,13 +97,19 @@ func main() {
 		case "2":
 			err = queryCancelOrder()
 
+		case "3":
+			err = queryMarketDataRequest()
+
+		case "4":
+			//quit
+			break Loop
+
 		default:
 			err = fmt.Errorf("unknown action: '%v'", action)
 		}
 
 		if err != nil {
 			fmt.Printf("%v\n", err)
-			break
 		}
 	}
 
