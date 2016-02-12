@@ -85,6 +85,9 @@ func main() {
 		case "1":
 			err = queryEnterOrder()
 
+		case "2":
+			err = queryCancelOrder()
+
 		default:
 			err = fmt.Errorf("unknown action: '%v'", action)
 		}
