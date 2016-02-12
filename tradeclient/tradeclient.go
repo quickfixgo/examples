@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/quickfixgo/quickfix"
 	"os"
@@ -25,21 +26,27 @@ func (e TradeClient) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionI
 	return
 }
 
-func (e TradeClient) ToAdmin(msg quickfix.MessageBuilder, sessionID quickfix.SessionID) {
+func (e TradeClient) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID) {
 	return
 }
 
-func (e TradeClient) ToApp(msg quickfix.MessageBuilder, sessionID quickfix.SessionID) (err error) {
+func (e TradeClient) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) (err error) {
 	return
 }
 
 func (e TradeClient) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
-	fmt.Println("FromApp: ", msg)
+	fmt.Printf("FromApp: %s\n", msg.String())
 	return
 }
 
 func main() {
+	flag.Parse()
+
 	cfgFileName := "tradeclient.cfg"
+	if flag.NArg() > 0 {
+		cfgFileName = flag.Arg(0)
+	}
+
 	cfg, err := os.Open(cfgFileName)
 	if err != nil {
 		fmt.Printf("Error opening %v, %v\n", cfgFileName, err)

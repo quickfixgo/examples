@@ -1,0 +1,19 @@
+package: github.com/quickfixgo/examples
+import:
+- package: github.com/quickfixgo/quickfix
+  subpackages:
+  - enum
+  - field
+  - fix40/executionreport
+  - fix40/newordersingle
+  - fix41/executionreport
+  - fix41/newordersingle
+  - fix42/executionreport
+  - fix42/newordersingle
+  - fix43/executionreport
+  - fix43/newordersingle
+  - fix44/executionreport
+  - fix44/newordersingle
+  - fix50/executionreport
+  - fix50/newordersingle
+  - tag

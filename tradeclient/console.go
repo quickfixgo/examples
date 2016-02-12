@@ -4,9 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/fix"
-	"github.com/quickfixgo/quickfix/fix/enum"
-	"github.com/quickfixgo/quickfix/fix/field"
+	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/quickfix/field"
 
 	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
 	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
@@ -18,6 +17,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func queryAction() (string, error) {
@@ -29,7 +29,7 @@ func queryAction() (string, error) {
 	return scanner.Text(), scanner.Err()
 }
 
-func queryVersion() (*field.BeginStringField, error) {
+func queryVersion() (string, error) {
 	fmt.Println()
 	fmt.Println("1) FIX.4.0")
 	fmt.Println("2) FIX.4.1")
@@ -41,47 +41,47 @@ func queryVersion() (*field.BeginStringField, error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return "", scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		return field.NewBeginString(fix.BeginString_FIX40), nil
+		return enum.BeginStringFIX40, nil
 	case "2":
-		return field.NewBeginString(fix.BeginString_FIX41), nil
+		return enum.BeginStringFIX41, nil
 	case "3":
-		return field.NewBeginString(fix.BeginString_FIX42), nil
+		return enum.BeginStringFIX42, nil
 	case "4":
-		return field.NewBeginString(fix.BeginString_FIX43), nil
+		return enum.BeginStringFIX43, nil
 	case "5":
-		return field.NewBeginString(fix.BeginString_FIX44), nil
+		return enum.BeginStringFIX44, nil
 	case "6":
-		return field.NewBeginString(fix.BeginString_FIXT11), nil
+		return enum.BeginStringFIXT11, nil
 	case "7":
-		return field.NewBeginString("A"), nil
+		return "A", nil
 	}
 
-	return nil, fmt.Errorf("unknown BeginString choice: %v", scanner.Text())
+	return "", fmt.Errorf("unknown BeginString choice: %v", scanner.Text())
 }
 
-func queryClOrdID() (*field.ClOrdIDField, error) {
+func queryClOrdID() (string, error) {
 	fmt.Print("ClOrdID: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	return field.NewClOrdID(scanner.Text()), scanner.Err()
+	return scanner.Text(), scanner.Err()
 }
 
-func querySymbol() (*field.SymbolField, error) {
+func querySymbol() (string, error) {
 	fmt.Println()
 	fmt.Print("Symbol: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 
-	return field.NewSymbol(scanner.Text()), scanner.Err()
+	return scanner.Text(), scanner.Err()
 }
 
-func querySide() (*field.SideField, error) {
+func querySide() (string, error) {
 
 	fmt.Println()
 	fmt.Println("1) Buy")
@@ -95,30 +95,30 @@ func querySide() (*field.SideField, error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return "", scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		return field.NewSide(enum.Side_BUY), nil
+		return enum.Side_BUY, nil
 	case "2":
-		return field.NewSide(enum.Side_SELL), nil
+		return enum.Side_SELL, nil
 	case "3":
-		return field.NewSide(enum.Side_SELL_SHORT), nil
+		return enum.Side_SELL_SHORT, nil
 	case "4":
-		return field.NewSide(enum.Side_SELL_SHORT_EXEMPT), nil
+		return enum.Side_SELL_SHORT_EXEMPT, nil
 	case "5":
-		return field.NewSide(enum.Side_CROSS), nil
+		return enum.Side_CROSS, nil
 	case "6":
-		return field.NewSide(enum.Side_CROSS_SHORT), nil
+		return enum.Side_CROSS_SHORT, nil
 	case "7":
-		return field.NewSide("A"), nil
+		return "A", nil
 	}
 
-	return nil, fmt.Errorf("unknown side choice: %v", scanner.Text())
+	return "", fmt.Errorf("unknown side choice: %v", scanner.Text())
 }
 
-func queryOrdType() (*field.OrdTypeField, error) {
+func queryOrdType() (string, error) {
 	fmt.Println()
 	fmt.Println("1) Market")
 	fmt.Println("2) Limit")
@@ -128,24 +128,24 @@ func queryOrdType() (*field.OrdTypeField, error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return "", scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		return field.NewOrdType(enum.OrdType_MARKET), nil
+		return enum.OrdType_MARKET, nil
 	case "2":
-		return field.NewOrdType(enum.OrdType_LIMIT), nil
+		return enum.OrdType_LIMIT, nil
 	case "3":
-		return field.NewOrdType(enum.OrdType_STOP), nil
+		return enum.OrdType_STOP, nil
 	case "4":
-		return field.NewOrdType(enum.OrdType_STOP_LIMIT), nil
+		return enum.OrdType_STOP_LIMIT, nil
 	}
 
-	return nil, fmt.Errorf("invalid ordtype choice: %v", scanner.Text())
+	return "", fmt.Errorf("invalid ordtype choice: %v", scanner.Text())
 }
 
-func queryTimeInForce() (*field.TimeInForceField, error) {
+func queryTimeInForce() (string, error) {
 	fmt.Println()
 	fmt.Println("1) Day")
 	fmt.Println("2) IOC")
@@ -156,72 +156,72 @@ func queryTimeInForce() (*field.TimeInForceField, error) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return "", scanner.Err()
 	}
 
 	switch scanner.Text() {
 	case "1":
-		return field.NewTimeInForce(enum.TimeInForce_DAY), nil
+		return enum.TimeInForce_DAY, nil
 	case "2":
-		return field.NewTimeInForce(enum.TimeInForce_IMMEDIATE_OR_CANCEL), nil
+		return enum.TimeInForce_IMMEDIATE_OR_CANCEL, nil
 	case "3":
-		return field.NewTimeInForce(enum.TimeInForce_AT_THE_OPENING), nil
+		return enum.TimeInForce_AT_THE_OPENING, nil
 	case "4":
-		return field.NewTimeInForce(enum.TimeInForce_GOOD_TILL_CANCEL), nil
+		return enum.TimeInForce_GOOD_TILL_CANCEL, nil
 	case "5":
-		return field.NewTimeInForce(enum.TimeInForce_GOOD_TILL_CROSSING), nil
+		return enum.TimeInForce_GOOD_TILL_CROSSING, nil
 	}
 
-	return nil, fmt.Errorf("invalid choice: %v", scanner.Text())
+	return "", fmt.Errorf("invalid choice: %v", scanner.Text())
 }
 
-func queryOrderQty() (*field.OrderQtyField, error) {
+func queryOrderQty() (float64, error) {
 	fmt.Println()
 	fmt.Print("OrderQty: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return 0, scanner.Err()
 	}
 
 	val, err := strconv.ParseFloat(scanner.Text(), 64)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return field.NewOrderQty(val), err
+	return val, err
 }
 
-func queryPrice() (*field.PriceField, error) {
+func queryPrice() (float64, error) {
 	fmt.Println()
 	fmt.Print("Price: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return 0, scanner.Err()
 	}
 
 	val, err := strconv.ParseFloat(scanner.Text(), 64)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return field.NewPrice(val), nil
+	return val, nil
 }
 
-func queryStopPx() (*field.StopPxField, error) {
+func queryStopPx() (float64, error) {
 	fmt.Println()
 	fmt.Print("Stop Price: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
-		return nil, scanner.Err()
+		return 0, scanner.Err()
 	}
 
 	val, err := strconv.ParseFloat(scanner.Text(), 64)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return field.NewStopPx(val), nil
+	return val, nil
 }
 
 func querySenderCompID() (*field.SenderCompIDField, error) {
@@ -264,7 +264,7 @@ func queryConfirm(prompt string) bool {
 	return strings.ToUpper(scanner.Text()) == "Y"
 }
 
-func queryHeader(header quickfix.MutableFieldMap) error {
+func queryHeader(header quickfix.FieldMap) error {
 	senderCompID, err := querySenderCompID()
 	if err != nil {
 		return err
@@ -290,363 +290,358 @@ func queryHeader(header quickfix.MutableFieldMap) error {
 	return nil
 }
 
-func queryNewOrderSingle40() (fix40nos.MessageBuilder, error) {
-	var builder fix40nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle40() (msg quickfix.Message, err error) {
+	order := fix40nos.Message{
+		HandlInst: "1",
 	}
 
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if order.Symbol, err = querySymbol(); err != nil {
+		return
 	}
 
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		order.OrderQty = int(fVal)
 	}
 
-	builder = fix40nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, orderQty, ordType)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header())
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
 
-	return builder, nil
+	return
 }
 
-func queryNewOrderSingle41() (fix41nos.MessageBuilder, error) {
-	var builder fix41nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle41() (msg quickfix.Message, err error) {
+	order := fix41nos.Message{
+		HandlInst: "1",
 	}
 
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if order.Symbol, err = querySymbol(); err != nil {
+		return
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	builder = fix41nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, ordType)
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(orderQty)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		iVal := int(fVal)
+		order.OrderQty = &iVal
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
+
 	}
 
-	queryHeader(builder.Header())
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
 
-	return builder, nil
+	return
 }
 
-func queryNewOrderSingle42() (fix42nos.MessageBuilder, error) {
-	var builder fix42nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle42() (msg quickfix.Message, err error) {
+	order := fix42nos.Message{
+		HandlInst:    "1",
+		TransactTime: time.Now(),
 	}
 
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if order.Symbol, err = querySymbol(); err != nil {
+		return
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	transactTime := &field.TransactTimeField{}
-
-	builder = fix42nos.Builder(clOrdID, field.NewHandlInst("1"), symbol, side, transactTime, ordType)
-
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(orderQty)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		order.OrderQty = &fVal
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header())
-
-	return builder, nil
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
+	return
 }
 
-func queryNewOrderSingle43() (fix43nos.MessageBuilder, error) {
-	var builder fix43nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle43() (msg quickfix.Message, err error) {
+	order := fix43nos.Message{
+		HandlInst:    "1",
+		TransactTime: time.Now(),
+	}
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		order.Instrument.Symbol = &sym
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	transactTime := &field.TransactTimeField{}
-
-	builder = fix43nos.Builder(clOrdID, field.NewHandlInst("1"), side, transactTime, ordType)
-
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(symbol)
-
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(orderQty)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		order.OrderQtyData.OrderQty = &fVal
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header())
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
 
-	return builder, nil
+	return
 }
 
-func queryNewOrderSingle44() (fix44nos.MessageBuilder, error) {
-	var builder fix44nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle44() (msg quickfix.Message, err error) {
+	handleInst := "1"
+	order := fix44nos.Message{
+		HandlInst:    &handleInst,
+		TransactTime: time.Now(),
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		order.Instrument.Symbol = &sym
 	}
 
-	transactTime := &field.TransactTimeField{}
-
-	builder = fix44nos.Builder(clOrdID, side, transactTime, ordType)
-
-	builder.Body().Set(field.NewHandlInst("1"))
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(symbol)
-
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(orderQty)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		order.OrderQtyData.OrderQty = &fVal
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header())
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
 
-	return builder, nil
+	return
 }
 
-func queryNewOrderSingle50() (fix50nos.MessageBuilder, error) {
-	var builder fix50nos.MessageBuilder
-
-	clOrdID, err := queryClOrdID()
-	if err != nil {
-		return builder, err
+func queryNewOrderSingle50() (msg quickfix.Message, err error) {
+	handleInst := "1"
+	order := fix50nos.Message{
+		HandlInst:    &handleInst,
+		TransactTime: time.Now(),
 	}
 
-	side, err := querySide()
-	if err != nil {
-		return builder, err
+	if order.ClOrdID, err = queryClOrdID(); err != nil {
+		return
 	}
 
-	ordType, err := queryOrdType()
-	if err != nil {
-		return builder, err
+	if sym, err := querySymbol(); err != nil {
+		return msg, err
+	} else {
+		order.Instrument.Symbol = &sym
 	}
 
-	transactTime := &field.TransactTimeField{}
-
-	builder = fix50nos.Builder(clOrdID, side, transactTime, ordType)
-
-	builder.Body().Set(field.NewHandlInst("1"))
-	symbol, err := querySymbol()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(symbol)
-
-	orderQty, err := queryOrderQty()
-	if err != nil {
-		return builder, err
-	}
-	builder.Body().Set(orderQty)
-
-	timeInForce, err := queryTimeInForce()
-	if err != nil {
-		return builder, err
+	if order.Side, err = querySide(); err != nil {
+		return
 	}
 
-	builder.Body().Set(timeInForce)
-	if ordType.Value == enum.OrdType_LIMIT || ordType.Value == enum.OrdType_STOP_LIMIT {
-		price, err := queryPrice()
-		if err != nil {
-			return builder, err
+	if order.OrdType, err = queryOrdType(); err != nil {
+		return
+	}
+
+	if fVal, err := queryOrderQty(); err != nil {
+		return msg, err
+	} else {
+		order.OrderQtyData.OrderQty = &fVal
+	}
+
+	if tif, err := queryTimeInForce(); err != nil {
+		return msg, err
+	} else {
+		order.TimeInForce = &tif
+	}
+
+	switch order.OrdType {
+	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryPrice(); err != nil {
+			return msg, err
+		} else {
+			order.Price = &fVal
 		}
-		builder.Body().Set(price)
 	}
 
-	if ordType.Value == enum.OrdType_STOP || ordType.Value == enum.OrdType_STOP_LIMIT {
-		stopPx, err := queryStopPx()
-		if err != nil {
-			return builder, err
+	switch order.OrdType {
+	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
+		if fVal, err := queryStopPx(); err != nil {
+			return msg, err
+		} else {
+			order.StopPx = &fVal
 		}
-		builder.Body().Set(stopPx)
 	}
 
-	queryHeader(builder.Header())
+	msg = quickfix.Marshal(order)
+	queryHeader(msg.Header)
 
-	return builder, nil
+	return
 }
 
 func queryEnterOrder() error {
@@ -655,50 +650,33 @@ func queryEnterOrder() error {
 		return err
 	}
 
-	var order *quickfix.MessageBuilder
-	switch beginString.Value {
-	case fix.BeginString_FIX40:
-		fix40Order, err := queryNewOrderSingle40()
-		if err != nil {
-			return err
-		}
-		order = &(fix40Order.MessageBuilder)
+	var order quickfix.Message
+	switch beginString {
+	case enum.BeginStringFIX40:
+		order, err = queryNewOrderSingle40()
 
-	case fix.BeginString_FIX41:
-		fix41Order, err := queryNewOrderSingle41()
-		if err != nil {
-			return err
-		}
-		order = &(fix41Order.MessageBuilder)
+	case enum.BeginStringFIX41:
+		order, err = queryNewOrderSingle41()
 
-	case fix.BeginString_FIX42:
-		fix42Order, err := queryNewOrderSingle42()
-		if err != nil {
-			return err
-		}
-		order = &(fix42Order.MessageBuilder)
+	case enum.BeginStringFIX42:
+		order, err = queryNewOrderSingle42()
 
-	case fix.BeginString_FIX43:
-		fix43Order, err := queryNewOrderSingle43()
-		if err != nil {
-			return err
-		}
-		order = &(fix43Order.MessageBuilder)
+	case enum.BeginStringFIX43:
+		order, err = queryNewOrderSingle43()
 
-	case fix.BeginString_FIX44:
-		fix44Order, err := queryNewOrderSingle44()
-		if err != nil {
-			return err
-		}
-		order = &(fix44Order.MessageBuilder)
+	case enum.BeginStringFIX44:
+		order, err = queryNewOrderSingle44()
 
-	case fix.BeginString_FIXT11:
-		fix50Order, err := queryNewOrderSingle50()
-		if err != nil {
-			return err
-		}
-		order = &(fix50Order.MessageBuilder)
+	case enum.BeginStringFIXT11:
+		order, err = queryNewOrderSingle50()
 	}
 
-	return quickfix.Send(*order)
+	if err != nil {
+		return err
+	}
+	bytes, _ := order.Build()
+
+	fmt.Println("Sending ", string(bytes))
+
+	return quickfix.Send(order)
 }

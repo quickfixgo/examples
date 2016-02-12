@@ -1,10 +1,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/fix/enum"
-	"github.com/quickfixgo/quickfix/fix/field"
+	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/quickfix/tag"
 
 	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
 	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
@@ -48,17 +49,17 @@ func (e *Executor) genOrderID() string {
 	return strconv.Itoa(e.orderID)
 }
 
-func (e *Executor) genExecID() string {
+func (e *Executor) genExecID() int {
 	e.execID++
-	return strconv.Itoa(e.execID)
+	return e.execID
 }
 
 //quickfix.Application interface
-func (e Executor) OnCreate(sessionID quickfix.SessionID)                                 { return }
-func (e Executor) OnLogon(sessionID quickfix.SessionID)                                  { return }
-func (e Executor) OnLogout(sessionID quickfix.SessionID)                                 { return }
-func (e Executor) ToAdmin(msg quickfix.MessageBuilder, sessionID quickfix.SessionID)     { return }
-func (e Executor) ToApp(msg quickfix.MessageBuilder, sessionID quickfix.SessionID) error { return nil }
+func (e Executor) OnCreate(sessionID quickfix.SessionID)                          { return }
+func (e Executor) OnLogon(sessionID quickfix.SessionID)                           { return }
+func (e Executor) OnLogout(sessionID quickfix.SessionID)                          { return }
+func (e Executor) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID)     { return }
+func (e Executor) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) error { return nil }
 func (e Executor) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
@@ -69,368 +70,236 @@ func (e *Executor) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (
 }
 
 func (e *Executor) OnFIX40NewOrderSingle(msg fix40nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
-		return
+	execReport := fix40er.Message{
+		ClOrdID:       &msg.ClOrdID,
+		Account:       msg.Account,
+		OrderID:       e.genOrderID(),
+		ExecID:        e.genExecID(),
+		ExecTransType: enum.ExecTransType_NEW,
+		OrdStatus:     enum.OrdStatus_FILLED,
+		Symbol:        msg.Symbol,
+		Side:          msg.Side,
+		OrderQty:      msg.OrderQty,
+		LastShares:    msg.OrderQty,
+		LastPx:        *msg.Price,
+		CumQty:        msg.OrderQty,
+		AvgPx:         *msg.Price,
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
-	}
-
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix40er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecTransType(enum.ExecTransType_NEW),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol, side, orderQty, field.NewLastShares(orderQty.Value), field.NewLastPx(price.Value), field.NewCumQty(orderQty.Value), field.NewAvgPx(price.Value))
-
-	execReport.Body().Set(clOrdID)
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func (e *Executor) OnFIX41NewOrderSingle(msg fix41nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
+	if msg.OrderQty == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
 		return
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
+	execReport := fix41er.Message{
+		ClOrdID:       &msg.ClOrdID,
+		Account:       msg.Account,
+		OrderID:       e.genOrderID(),
+		ExecID:        strconv.Itoa(e.genExecID()),
+		ExecTransType: enum.ExecTransType_NEW,
+		ExecType:      enum.ExecType_FILL,
+		OrdStatus:     enum.OrdStatus_FILLED,
+		Symbol:        msg.Symbol,
+		Side:          msg.Side,
+		OrderQty:      *msg.OrderQty,
+		LastShares:    *msg.OrderQty,
+		LastPx:        *msg.Price,
+		LeavesQty:     0,
+		CumQty:        *msg.OrderQty,
+		AvgPx:         *msg.Price,
 	}
 
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix41er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecTransType(enum.ExecTransType_NEW),
-		field.NewExecType(enum.ExecType_FILL),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol,
-		side,
-		orderQty,
-		field.NewLastShares(orderQty.Value),
-		field.NewLastPx(price.Value),
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Value),
-		field.NewAvgPx(price.Value))
-
-	execReport.Body().Set(clOrdID)
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func (e *Executor) OnFIX42NewOrderSingle(msg fix42nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
+	if msg.OrderQty == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
 		return
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
+	execReport := fix42er.Message{
+		ClOrdID:       &msg.ClOrdID,
+		Account:       msg.Account,
+		OrderID:       e.genOrderID(),
+		ExecID:        strconv.Itoa(e.genExecID()),
+		ExecTransType: enum.ExecTransType_NEW,
+		ExecType:      enum.ExecType_FILL,
+		OrdStatus:     enum.OrdStatus_FILLED,
+		Symbol:        msg.Symbol,
+		Side:          msg.Side,
+		OrderQty:      msg.OrderQty,
+		LeavesQty:     0,
+		LastShares:    msg.OrderQty,
+		CumQty:        *msg.OrderQty,
+		AvgPx:         *msg.Price,
+		LastPx:        msg.Price,
 	}
 
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix42er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecTransType(enum.ExecTransType_NEW),
-		field.NewExecType(enum.ExecType_FILL),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol,
-		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Value),
-		field.NewAvgPx(price.Value))
-
-	execReport.Body().Set(clOrdID)
-	execReport.Body().Set(orderQty)
-	execReport.Body().Set(field.NewLastShares(orderQty.Value))
-	execReport.Body().Set(field.NewLastPx(price.Value))
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func (e *Executor) OnFIX43NewOrderSingle(msg fix43nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
+	if msg.OrderQtyData.OrderQty == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
 		return
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
+	execReport := fix43er.Message{
+		ClOrdID:      &msg.ClOrdID,
+		Account:      msg.Account,
+		OrderID:      e.genOrderID(),
+		ExecID:       strconv.Itoa(e.genExecID()),
+		ExecType:     enum.ExecType_FILL,
+		OrdStatus:    enum.OrdStatus_FILLED,
+		Side:         msg.Side,
+		Instrument:   msg.Instrument,
+		OrderQtyData: msg.OrderQtyData,
+		LeavesQty:    0,
+		LastQty:      msg.OrderQtyData.OrderQty,
+		CumQty:       *msg.OrderQtyData.OrderQty,
+		AvgPx:        *msg.Price,
+		LastPx:       msg.Price,
 	}
-
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix43er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecType(enum.ExecType_FILL),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Value),
-		field.NewAvgPx(price.Value))
-
-	execReport.Body().Set(clOrdID)
-	execReport.Body().Set(symbol)
-	execReport.Body().Set(orderQty)
-	execReport.Body().Set(field.NewLastShares(orderQty.Value))
-	execReport.Body().Set(field.NewLastPx(price.Value))
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func (e *Executor) OnFIX44NewOrderSingle(msg fix44nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
+	if msg.OrderQtyData.OrderQty == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
 		return
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
+	execReport := fix44er.Message{
+		ClOrdID:      &msg.ClOrdID,
+		OrderID:      e.genOrderID(),
+		Account:      msg.Account,
+		ExecID:       strconv.Itoa(e.genExecID()),
+		ExecType:     enum.ExecType_FILL,
+		OrdStatus:    enum.OrdStatus_FILLED,
+		Side:         msg.Side,
+		Instrument:   msg.Instrument,
+		LeavesQty:    0,
+		CumQty:       *msg.OrderQtyData.OrderQty,
+		LastQty:      msg.OrderQtyData.OrderQty,
+		OrderQtyData: msg.OrderQtyData,
+		AvgPx:        *msg.Price,
+		LastPx:       msg.Price,
 	}
 
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix44er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecType(enum.ExecType_FILL),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Value),
-		field.NewAvgPx(price.Value))
-
-	execReport.Body().Set(clOrdID)
-	execReport.Body().Set(symbol)
-	execReport.Body().Set(orderQty)
-	execReport.Body().Set(field.NewLastQty(orderQty.Value))
-	execReport.Body().Set(field.NewLastPx(price.Value))
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func (e *Executor) OnFIX50NewOrderSingle(msg fix50nos.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	symbol, err := msg.Symbol()
-	if err != nil {
+	if msg.OrdType != enum.OrdType_LIMIT {
+		err = quickfix.ValueIsIncorrect(tag.OrdType)
 		return
 	}
 
-	side, err := msg.Side()
-	if err != nil {
+	if msg.Price == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
 		return
 	}
 
-	orderQty, err := msg.OrderQty()
-	if err != nil {
+	if msg.OrderQtyData.OrderQty == nil {
+		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
 		return
 	}
 
-	ordType, err := msg.OrdType()
-	if err != nil {
-		return
+	execReport := fix50er.Message{
+		ClOrdID:      &msg.ClOrdID,
+		Instrument:   msg.Instrument,
+		Account:      msg.Account,
+		OrderID:      e.genOrderID(),
+		ExecID:       strconv.Itoa(e.genExecID()),
+		ExecType:     enum.ExecType_FILL,
+		OrdStatus:    enum.OrdStatus_FILLED,
+		Side:         msg.Side,
+		OrderQtyData: msg.OrderQtyData,
+		LastQty:      msg.OrderQtyData.OrderQty,
+		LeavesQty:    0,
+		CumQty:       *msg.OrderQtyData.OrderQty,
+		LastPx:       msg.Price,
+		AvgPx:        msg.Price,
 	}
 
-	if ordType.Value != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(ordType.Tag())
-		return
-	}
-
-	price, err := msg.Price()
-	if err != nil {
-		return
-	}
-
-	clOrdID, err := msg.ClOrdID()
-	if err != nil {
-		return
-	}
-
-	execReport := fix50er.Builder(
-		field.NewOrderID(e.genOrderID()),
-		field.NewExecID(e.genExecID()),
-		field.NewExecType(enum.ExecType_FILL),
-		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Value))
-
-	execReport.Body().Set(clOrdID)
-	execReport.Body().Set(symbol)
-	execReport.Body().Set(orderQty)
-	execReport.Body().Set(field.NewLastQty(orderQty.Value))
-	execReport.Body().Set(field.NewLastPx(price.Value))
-	execReport.Body().Set(field.NewAvgPx(price.Value))
-
-	if acct, err := msg.Account(); err != nil {
-		execReport.Body().Set(acct)
-	}
-
-	quickfix.SendToTarget(execReport.MessageBuilder, sessionID)
+	quickfix.SendToTarget(execReport, sessionID)
 
 	return
 }
 
 func main() {
+	flag.Parse()
+
 	cfgFileName := "executor.cfg"
+	if flag.NArg() > 0 {
+		cfgFileName = flag.Arg(0)
+	}
+
 	cfg, err := os.Open(cfgFileName)
 	if err != nil {
 		fmt.Printf("Error opening %v, %v\n", cfgFileName, err)
