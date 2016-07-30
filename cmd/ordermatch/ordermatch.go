@@ -4,16 +4,17 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
+	"strconv"
+
 	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/quickfix/field"
 	"github.com/quickfixgo/quickfix/fix42/executionreport"
 	"github.com/quickfixgo/quickfix/fix42/marketdatarequest"
 	"github.com/quickfixgo/quickfix/fix42/newordersingle"
 	"github.com/quickfixgo/quickfix/fix42/ordercancelrequest"
-	"github.com/quickfixgo/quickfix/tag"
-	"os"
-	"os/signal"
-	"strconv"
 )
 
 //Application implements the quickfix.Application interface
@@ -62,25 +63,56 @@ func (a *Application) FromApp(msg quickfix.Message, sessionID quickfix.SessionID
 	return a.Route(msg, sessionID)
 }
 
-func (a *Application) onNewOrderSingle(msg newordersingle.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	if msg.Price == nil {
-		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
-		return
+func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
+		return err
 	}
-	if msg.OrderQty == nil {
-		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
-		return
+
+	symbol, err := msg.GetSymbol()
+	if err != nil {
+		return err
+	}
+
+	senderCompID, err := msg.Header.GetSenderCompID()
+	if err != nil {
+		return err
+	}
+
+	targetCompID, err := msg.Header.GetTargetCompID()
+	if err != nil {
+		return err
+	}
+
+	side, err := msg.GetSide()
+	if err != nil {
+		return err
+	}
+
+	ordType, err := msg.GetOrdType()
+	if err != nil {
+		return err
+	}
+
+	price, err := msg.GetPrice()
+	if err != nil {
+		return err
+	}
+
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
+		return err
 	}
 
 	order := Order{
-		ClOrdID:      msg.ClOrdID,
-		Symbol:       msg.Symbol,
-		SenderCompID: msg.Header.SenderCompID,
-		TargetCompID: msg.Header.TargetCompID,
-		Side:         msg.Side,
-		OrdType:      msg.OrdType,
-		Price:        *msg.Price,
-		Quantity:     *msg.OrderQty,
+		ClOrdID:      clOrdID.String(),
+		Symbol:       symbol.String(),
+		SenderCompID: senderCompID.String(),
+		TargetCompID: targetCompID.String(),
+		Side:         side.String(),
+		OrdType:      ordType.String(),
+		Price:        price.Float64(),
+		Quantity:     orderQty.Float64(),
 	}
 
 	a.Insert(order)
@@ -93,19 +125,34 @@ func (a *Application) onNewOrderSingle(msg newordersingle.Message, sessionID qui
 		matches = matches[1:]
 	}
 
-	return
+	return nil
 }
 
-func (a *Application) onOrderCancelRequest(msg ordercancelrequest.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	order := a.Cancel(msg.OrigClOrdID, msg.Symbol, msg.Side)
+func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelRequest, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+	origClOrdID, err := msg.GetOrigClOrdID()
+	if err != nil {
+		return err
+	}
+
+	symbol, err := msg.GetSymbol()
+	if err != nil {
+		return err
+	}
+
+	side, err := msg.GetSide()
+	if err != nil {
+		return err
+	}
+
+	order := a.Cancel(origClOrdID.String(), symbol.String(), side.String())
 	if order != nil {
 		a.cancelOrder(*order)
 	}
 
-	return
+	return nil
 }
 
-func (a *Application) onMarketDataRequest(msg marketdatarequest.Message, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
+func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
 	fmt.Printf("%+v\n", msg)
 	return
 }
@@ -132,23 +179,23 @@ func (a *Application) genExecID() string {
 }
 
 func (a *Application) updateOrder(order Order, status string) {
-	execReport := executionreport.Message{
-		OrderID:       order.ClOrdID,
-		ClOrdID:       &order.ClOrdID,
-		ExecID:        a.genExecID(),
-		ExecTransType: enum.ExecTransType_NEW,
-		ExecType:      status,
-		OrdStatus:     status,
-		Symbol:        order.Symbol,
-		Side:          order.Side,
-		OrderQty:      &order.Quantity,
-		LeavesQty:     order.OpenQuantity(),
-		CumQty:        order.ExecutedQuantity,
-		AvgPx:         order.AvgPx,
-	}
+	execReport := executionreport.New(
+		field.NewOrderID(order.ClOrdID),
+		field.NewExecID(a.genExecID()),
+		field.NewExecTransType(enum.ExecTransType_NEW),
+		field.NewExecType(status),
+		field.NewOrdStatus(status),
+		field.NewSymbol(order.Symbol),
+		field.NewSide(order.Side),
+		field.NewLeavesQty(order.OpenQuantity()),
+		field.NewCumQty(order.ExecutedQuantity),
+		field.NewAvgPx(order.AvgPx),
+	)
 
-	execReport.Header.TargetCompID = order.SenderCompID
-	execReport.Header.SenderCompID = order.TargetCompID
+	execReport.SetOrderQty(order.Quantity)
+	execReport.SetClOrdID(order.ClOrdID)
+	execReport.Header.SetTargetCompID(order.SenderCompID)
+	execReport.Header.SetSenderCompID(order.TargetCompID)
 
 	quickfix.Send(execReport)
 }
