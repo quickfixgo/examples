@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/quickfixgo/quickfix"
 	"os"
+
+	"github.com/quickfixgo/quickfix"
 )
 
 //TradeClient implements the quickfix.Application interface
@@ -38,6 +39,8 @@ func (e TradeClient) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID)
 
 //ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) (err error) {
+	msg.Build()
+	fmt.Printf("Sending %s\n", &msg)
 	return
 }
 
@@ -94,11 +97,12 @@ Loop:
 		case "1":
 			err = queryEnterOrder()
 
-		case "2":
-			err = queryCancelOrder()
+			/*		case "2":
+						err = queryCancelOrder()
 
-		case "3":
-			err = queryMarketDataRequest()
+					case "3":
+						err = queryMarketDataRequest()
+			*/
 
 		case "4":
 			//quit
