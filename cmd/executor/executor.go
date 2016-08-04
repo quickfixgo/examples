@@ -503,7 +503,7 @@ func main() {
 	}
 
 	interrupt := make(chan os.Signal)
-	signal.Notify(interrupt)
+	signal.Notify(interrupt, os.Interrupt, os.Kill)
 	<-interrupt
 
 	acceptor.Stop()
