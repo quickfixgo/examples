@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 	"github.com/quickfixgo/quickfix"
 )
 
@@ -88,14 +89,14 @@ func main() {
 
 Loop:
 	for {
-		action, err := queryAction()
+		action, err := internal.QueryAction()
 		if err != nil {
 			break
 		}
 
 		switch action {
 		case "1":
-			err = queryEnterOrder()
+			err = internal.QueryEnterOrder()
 
 			/*		case "2":
 						err = queryCancelOrder()

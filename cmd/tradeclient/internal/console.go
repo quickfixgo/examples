@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bufio"
@@ -70,7 +70,7 @@ func queryFieldChoices(fieldName string, choices []string, values []string) stri
 	return values[choice-1]
 }
 
-func queryAction() (string, error) {
+func QueryAction() (string, error) {
 	fmt.Println()
 	fmt.Println("1) Enter Order")
 	fmt.Println("2) Cancel Order")
@@ -494,7 +494,7 @@ func queryMarketDataRequest50() fix50mdr.MarketDataRequest {
 	return request
 }
 
-func queryEnterOrder() (err error) {
+func QueryEnterOrder() (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = e.(error)
