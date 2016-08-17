@@ -12,15 +12,11 @@ All examples have been ported from [QuickFIX](http://quickfixengine.org)
 Installation
 ------------
 
-To install QuickFIX/Go examples, use `go get`:
+To build and run the examples, you will first need [Go](http://www.golang.org) installed on your machine (version 1.6+ is *required*).
 
-```
-go get github.com/quickfixgo/examples
-```
+For local dev first make sure Go is properly installed, including setting up a [GOPATH](http://golang.org/doc/code.html#GOPATH).
 
-### Staying up to date
-
-To update the examples to the latest version, use `go get -u github.com/quickfixgo/examples`.
+Next, using [Git](https://git-scm.com/), clone this repository into `$GOPATH/src/github.com/quickfixgo/examples`. All the necessary dependencies are either vendored, so you just need to type `go build ./cmd/...`. This will compile the example code. If this exits with exit status 0, then everything is working!
 
 Licensing
 ---------
