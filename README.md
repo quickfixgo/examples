@@ -22,6 +22,11 @@ Next, using [Git](https://git-scm.com/), clone this repository into `$GOPATH/src
 $ make
 ```
 
+Running the Examples
+--------------------
+
+Following installation, the examples can be found in `$GOPATH/bin`.  The examples are meant to be run in pairs- the TradeClient as a client of either the Executor or OrderMatch.  By default, the examples will load the default configurations named after the example apps provided in the `config/` root directory.   Eg, running `$GOPATH/bin/tradeclient` will load the `config/tradeclient.cfg` configuration.  Each example can be run with a custom configuration as a command line argument (`$GOPATH/bin/tradeclient my_trade_client.cfg`).
+
 Licensing
 ---------
 
