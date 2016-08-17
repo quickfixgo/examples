@@ -1,4 +1,7 @@
-#Example QuickFIX/Go Applications
+Example QuickFIX/Go Applications
+================================
+
+[![Build Status](https://travis-ci.org/quickfixgo/examples.svg?branch=master)](https://travis-ci.org/quickfixgo/examples)
 
 * TradeClient is a simple console based trading client
 * Executor is a server that fills every limit order it receives
