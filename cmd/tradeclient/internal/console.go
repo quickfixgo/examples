@@ -531,7 +531,7 @@ func QueryEnterOrder() (err error) {
 	return quickfix.Send(order)
 }
 
-func queryCancelOrder() (err error) {
+func QueryCancelOrder() (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = e.(error)
@@ -572,7 +572,7 @@ func queryCancelOrder() (err error) {
 	return
 }
 
-func queryMarketDataRequest() error {
+func QueryMarketDataRequest() error {
 	beginString, err := queryVersion()
 	if err != nil {
 		return err

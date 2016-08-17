@@ -1,10 +1,11 @@
-package main
+package internal
 
 import (
 	"fmt"
-	"github.com/quickfixgo/quickfix/enum"
 	"sort"
 	"time"
+
+	"github.com/quickfixgo/quickfix/enum"
 )
 
 type orderList struct {

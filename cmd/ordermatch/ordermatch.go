@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path"
 	"strconv"
 
+	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
 	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/quickfix/enum"
 	"github.com/quickfixgo/quickfix/field"
@@ -20,14 +22,14 @@ import (
 //Application implements the quickfix.Application interface
 type Application struct {
 	*quickfix.MessageRouter
-	*OrderMatcher
+	*internal.OrderMatcher
 	execID int
 }
 
 func newApplication() *Application {
 	app := &Application{
 		MessageRouter: quickfix.NewMessageRouter(),
-		OrderMatcher:  NewOrderMatcher(),
+		OrderMatcher:  internal.NewOrderMatcher(),
 	}
 	app.AddRoute(newordersingle.Route(app.onNewOrderSingle))
 	app.AddRoute(ordercancelrequest.Route(app.onOrderCancelRequest))
@@ -104,7 +106,7 @@ func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessio
 		return err
 	}
 
-	order := Order{
+	order := internal.Order{
 		ClOrdID:      clOrdID.String(),
 		Symbol:       symbol.String(),
 		SenderCompID: senderCompID.String(),
@@ -157,11 +159,11 @@ func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataReques
 	return
 }
 
-func (a *Application) acceptOrder(order Order) {
+func (a *Application) acceptOrder(order internal.Order) {
 	a.updateOrder(order, enum.OrdStatus_NEW)
 }
 
-func (a *Application) fillOrder(order Order) {
+func (a *Application) fillOrder(order internal.Order) {
 	status := enum.OrdStatus_FILLED
 	if !order.IsClosed() {
 		status = enum.OrdStatus_PARTIALLY_FILLED
@@ -169,7 +171,7 @@ func (a *Application) fillOrder(order Order) {
 	a.updateOrder(order, status)
 }
 
-func (a *Application) cancelOrder(order Order) {
+func (a *Application) cancelOrder(order internal.Order) {
 	a.updateOrder(order, enum.OrdStatus_CANCELED)
 }
 
@@ -178,7 +180,7 @@ func (a *Application) genExecID() string {
 	return strconv.Itoa(a.execID)
 }
 
-func (a *Application) updateOrder(order Order, status string) {
+func (a *Application) updateOrder(order internal.Order, status string) {
 	execReport := executionreport.New(
 		field.NewOrderID(order.ClOrdID),
 		field.NewExecID(a.genExecID()),
@@ -203,7 +205,7 @@ func (a *Application) updateOrder(order Order, status string) {
 func main() {
 	flag.Parse()
 
-	cfgFileName := "ordermatch.cfg"
+	cfgFileName := path.Join("config", "ordermatch.cfg")
 	if flag.NArg() > 0 {
 		cfgFileName = flag.Arg(0)
 	}

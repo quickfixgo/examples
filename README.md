@@ -16,7 +16,11 @@ To build and run the examples, you will first need [Go](http://www.golang.org) i
 
 For local dev first make sure Go is properly installed, including setting up a [GOPATH](http://golang.org/doc/code.html#GOPATH).
 
-Next, using [Git](https://git-scm.com/), clone this repository into `$GOPATH/src/github.com/quickfixgo/examples`. All the necessary dependencies are either vendored, so you just need to type `go build ./cmd/...`. This will compile the example code. If this exits with exit status 0, then everything is working!
+Next, using [Git](https://git-scm.com/), clone this repository into `$GOPATH/src/github.com/quickfixgo/examples`. All the necessary dependencies are either vendored, so you just need to type `make`. This will compile and install the examples into `$GOPATH/bin`. If this exits with exit status 0, then everything is working!
+
+```sh
+$ make
+```
 
 Licensing
 ---------

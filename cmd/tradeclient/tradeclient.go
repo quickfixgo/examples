@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 	"github.com/quickfixgo/quickfix"
@@ -54,7 +55,7 @@ func (e TradeClient) FromApp(msg quickfix.Message, sessionID quickfix.SessionID)
 func main() {
 	flag.Parse()
 
-	cfgFileName := "tradeclient.cfg"
+	cfgFileName := path.Join("config", "tradeclient.cfg")
 	if flag.NArg() > 0 {
 		cfgFileName = flag.Arg(0)
 	}
@@ -98,12 +99,11 @@ Loop:
 		case "1":
 			err = internal.QueryEnterOrder()
 
-			/*		case "2":
-						err = queryCancelOrder()
+		case "2":
+			err = internal.QueryCancelOrder()
 
-					case "3":
-						err = queryMarketDataRequest()
-			*/
+		case "3":
+			err = internal.QueryMarketDataRequest()
 
 		case "4":
 			//quit
