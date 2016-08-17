@@ -8,3 +8,21 @@ Example QuickFIX/Go Applications
 * OrderMatch is a primitive matching engine 
 
 All examples have been ported from [QuickFIX](http://quickfixengine.org)
+
+Installation
+------------
+
+To install QuickFIX/Go examples, use `go get`:
+
+```
+go get github.com/quickfixgo/examples
+```
+
+### Staying up to date
+
+To update the examples to the latest version, use `go get -u github.com/quickfixgo/examples`.
+
+Licensing
+---------
+
+This software is available under the QuickFIX Software License. Please see the [LICENSE.txt](https://github.com/quickfixgo/examples/blob/master/LICENSE.txt) for the terms specified by the QuickFIX Software License.
