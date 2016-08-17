@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"path"
 
 	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/quickfix/enum"
@@ -428,49 +429,10 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 	return
 }
 
-/*
-func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	if msg.OrdType != enum.OrdType_LIMIT {
-		err = quickfix.ValueIsIncorrect(tag.OrdType)
-		return
-	}
-
-	if msg.Price == nil {
-		err = quickfix.ConditionallyRequiredFieldMissing(tag.Price)
-		return
-	}
-
-	if msg.OrderQtyData.OrderQty == nil {
-		err = quickfix.ConditionallyRequiredFieldMissing(tag.OrderQty)
-		return
-	}
-
-	execReport := fix50er.ExecutionReport{
-		ClOrdID:      &msg.ClOrdID,
-		Instrument:   msg.Instrument,
-		Account:      msg.Account,
-		OrderID:      e.genOrderID(),
-		ExecID:       strconv.Itoa(e.genExecID()),
-		ExecType:     enum.ExecType_FILL,
-		OrdStatus:    enum.OrdStatus_FILLED,
-		Side:         msg.Side,
-		OrderQtyData: msg.OrderQtyData,
-		LastQty:      msg.OrderQtyData.OrderQty,
-		LeavesQty:    0,
-		CumQty:       *msg.OrderQtyData.OrderQty,
-		LastPx:       msg.Price,
-		AvgPx:        msg.Price,
-	}
-
-	quickfix.SendToTarget(execReport, sessionID)
-
-	return
-}*/
-
 func main() {
 	flag.Parse()
 
-	cfgFileName := "executor.cfg"
+	cfgFileName := path.Join("config", "executor.cfg")
 	if flag.NArg() > 0 {
 		cfgFileName = flag.Arg(0)
 	}

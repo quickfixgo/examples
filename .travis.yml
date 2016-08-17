@@ -11,4 +11,4 @@ matrix:
 
 install: 
 
-script: go build ./cmd/...
+script: make
