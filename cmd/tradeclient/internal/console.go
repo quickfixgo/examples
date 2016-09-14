@@ -8,6 +8,7 @@ import (
 	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/quickfix/enum"
 	"github.com/quickfixgo/quickfix/field"
+	"github.com/shopspring/decimal"
 
 	"os"
 	"strconv"
@@ -43,8 +44,8 @@ func queryString(fieldName string) string {
 	return scanner.Text()
 }
 
-func queryFloat(fieldName string) float64 {
-	val, err := strconv.ParseFloat(queryString(fieldName), 64)
+func queryDecimal(fieldName string) decimal.Decimal {
+	val, err := decimal.NewFromString(queryString(fieldName))
 	if err != nil {
 		panic(err)
 	}
@@ -190,15 +191,15 @@ func queryTimeInForce() field.TimeInForceField {
 }
 
 func queryOrderQty() field.OrderQtyField {
-	return field.NewOrderQty(queryFloat("OrderQty"))
+	return field.NewOrderQty(queryDecimal("OrderQty"), 2)
 }
 
 func queryPrice() field.PriceField {
-	return field.NewPrice(queryFloat("Price"))
+	return field.NewPrice(queryDecimal("Price"), 2)
 }
 
 func queryStopPx() field.StopPxField {
-	return field.NewStopPx(queryFloat("Stop Price"))
+	return field.NewStopPx(queryDecimal("Stop Price"), 2)
 }
 
 func querySenderCompID() field.SenderCompIDField {

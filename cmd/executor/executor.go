@@ -9,6 +9,7 @@ import (
 	"github.com/quickfixgo/quickfix/enum"
 	"github.com/quickfixgo/quickfix/field"
 	"github.com/quickfixgo/quickfix/tag"
+	"github.com/shopspring/decimal"
 
 	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
 	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
@@ -109,11 +110,17 @@ func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID 
 		symbol,
 		side,
 		orderQty,
-		field.NewLastShares(orderQty.Float64()),
-		field.NewLastPx(price.Float64()),
-		field.NewCumQty(orderQty.Float64()),
-		field.NewAvgPx(price.Float64()),
+		field.NewLastShares(orderQty.Decimal, 2),
+		field.NewLastPx(price.Decimal, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewAvgPx(price.Decimal, 2),
 	)
+
+	var clOrdID field.ClOrdIDField
+	if clOrdID, err = msg.GetClOrdID(); err != nil {
+		return
+	}
+	execReport.Set(clOrdID)
 
 	quickfix.SendToTarget(execReport, sessionID)
 
@@ -158,12 +165,18 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 		symbol,
 		side,
 		orderQty,
-		field.NewLastShares(orderQty.Float64()),
-		field.NewLastPx(price.Float64()),
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Float64()),
-		field.NewAvgPx(price.Float64()),
+		field.NewLastShares(orderQty.Decimal, 2),
+		field.NewLastPx(price.Decimal, 2),
+		field.NewLeavesQty(decimal.Zero, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewAvgPx(price.Decimal, 2),
 	)
+
+	var clOrdID field.ClOrdIDField
+	if clOrdID, err = msg.GetClOrdID(); err != nil {
+		return
+	}
+	execReport.Set(clOrdID)
 
 	quickfix.SendToTarget(execReport, sessionID)
 
@@ -212,15 +225,15 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		symbol,
 		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Float64()),
-		field.NewAvgPx(price.Float64()),
+		field.NewLeavesQty(decimal.Zero, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewAvgPx(price.Decimal, 2),
 	)
 
 	execReport.Set(clOrdID)
 	execReport.Set(orderQty)
-	execReport.SetLastShares(orderQty.Float64())
-	execReport.SetLastPx(price.Float64())
+	execReport.SetLastShares(orderQty.Decimal, 2)
+	execReport.SetLastPx(price.Decimal, 2)
 
 	if msg.HasAccount() {
 		var acct field.AccountField
@@ -275,16 +288,16 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Float64()),
-		field.NewAvgPx(price.Float64()),
+		field.NewLeavesQty(decimal.Zero, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewAvgPx(price.Decimal, 2),
 	)
 
 	execReport.Set(clOrdID)
 	execReport.Set(symbol)
 	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Float64())
-	execReport.SetLastPx(price.Float64())
+	execReport.SetLastQty(orderQty.Decimal, 2)
+	execReport.SetLastPx(price.Decimal, 2)
 
 	if msg.HasAccount() {
 		var acct field.AccountField
@@ -340,16 +353,16 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Float64()),
-		field.NewAvgPx(price.Float64()),
+		field.NewLeavesQty(decimal.Zero, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewAvgPx(price.Decimal, 2),
 	)
 
 	execReport.Set(clOrdID)
 	execReport.Set(symbol)
 	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Float64())
-	execReport.SetLastPx(price.Float64())
+	execReport.SetLastQty(orderQty.Decimal, 2)
+	execReport.SetLastPx(price.Decimal, 2)
 
 	if msg.HasAccount() {
 		var acct field.AccountField
@@ -405,16 +418,16 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		side,
-		field.NewLeavesQty(0),
-		field.NewCumQty(orderQty.Float64()),
+		field.NewLeavesQty(decimal.Zero, 2),
+		field.NewCumQty(orderQty.Decimal, 2),
 	)
 
 	execReport.Set(clOrdID)
 	execReport.Set(symbol)
 	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Float64())
-	execReport.SetLastPx(price.Float64())
-	execReport.SetAvgPx(price.Float64())
+	execReport.SetLastQty(orderQty.Decimal, 2)
+	execReport.SetLastPx(price.Decimal, 2)
+	execReport.SetAvgPx(price.Decimal, 2)
 
 	if msg.HasAccount() {
 		var acct field.AccountField

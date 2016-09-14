@@ -113,8 +113,8 @@ func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessio
 		TargetCompID: targetCompID.String(),
 		Side:         side.String(),
 		OrdType:      ordType.String(),
-		Price:        price.Float64(),
-		Quantity:     orderQty.Float64(),
+		Price:        price.Decimal,
+		Quantity:     orderQty.Decimal,
 	}
 
 	a.Insert(order)
@@ -189,13 +189,19 @@ func (a *Application) updateOrder(order internal.Order, status string) {
 		field.NewOrdStatus(status),
 		field.NewSymbol(order.Symbol),
 		field.NewSide(order.Side),
-		field.NewLeavesQty(order.OpenQuantity()),
-		field.NewCumQty(order.ExecutedQuantity),
-		field.NewAvgPx(order.AvgPx),
+		field.NewLeavesQty(order.OpenQuantity(), 2),
+		field.NewCumQty(order.ExecutedQuantity, 2),
+		field.NewAvgPx(order.AvgPx, 2),
 	)
-
-	execReport.SetOrderQty(order.Quantity)
+	execReport.SetOrderQty(order.Quantity, 2)
 	execReport.SetClOrdID(order.ClOrdID)
+
+	switch status {
+	case enum.OrdStatus_FILLED, enum.OrdStatus_PARTIALLY_FILLED:
+		execReport.SetLastShares(order.LastExecutedQuantity, 2)
+		execReport.SetLastPx(order.LastExecutedPrice, 2)
+	}
+
 	execReport.Header.SetTargetCompID(order.SenderCompID)
 	execReport.Header.SetSenderCompID(order.TargetCompID)
 

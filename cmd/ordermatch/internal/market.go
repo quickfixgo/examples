@@ -38,9 +38,10 @@ func (l *orderList) Remove(clordID string) (order *Order) {
 
 func bids() (b orderList) {
 	b.sortBy = func(i, j *Order) bool {
-		if i.Price > j.Price {
+		switch i.Price.Cmp(j.Price) {
+		case 1:
 			return true
-		} else if i.Price < j.Price {
+		case -1:
 			return false
 		}
 
@@ -52,10 +53,11 @@ func bids() (b orderList) {
 
 func offers() (o orderList) {
 	o.sortBy = func(i, j *Order) bool {
-		if i.Price < j.Price {
-			return true
-		} else if i.Price < j.Price {
+		switch i.Price.Cmp(j.Price) {
+		case 1:
 			return false
+		case -1:
+			return true
 		}
 
 		return i.insertTime.Before(j.insertTime)
@@ -121,7 +123,7 @@ func (m *Market) Match() (matched []Order) {
 
 		price := bestOffer.Price
 		quantity := bestBid.OpenQuantity()
-		if offerQuant := bestOffer.OpenQuantity(); offerQuant < quantity {
+		if offerQuant := bestOffer.OpenQuantity(); offerQuant.Cmp(quantity) == -1 {
 			quantity = offerQuant
 		}
 
