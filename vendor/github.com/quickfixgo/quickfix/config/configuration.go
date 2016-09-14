@@ -1,5 +1,8 @@
 package config
 
+//NOTE: Additions to this file should be made to both config/doc.go and http://www.quickfixgo.org/docs/
+
+//Const configuration settings
 const (
 	BeginString              string = "BeginString"
 	SenderCompID             string = "SenderCompID"
@@ -12,6 +15,7 @@ const (
 	SocketPrivateKeyFile     string = "SocketPrivateKeyFile"
 	SocketCertificateFile    string = "SocketCertificateFile"
 	SocketCAFile             string = "SocketCAFile"
+	SocketInsecureSkipVerify string = "SocketInsecureSkipVerify"
 	DefaultApplVerID         string = "DefaultApplVerID"
 	StartTime                string = "StartTime"
 	EndTime                  string = "EndTime"
@@ -28,8 +32,9 @@ const (
 	HeartBtInt               string = "HeartBtInt"
 	FileLogPath              string = "FileLogPath"
 	FileStorePath            string = "FileStorePath"
-	SQLDriver                string = "SQLDriver"
-	SQLDataSourceName        string = "SQLDataSourceName"
-	SQLConnMaxLifetime       string = "SQLConnMaxLifetime"
+	SQLStoreDriver           string = "SQLStoreDriver"
+	SQLStoreDataSourceName   string = "SQLStoreDataSourceName"
+	SQLStoreConnMaxLifetime  string = "SQLStoreConnMaxLifetime"
 	ValidateFieldsOutOfOrder string = "ValidateFieldsOutOfOrder"
+	ResendRequestChunkSize   string = "ResendRequestChunkSize"
 )

@@ -78,6 +78,10 @@ For week long sessions, the ending day of week for the session. Use in combinati
 
  Full day of week in English, or 3 letter abbreviation (i.e. Monday and Mon are valid)
 
+ResendRequestChunkSize
+
+Setting to limit the size of a resend request in case of missing messages. This is useful when the remote FIX engine does not allow to ask for more than n message for a ResendRequest.  E.g. if the ResendRequestChunkSize is set to 5 and a gap of 7 messages is detected, a first resend request will be sent for 5 messages. When this gap has been filled, another resend request for 2 messages will be sent. If the ResendRequestChunkSize is set to 0, only one ResendRequest for all the missing messages will be sent. Value must be positive integer. Defaults to 0 (disables splitting).
+
 ResetOnLogon
 
 Determines if sequence numbers should be reset when receiving a logon request. Acceptors only.	Valid Values:
@@ -211,15 +215,15 @@ FileStorePath
 
 Directory to store sequence number and message files.  Only used with FileStoreFactory.
 
-SQLDriver
+SQLStoreDriver
 
 The name of the database driver to use (see https://github.com/golang/go/wiki/SQLDrivers for the list of available drivers).  Only used with SqlStoreFactory.
 
-SQLDataSourceName
+SQLStoreDataSourceName
 
 The driver-specific data source name of the database to use.  Only used with SqlStoreFactory.
 
-SQLConnMaxLifetime
+SQLStoreConnMaxLifetime
 
 SetConnMaxLifetime sets the maximum duration of time that a database connection may be reused (see https://golang.org/pkg/database/sql/#DB.SetConnMaxLifetime).  Defaults to zero, which causes connections to be reused forever.  Only used with SqlStoreFactory.
 
