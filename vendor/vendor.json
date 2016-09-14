@@ -211,6 +211,12 @@
 			"path": "github.com/quickfixgo/quickfix/tag",
 			"revision": "666d295eba4d271c4b55acca5e363c97bee42742",
 			"revisionTime": "2016-08-16T20:57:37Z"
+		},
+		{
+			"checksumSHA1": "/o4h+zapTyKGjeZqcNhUWeikF0M=",
+			"path": "github.com/shopspring/decimal",
+			"revision": "74d668a796fa3734c552fb907d9b83146d0bebee",
+			"revisionTime": "2016-03-11T12:45:26Z"
 		}
 	],
 	"rootPath": "github.com/quickfixgo/examples"
