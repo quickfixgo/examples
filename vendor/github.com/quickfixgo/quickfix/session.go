@@ -31,9 +31,9 @@ type session struct {
 	application  Application
 	validator
 	stateMachine
-	stateTimer   internal.EventTimer
-	peerTimer    internal.EventTimer
-	messageStash map[int]Message
+	stateTimer internal.EventTimer
+	peerTimer  internal.EventTimer
+	sentReset  bool
 
 	targetDefaultApplVerID string
 
@@ -128,7 +128,7 @@ func (s *session) sendLogon(resetStore, setResetSeqNum bool) error {
 	return nil
 }
 
-func (s *session) sendLogout(reason string) error {
+func (s *session) buildLogout(reason string) Message {
 	logout := NewMessage()
 	logout.Header.SetField(tagMsgType, FIXString("5"))
 	logout.Header.SetField(tagBeginString, FIXString(s.sessionID.BeginString))
@@ -137,10 +137,16 @@ func (s *session) sendLogout(reason string) error {
 	if reason != "" {
 		logout.Body.SetField(tagText, FIXString(reason))
 	}
+
+	return logout
+}
+
+func (s *session) sendLogout(reason string) error {
+	logout := s.buildLogout(reason)
 	return s.send(logout)
 }
 
-func (s *session) resend(msg Message) error {
+func (s *session) resend(msg Message) bool {
 	msg.Header.SetField(tagPossDupFlag, FIXBoolean(true))
 
 	var origSendingTime FIXString
@@ -150,12 +156,7 @@ func (s *session) resend(msg Message) error {
 
 	s.insertSendingTime(msg.Header)
 
-	if _, err := msg.Build(); err != nil {
-		return err
-	}
-	s.sendBytes(msg.rawMessage)
-
-	return nil
+	return s.application.ToApp(msg, s.sessionID) == nil
 }
 
 //queueForSend will validate, persist, and queue the message for send
@@ -240,6 +241,26 @@ func (s *session) prepMessageForSend(msg *Message) error {
 
 	if isAdminMessageType(string(msgType)) {
 		s.application.ToAdmin(*msg, s.sessionID)
+
+		if msgType.String() == enum.MsgType_LOGON {
+			var resetSeqNumFlag FIXBoolean
+			if msg.Body.Has(tagResetSeqNumFlag) {
+				if err := msg.Body.GetField(tagResetSeqNumFlag, &resetSeqNumFlag); err != nil {
+					return err
+				}
+			}
+
+			if resetSeqNumFlag.Bool() {
+				if err := s.store.Reset(); err != nil {
+					return err
+				}
+
+				s.sentReset = true
+				seqNum = s.store.NextSenderMsgSeqNum()
+				msg.Header.SetField(tagMsgSeqNum, FIXInt(seqNum))
+			}
+
+		}
 	} else {
 		if err := s.application.ToApp(*msg, s.sessionID); err != nil {
 			return err
@@ -280,26 +301,42 @@ func (s *session) sendBytes(msg []byte) {
 	s.stateTimer.Reset(s.HeartBtInt)
 }
 
-func (s *session) doTargetTooHigh(reject targetTooHigh) error {
+func (s *session) doTargetTooHigh(reject targetTooHigh) (nextState resendState, err error) {
 	s.log.OnEventf("MsgSeqNum too high, expecting %v but received %v", reject.ExpectedTarget, reject.ReceivedTarget)
+	return s.sendResendRequest(reject.ExpectedTarget, reject.ReceivedTarget-1)
+}
+
+func (s *session) sendResendRequest(beginSeq, endSeq int) (nextState resendState, err error) {
+	nextState.resendRangeEnd = endSeq
 
 	resend := NewMessage()
-	resend.Header.SetField(tagMsgType, FIXString("2"))
-	resend.Body.SetField(tagBeginSeqNo, FIXInt(reject.ExpectedTarget))
+	resend.Header.SetField(tagMsgType, FIXString(enum.MsgType_RESEND_REQUEST))
+	resend.Body.SetField(tagBeginSeqNo, FIXInt(beginSeq))
 
-	var endSeqNum = 0
-	if s.sessionID.BeginString < enum.BeginStringFIX42 {
-		endSeqNum = 999999
-	}
-	resend.Body.SetField(tagEndSeqNo, FIXInt(endSeqNum))
-
-	if err := s.send(resend); err != nil {
-		return err
+	var endSeqNo int
+	if s.ResendRequestChunkSize != 0 {
+		endSeqNo = beginSeq + s.ResendRequestChunkSize - 1
+	} else {
+		endSeqNo = endSeq
 	}
 
-	s.log.OnEventf("Sent ResendRequest FROM: %v TO: %v", reject.ExpectedTarget, endSeqNum)
+	if endSeqNo < endSeq {
+		nextState.currentResendRangeEnd = endSeqNo
+	} else {
+		if s.sessionID.BeginString < enum.BeginStringFIX42 {
+			endSeqNo = 999999
+		} else {
+			endSeqNo = 0
+		}
+	}
+	resend.Body.SetField(tagEndSeqNo, FIXInt(endSeqNo))
 
-	return nil
+	if err = s.send(resend); err != nil {
+		return
+	}
+	s.log.OnEventf("Sent ResendRequest FROM: %v TO: %v", beginSeq, endSeqNo)
+
+	return
 }
 
 func (s *session) handleLogon(msg Message) error {
@@ -332,7 +369,9 @@ func (s *session) handleLogon(msg Message) error {
 	if err := msg.Body.GetField(tagResetSeqNumFlag, &resetSeqNumFlag); err == nil {
 		if resetSeqNumFlag {
 			s.log.OnEvent("Logon contains ResetSeqNumFlag=Y, resetting sequence numbers to 1")
-			resetStore = true
+			if !s.sentReset {
+				resetStore = true
+			}
 		}
 	}
 
@@ -357,15 +396,13 @@ func (s *session) handleLogon(msg Message) error {
 			return err
 		}
 	}
+	s.sentReset = false
 
 	s.peerTimer.Reset(time.Duration(float64(1.2) * float64(s.HeartBtInt)))
 	s.application.OnLogon(s.sessionID)
 
 	if err := s.checkTargetTooHigh(msg); err != nil {
-		switch TypedError := err.(type) {
-		case targetTooHigh:
-			return s.doTargetTooHigh(TypedError)
-		}
+		return err
 	}
 
 	return s.store.IncrNextTargetMsgSeqNum()
@@ -597,7 +634,7 @@ func (s *session) onAdmin(msg interface{}) {
 
 		s.messageIn = msg.messageIn
 		s.messageOut = msg.messageOut
-		s.messageStash = make(map[int]Message)
+		s.sentReset = false
 
 		s.Connect(s)
 
