@@ -3,6 +3,7 @@ package internal
 import (
 	"time"
 
+	"github.com/quickfixgo/quickfix/enum"
 	"github.com/shopspring/decimal"
 )
 
@@ -11,8 +12,8 @@ type Order struct {
 	Symbol               string
 	SenderCompID         string
 	TargetCompID         string
-	Side                 string
-	OrdType              string
+	Side                 enum.Side
+	OrdType              enum.OrdType
 	Price                decimal.Decimal
 	Quantity             decimal.Decimal
 	ExecutedQuantity     decimal.Decimal

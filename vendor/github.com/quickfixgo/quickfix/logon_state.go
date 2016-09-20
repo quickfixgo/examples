@@ -15,7 +15,7 @@ func (s logonState) FixMsgIn(session *session, msg Message) (nextState sessionSt
 		return handleStateError(session, err)
 	}
 
-	if string(msgType) != enum.MsgType_LOGON {
+	if enum.MsgType(msgType) != enum.MsgType_LOGON {
 		session.log.OnEventf("Invalid Session State: Received Msg %s while waiting for Logon", msg)
 		return latentState{}
 	}
@@ -24,9 +24,9 @@ func (s logonState) FixMsgIn(session *session, msg Message) (nextState sessionSt
 		switch err := err.(type) {
 		case RejectLogon:
 			session.log.OnEvent(err.Text)
-			msg := session.buildLogout(err.Text)
+			logout := session.buildLogout(err.Text)
 
-			if err := session.dropAndSend(msg, false); err != nil {
+			if err := session.dropAndSendInReplyTo(logout, false, &msg); err != nil {
 				session.logError(err)
 			}
 
