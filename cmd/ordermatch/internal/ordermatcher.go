@@ -1,6 +1,10 @@
 package internal
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/quickfixgo/quickfix/enum"
+)
 
 type OrderMatcher struct {
 	markets map[string]*Market
@@ -34,7 +38,7 @@ func (m *OrderMatcher) Insert(order Order) {
 	market.Insert(order)
 }
 
-func (m *OrderMatcher) Cancel(clordID, symbol, side string) *Order {
+func (m *OrderMatcher) Cancel(clordID, symbol string, side enum.Side) *Order {
 	market, ok := m.markets[symbol]
 	if !ok {
 		return nil

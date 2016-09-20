@@ -107,14 +107,14 @@ func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessio
 	}
 
 	order := internal.Order{
-		ClOrdID:      clOrdID.String(),
-		Symbol:       symbol.String(),
-		SenderCompID: senderCompID.String(),
-		TargetCompID: targetCompID.String(),
-		Side:         side.String(),
-		OrdType:      ordType.String(),
-		Price:        price.Decimal,
-		Quantity:     orderQty.Decimal,
+		ClOrdID:      clOrdID,
+		Symbol:       symbol,
+		SenderCompID: senderCompID,
+		TargetCompID: targetCompID,
+		Side:         side,
+		OrdType:      ordType,
+		Price:        price,
+		Quantity:     orderQty,
 	}
 
 	a.Insert(order)
@@ -146,7 +146,7 @@ func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelReq
 		return err
 	}
 
-	order := a.Cancel(origClOrdID.String(), symbol.String(), side.String())
+	order := a.Cancel(origClOrdID, symbol, side)
 	if order != nil {
 		a.cancelOrder(*order)
 	}
@@ -180,12 +180,12 @@ func (a *Application) genExecID() string {
 	return strconv.Itoa(a.execID)
 }
 
-func (a *Application) updateOrder(order internal.Order, status string) {
+func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 	execReport := executionreport.New(
 		field.NewOrderID(order.ClOrdID),
 		field.NewExecID(a.genExecID()),
 		field.NewExecTransType(enum.ExecTransType_NEW),
-		field.NewExecType(status),
+		field.NewExecType(enum.ExecType(status)),
 		field.NewOrdStatus(status),
 		field.NewSymbol(order.Symbol),
 		field.NewSide(order.Side),

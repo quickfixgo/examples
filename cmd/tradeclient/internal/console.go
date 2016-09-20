@@ -140,16 +140,16 @@ func querySide() field.SideField {
 	}
 
 	values := []string{
-		enum.Side_BUY,
-		enum.Side_SELL,
-		enum.Side_SELL_SHORT,
-		enum.Side_SELL_SHORT_EXEMPT,
-		enum.Side_CROSS,
-		enum.Side_CROSS_SHORT,
+		string(enum.Side_BUY),
+		string(enum.Side_SELL),
+		string(enum.Side_SELL_SHORT),
+		string(enum.Side_SELL_SHORT_EXEMPT),
+		string(enum.Side_CROSS),
+		string(enum.Side_CROSS_SHORT),
 		"A",
 	}
 
-	return field.NewSide(queryFieldChoices("Side", choices, values))
+	return field.NewSide(enum.Side(queryFieldChoices("Side", choices, values)))
 }
 
 func queryOrdType(f *field.OrdTypeField) field.OrdTypeField {
@@ -161,10 +161,10 @@ func queryOrdType(f *field.OrdTypeField) field.OrdTypeField {
 	}
 
 	values := []string{
-		enum.OrdType_MARKET,
-		enum.OrdType_LIMIT,
-		enum.OrdType_STOP,
-		enum.OrdType_STOP_LIMIT,
+		string(enum.OrdType_MARKET),
+		string(enum.OrdType_LIMIT),
+		string(enum.OrdType_STOP),
+		string(enum.OrdType_STOP_LIMIT),
 	}
 
 	f.FIXString = quickfix.FIXString(queryFieldChoices("OrdType", choices, values))
@@ -180,14 +180,14 @@ func queryTimeInForce() field.TimeInForceField {
 		"GTX",
 	}
 	values := []string{
-		enum.TimeInForce_DAY,
-		enum.TimeInForce_IMMEDIATE_OR_CANCEL,
-		enum.TimeInForce_AT_THE_OPENING,
-		enum.TimeInForce_GOOD_TILL_CANCEL,
-		enum.TimeInForce_GOOD_TILL_CROSSING,
+		string(enum.TimeInForce_DAY),
+		string(enum.TimeInForce_IMMEDIATE_OR_CANCEL),
+		string(enum.TimeInForce_AT_THE_OPENING),
+		string(enum.TimeInForce_GOOD_TILL_CANCEL),
+		string(enum.TimeInForce_GOOD_TILL_CROSSING),
 	}
 
-	return field.NewTimeInForce(queryFieldChoices("TimeInForce", choices, values))
+	return field.NewTimeInForce(enum.TimeInForce(queryFieldChoices("TimeInForce", choices, values)))
 }
 
 func queryOrderQty() field.OrderQtyField {
@@ -242,12 +242,12 @@ func queryNewOrderSingle40() fix40nos.NewOrderSingle {
 	var ordType field.OrdTypeField
 	order := fix40nos.New(queryClOrdID(), field.NewHandlInst("1"), querySymbol(), querySide(), queryOrderQty(), queryOrdType(&ordType))
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
@@ -263,12 +263,12 @@ func queryNewOrderSingle41() (msg quickfix.Message) {
 	order := fix41nos.New(queryClOrdID(), field.NewHandlInst("1"), querySymbol(), querySide(), queryOrdType(&ordType))
 	order.Set(queryOrderQty())
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
@@ -285,12 +285,12 @@ func queryNewOrderSingle42() (msg quickfix.Message) {
 	order := fix42nos.New(queryClOrdID(), field.NewHandlInst("1"), querySymbol(), querySide(), field.NewTransactTime(time.Now()), queryOrdType(&ordType))
 	order.Set(queryOrderQty())
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
@@ -307,12 +307,12 @@ func queryNewOrderSingle43() (msg quickfix.Message) {
 	order.Set(querySymbol())
 	order.Set(queryOrderQty())
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
@@ -331,12 +331,12 @@ func queryNewOrderSingle44() (msg quickfix.Message) {
 	order.Set(querySymbol())
 	order.Set(queryOrderQty())
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
@@ -356,12 +356,12 @@ func queryNewOrderSingle50() (msg quickfix.Message) {
 	order.Set(queryOrderQty())
 	order.Set(queryTimeInForce())
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
 		order.Set(queryPrice())
 	}
 
-	switch ordType.FIXString {
+	switch ordType.Value() {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}

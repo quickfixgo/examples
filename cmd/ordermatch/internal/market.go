@@ -102,7 +102,7 @@ func (m *Market) Insert(order Order) {
 		m.Offers.Insert(&order)
 	}
 }
-func (m *Market) Cancel(clordID, side string) (order *Order) {
+func (m *Market) Cancel(clordID string, side enum.Side) (order *Order) {
 	if side == enum.Side_BUY {
 		order = m.Bids.Remove(clordID)
 	} else {

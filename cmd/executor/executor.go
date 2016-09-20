@@ -73,33 +73,34 @@ func (e *executor) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (
 	return e.Route(msg, sessionID)
 }
 
-func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
+func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+	ordType, err := msg.GetOrdType()
+	if err != nil {
 		return err
 	}
-	if ordType.String() != enum.OrdType_LIMIT {
+
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
-		return
+	symbol, err := msg.GetSymbol()
+	if err != nil {
+		return err
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
-		return
+	side, err := msg.GetSide()
+	if err != nil {
+		return err
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
-		return
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
+		return err
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
-		return
+	price, err := msg.GetPrice()
+	if err != nil {
+		return err
 	}
 
 	execReport := fix40er.New(
@@ -107,52 +108,52 @@ func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID 
 		e.genExecID(),
 		field.NewExecTransType(enum.ExecTransType_NEW),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol,
-		side,
-		orderQty,
-		field.NewLastShares(orderQty.Decimal, 2),
-		field.NewLastPx(price.Decimal, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
-		field.NewAvgPx(price.Decimal, 2),
+		field.NewSymbol(symbol),
+		field.NewSide(side),
+		field.NewOrderQty(orderQty, 2),
+		field.NewLastShares(orderQty, 2),
+		field.NewLastPx(price, 2),
+		field.NewCumQty(orderQty, 2),
+		field.NewAvgPx(price, 2),
 	)
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
-		return
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
+		return err
 	}
-	execReport.Set(clOrdID)
+	execReport.SetClOrdID(clOrdID)
 
 	quickfix.SendToTarget(execReport, sessionID)
 
-	return
+	return nil
 }
 
 func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
-		return err
+	ordType, err := msg.GetOrdType()
+	if err != nil {
+		return
 	}
-	if ordType.String() != enum.OrdType_LIMIT {
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
+	symbol, err := msg.GetSymbol()
+	if err != nil {
 		return
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
+	side, err := msg.GetSide()
+	if err != nil {
 		return
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
 		return
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
+	price, err := msg.GetPrice()
+	if err != nil {
 		return
 	}
 
@@ -162,21 +163,21 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 		field.NewExecTransType(enum.ExecTransType_NEW),
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol,
-		side,
-		orderQty,
-		field.NewLastShares(orderQty.Decimal, 2),
-		field.NewLastPx(price.Decimal, 2),
+		field.NewSymbol(symbol),
+		field.NewSide(side),
+		field.NewOrderQty(orderQty, 2),
+		field.NewLastShares(orderQty, 2),
+		field.NewLastPx(price, 2),
 		field.NewLeavesQty(decimal.Zero, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
-		field.NewAvgPx(price.Decimal, 2),
+		field.NewCumQty(orderQty, 2),
+		field.NewAvgPx(price, 2),
 	)
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
 		return
 	}
-	execReport.Set(clOrdID)
+	execReport.SetClOrdID(clOrdID)
 
 	quickfix.SendToTarget(execReport, sessionID)
 
@@ -184,36 +185,37 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 }
 
 func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
+	ordType, err := msg.GetOrdType()
+	if err != nil {
 		return err
 	}
-	if ordType.String() != enum.OrdType_LIMIT {
+
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
+	symbol, err := msg.GetSymbol()
+	if err != nil {
 		return
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
+	side, err := msg.GetSide()
+	if err != nil {
 		return
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
 		return
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
+	price, err := msg.GetPrice()
+	if err != nil {
 		return
 	}
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
 		return
 	}
 
@@ -223,24 +225,24 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 		field.NewExecTransType(enum.ExecTransType_NEW),
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		symbol,
-		side,
+		field.NewSymbol(symbol),
+		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
-		field.NewAvgPx(price.Decimal, 2),
+		field.NewCumQty(orderQty, 2),
+		field.NewAvgPx(price, 2),
 	)
 
-	execReport.Set(clOrdID)
-	execReport.Set(orderQty)
-	execReport.SetLastShares(orderQty.Decimal, 2)
-	execReport.SetLastPx(price.Decimal, 2)
+	execReport.SetClOrdID(clOrdID)
+	execReport.SetOrderQty(orderQty, 2)
+	execReport.SetLastShares(orderQty, 2)
+	execReport.SetLastPx(price, 2)
 
 	if msg.HasAccount() {
-		var acct field.AccountField
-		if acct, err = msg.GetAccount(); err != nil {
+		acct, err := msg.GetAccount()
+		if err != nil {
 			return err
 		}
-		execReport.Set(acct)
+		execReport.SetAccount(acct)
 	}
 
 	quickfix.SendToTarget(execReport, sessionID)
@@ -249,36 +251,36 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 }
 
 func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
+	ordType, err := msg.GetOrdType()
+	if err != nil {
 		return err
 	}
-	if ordType.String() != enum.OrdType_LIMIT {
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
+	symbol, err := msg.GetSymbol()
+	if err != nil {
 		return
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
+	side, err := msg.GetSide()
+	if err != nil {
 		return
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
 		return
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
+	price, err := msg.GetPrice()
+	if err != nil {
 		return
 	}
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
 		return
 	}
 
@@ -287,24 +289,24 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 		e.genExecID(),
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
+		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
-		field.NewAvgPx(price.Decimal, 2),
+		field.NewCumQty(orderQty, 2),
+		field.NewAvgPx(price, 2),
 	)
 
-	execReport.Set(clOrdID)
-	execReport.Set(symbol)
-	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Decimal, 2)
-	execReport.SetLastPx(price.Decimal, 2)
+	execReport.SetClOrdID(clOrdID)
+	execReport.SetSymbol(symbol)
+	execReport.SetOrderQty(orderQty, 2)
+	execReport.SetLastQty(orderQty, 2)
+	execReport.SetLastPx(price, 2)
 
 	if msg.HasAccount() {
-		var acct field.AccountField
-		if acct, err = msg.GetAccount(); err != nil {
+		acct, err := msg.GetAccount()
+		if err != nil {
 			return err
 		}
-		execReport.Set(acct)
+		execReport.SetAccount(acct)
 	}
 
 	quickfix.SendToTarget(execReport, sessionID)
@@ -313,37 +315,37 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 }
 
 func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
+	ordType, err := msg.GetOrdType()
+	if err != nil {
 		return err
 	}
 
-	if ordType.String() != enum.OrdType_LIMIT {
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
+	symbol, err := msg.GetSymbol()
+	if err != nil {
 		return
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
+	side, err := msg.GetSide()
+	if err != nil {
 		return
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
 		return
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
+	price, err := msg.GetPrice()
+	if err != nil {
 		return
 	}
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
 		return
 	}
 
@@ -352,24 +354,24 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 		e.genExecID(),
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
+		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
-		field.NewAvgPx(price.Decimal, 2),
+		field.NewCumQty(orderQty, 2),
+		field.NewAvgPx(price, 2),
 	)
 
-	execReport.Set(clOrdID)
-	execReport.Set(symbol)
-	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Decimal, 2)
-	execReport.SetLastPx(price.Decimal, 2)
+	execReport.SetClOrdID(clOrdID)
+	execReport.SetSymbol(symbol)
+	execReport.SetOrderQty(orderQty, 2)
+	execReport.SetLastQty(orderQty, 2)
+	execReport.SetLastPx(price, 2)
 
 	if msg.HasAccount() {
-		var acct field.AccountField
-		if acct, err = msg.GetAccount(); err != nil {
+		acct, err := msg.GetAccount()
+		if err != nil {
 			return err
 		}
-		execReport.Set(acct)
+		execReport.SetAccount(acct)
 	}
 
 	quickfix.SendToTarget(execReport, sessionID)
@@ -378,37 +380,37 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 }
 
 func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
-	var ordType field.OrdTypeField
-	if ordType, err = msg.GetOrdType(); err != nil {
+	ordType, err := msg.GetOrdType()
+	if err != nil {
 		return err
 	}
 
-	if ordType.String() != enum.OrdType_LIMIT {
+	if ordType != enum.OrdType_LIMIT {
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
-	var symbol field.SymbolField
-	if symbol, err = msg.GetSymbol(); err != nil {
+	symbol, err := msg.GetSymbol()
+	if err != nil {
 		return
 	}
 
-	var side field.SideField
-	if side, err = msg.GetSide(); err != nil {
+	side, err := msg.GetSide()
+	if err != nil {
 		return
 	}
 
-	var orderQty field.OrderQtyField
-	if orderQty, err = msg.GetOrderQty(); err != nil {
+	orderQty, err := msg.GetOrderQty()
+	if err != nil {
 		return
 	}
 
-	var price field.PriceField
-	if price, err = msg.GetPrice(); err != nil {
+	price, err := msg.GetPrice()
+	if err != nil {
 		return
 	}
 
-	var clOrdID field.ClOrdIDField
-	if clOrdID, err = msg.GetClOrdID(); err != nil {
+	clOrdID, err := msg.GetClOrdID()
+	if err != nil {
 		return
 	}
 
@@ -417,24 +419,24 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 		e.genExecID(),
 		field.NewExecType(enum.ExecType_FILL),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
-		side,
+		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
-		field.NewCumQty(orderQty.Decimal, 2),
+		field.NewCumQty(orderQty, 2),
 	)
 
-	execReport.Set(clOrdID)
-	execReport.Set(symbol)
-	execReport.Set(orderQty)
-	execReport.SetLastQty(orderQty.Decimal, 2)
-	execReport.SetLastPx(price.Decimal, 2)
-	execReport.SetAvgPx(price.Decimal, 2)
+	execReport.SetClOrdID(clOrdID)
+	execReport.SetSymbol(symbol)
+	execReport.SetOrderQty(orderQty, 2)
+	execReport.SetLastQty(orderQty, 2)
+	execReport.SetLastPx(price, 2)
+	execReport.SetAvgPx(price, 2)
 
 	if msg.HasAccount() {
-		var acct field.AccountField
-		if acct, err = msg.GetAccount(); err != nil {
+		acct, err := msg.GetAccount()
+		if err != nil {
 			return err
 		}
-		execReport.Set(acct)
+		execReport.SetAccount(acct)
 	}
 
 	quickfix.SendToTarget(execReport, sessionID)
