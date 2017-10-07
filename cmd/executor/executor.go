@@ -5,25 +5,25 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/quickfixgo/enum"
+	"github.com/quickfixgo/field"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/enum"
-	"github.com/quickfixgo/quickfix/field"
-	"github.com/quickfixgo/quickfix/tag"
+	"github.com/quickfixgo/tag"
 	"github.com/shopspring/decimal"
 
-	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
-	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
-	fix42nos "github.com/quickfixgo/quickfix/fix42/newordersingle"
-	fix43nos "github.com/quickfixgo/quickfix/fix43/newordersingle"
-	fix44nos "github.com/quickfixgo/quickfix/fix44/newordersingle"
-	fix50nos "github.com/quickfixgo/quickfix/fix50/newordersingle"
+	fix40nos "github.com/quickfixgo/fix40/newordersingle"
+	fix41nos "github.com/quickfixgo/fix41/newordersingle"
+	fix42nos "github.com/quickfixgo/fix42/newordersingle"
+	fix43nos "github.com/quickfixgo/fix43/newordersingle"
+	fix44nos "github.com/quickfixgo/fix44/newordersingle"
+	fix50nos "github.com/quickfixgo/fix50/newordersingle"
 
-	fix40er "github.com/quickfixgo/quickfix/fix40/executionreport"
-	fix41er "github.com/quickfixgo/quickfix/fix41/executionreport"
-	fix42er "github.com/quickfixgo/quickfix/fix42/executionreport"
-	fix43er "github.com/quickfixgo/quickfix/fix43/executionreport"
-	fix44er "github.com/quickfixgo/quickfix/fix44/executionreport"
-	fix50er "github.com/quickfixgo/quickfix/fix50/executionreport"
+	fix40er "github.com/quickfixgo/fix40/executionreport"
+	fix41er "github.com/quickfixgo/fix41/executionreport"
+	fix42er "github.com/quickfixgo/fix42/executionreport"
+	fix43er "github.com/quickfixgo/fix43/executionreport"
+	fix44er "github.com/quickfixgo/fix44/executionreport"
+	fix50er "github.com/quickfixgo/fix50/executionreport"
 
 	"os"
 	"os/signal"
@@ -59,17 +59,17 @@ func (e *executor) genExecID() field.ExecIDField {
 }
 
 //quickfix.Application interface
-func (e executor) OnCreate(sessionID quickfix.SessionID)                          { return }
-func (e executor) OnLogon(sessionID quickfix.SessionID)                           { return }
-func (e executor) OnLogout(sessionID quickfix.SessionID)                          { return }
-func (e executor) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID)     { return }
-func (e executor) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) error { return nil }
-func (e executor) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (e executor) OnCreate(sessionID quickfix.SessionID)                           { return }
+func (e executor) OnLogon(sessionID quickfix.SessionID)                            { return }
+func (e executor) OnLogout(sessionID quickfix.SessionID)                           { return }
+func (e executor) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID)     { return }
+func (e executor) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error { return nil }
+func (e executor) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
 
 //Use Message Cracker on Incoming Application Messages
-func (e *executor) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (e *executor) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return e.Route(msg, sessionID)
 }
 

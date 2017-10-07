@@ -30,24 +30,23 @@ func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {
 }
 
 //FromAdmin implemented as part of Application interface
-func (e TradeClient) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return
 }
 
 //ToAdmin implemented as part of Application interface
-func (e TradeClient) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID) {
+func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {
 	return
 }
 
 //ToApp implemented as part of Application interface
-func (e TradeClient) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) (err error) {
-	msg.Build()
-	fmt.Printf("Sending %s\n", &msg)
+func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
+	fmt.Printf("Sending %s\n", msg)
 	return
 }
 
 //FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
-func (e TradeClient) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	fmt.Printf("FromApp: %s\n", msg.String())
 	return
 }

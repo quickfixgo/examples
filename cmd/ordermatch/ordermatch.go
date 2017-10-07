@@ -9,14 +9,14 @@ import (
 	"path"
 	"strconv"
 
+	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
+	"github.com/quickfixgo/field"
+	"github.com/quickfixgo/fix42/executionreport"
+	"github.com/quickfixgo/fix42/marketdatarequest"
+	"github.com/quickfixgo/fix42/newordersingle"
+	"github.com/quickfixgo/fix42/ordercancelrequest"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/enum"
-	"github.com/quickfixgo/quickfix/field"
-	"github.com/quickfixgo/quickfix/fix42/executionreport"
-	"github.com/quickfixgo/quickfix/fix42/marketdatarequest"
-	"github.com/quickfixgo/quickfix/fix42/newordersingle"
-	"github.com/quickfixgo/quickfix/fix42/ordercancelrequest"
 )
 
 //Application implements the quickfix.Application interface
@@ -48,20 +48,20 @@ func (a Application) OnLogon(sessionID quickfix.SessionID) { return }
 func (a Application) OnLogout(sessionID quickfix.SessionID) { return }
 
 //ToAdmin implemented as part of Application interface
-func (a Application) ToAdmin(msg quickfix.Message, sessionID quickfix.SessionID) { return }
+func (a Application) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) { return }
 
 //ToApp implemented as part of Application interface
-func (a Application) ToApp(msg quickfix.Message, sessionID quickfix.SessionID) error {
+func (a Application) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error {
 	return nil
 }
 
 //FromAdmin implemented as part of Application interface
-func (a Application) FromAdmin(msg quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (a Application) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
 
 //FromApp implemented as part of Application interface, uses Router on incoming application messages
-func (a *Application) FromApp(msg quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (a *Application) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return a.Route(msg, sessionID)
 }
 

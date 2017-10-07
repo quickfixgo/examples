@@ -5,33 +5,33 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/quickfixgo/enum"
+	"github.com/quickfixgo/field"
 	"github.com/quickfixgo/quickfix"
-	"github.com/quickfixgo/quickfix/enum"
-	"github.com/quickfixgo/quickfix/field"
 	"github.com/shopspring/decimal"
 
 	"os"
 	"strconv"
 	"strings"
 
-	fix40nos "github.com/quickfixgo/quickfix/fix40/newordersingle"
-	fix41nos "github.com/quickfixgo/quickfix/fix41/newordersingle"
-	fix42nos "github.com/quickfixgo/quickfix/fix42/newordersingle"
-	fix43nos "github.com/quickfixgo/quickfix/fix43/newordersingle"
-	fix44nos "github.com/quickfixgo/quickfix/fix44/newordersingle"
-	fix50nos "github.com/quickfixgo/quickfix/fix50/newordersingle"
+	fix40nos "github.com/quickfixgo/fix40/newordersingle"
+	fix41nos "github.com/quickfixgo/fix41/newordersingle"
+	fix42nos "github.com/quickfixgo/fix42/newordersingle"
+	fix43nos "github.com/quickfixgo/fix43/newordersingle"
+	fix44nos "github.com/quickfixgo/fix44/newordersingle"
+	fix50nos "github.com/quickfixgo/fix50/newordersingle"
 
-	fix40cxl "github.com/quickfixgo/quickfix/fix40/ordercancelrequest"
-	fix41cxl "github.com/quickfixgo/quickfix/fix41/ordercancelrequest"
-	fix42cxl "github.com/quickfixgo/quickfix/fix42/ordercancelrequest"
-	fix43cxl "github.com/quickfixgo/quickfix/fix43/ordercancelrequest"
-	fix44cxl "github.com/quickfixgo/quickfix/fix44/ordercancelrequest"
-	fix50cxl "github.com/quickfixgo/quickfix/fix50/ordercancelrequest"
+	fix40cxl "github.com/quickfixgo/fix40/ordercancelrequest"
+	fix41cxl "github.com/quickfixgo/fix41/ordercancelrequest"
+	fix42cxl "github.com/quickfixgo/fix42/ordercancelrequest"
+	fix43cxl "github.com/quickfixgo/fix43/ordercancelrequest"
+	fix44cxl "github.com/quickfixgo/fix44/ordercancelrequest"
+	fix50cxl "github.com/quickfixgo/fix50/ordercancelrequest"
 
-	fix42mdr "github.com/quickfixgo/quickfix/fix42/marketdatarequest"
-	fix43mdr "github.com/quickfixgo/quickfix/fix43/marketdatarequest"
-	fix44mdr "github.com/quickfixgo/quickfix/fix44/marketdatarequest"
-	fix50mdr "github.com/quickfixgo/quickfix/fix50/marketdatarequest"
+	fix42mdr "github.com/quickfixgo/fix42/marketdatarequest"
+	fix43mdr "github.com/quickfixgo/fix43/marketdatarequest"
+	fix44mdr "github.com/quickfixgo/fix44/marketdatarequest"
+	fix50mdr "github.com/quickfixgo/fix50/marketdatarequest"
 )
 
 func queryString(fieldName string) string {
@@ -100,17 +100,17 @@ func queryVersion() (string, error) {
 
 	switch scanner.Text() {
 	case "1":
-		return enum.BeginStringFIX40, nil
+		return quickfix.BeginStringFIX40, nil
 	case "2":
-		return enum.BeginStringFIX41, nil
+		return quickfix.BeginStringFIX41, nil
 	case "3":
-		return enum.BeginStringFIX42, nil
+		return quickfix.BeginStringFIX42, nil
 	case "4":
-		return enum.BeginStringFIX43, nil
+		return quickfix.BeginStringFIX43, nil
 	case "5":
-		return enum.BeginStringFIX44, nil
+		return quickfix.BeginStringFIX44, nil
 	case "6":
-		return enum.BeginStringFIXT11, nil
+		return quickfix.BeginStringFIXT11, nil
 	}
 
 	return "", fmt.Errorf("unknown BeginString choice: %v", scanner.Text())
@@ -225,7 +225,7 @@ func queryConfirm(prompt string) bool {
 }
 
 type header interface {
-	Set(f quickfix.FieldWriter) quickfix.FieldMap
+	Set(f quickfix.FieldWriter) *quickfix.FieldMap
 }
 
 func queryHeader(h header) {
@@ -258,7 +258,7 @@ func queryNewOrderSingle40() fix40nos.NewOrderSingle {
 	return order
 }
 
-func queryNewOrderSingle41() (msg quickfix.Message) {
+func queryNewOrderSingle41() (msg *quickfix.Message) {
 	var ordType field.OrdTypeField
 	order := fix41nos.New(queryClOrdID(), field.NewHandlInst("1"), querySymbol(), querySide(), queryOrdType(&ordType))
 	order.Set(queryOrderQty())
@@ -275,12 +275,12 @@ func queryNewOrderSingle41() (msg quickfix.Message) {
 
 	order.Set(queryTimeInForce())
 	msg = order.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 
 	return
 }
 
-func queryNewOrderSingle42() (msg quickfix.Message) {
+func queryNewOrderSingle42() (msg *quickfix.Message) {
 	var ordType field.OrdTypeField
 	order := fix42nos.New(queryClOrdID(), field.NewHandlInst("1"), querySymbol(), querySide(), field.NewTransactTime(time.Now()), queryOrdType(&ordType))
 	order.Set(queryOrderQty())
@@ -297,11 +297,11 @@ func queryNewOrderSingle42() (msg quickfix.Message) {
 
 	order.Set(queryTimeInForce())
 	msg = order.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryNewOrderSingle43() (msg quickfix.Message) {
+func queryNewOrderSingle43() (msg *quickfix.Message) {
 	var ordType field.OrdTypeField
 	order := fix43nos.New(queryClOrdID(), field.NewHandlInst("1"), querySide(), field.NewTransactTime(time.Now()), queryOrdType(&ordType))
 	order.Set(querySymbol())
@@ -319,12 +319,12 @@ func queryNewOrderSingle43() (msg quickfix.Message) {
 
 	order.Set(queryTimeInForce())
 	msg = order.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 
 	return
 }
 
-func queryNewOrderSingle44() (msg quickfix.Message) {
+func queryNewOrderSingle44() (msg *quickfix.Message) {
 	var ordType field.OrdTypeField
 	order := fix44nos.New(queryClOrdID(), querySide(), field.NewTransactTime(time.Now()), queryOrdType(&ordType))
 	order.SetHandlInst("1")
@@ -343,12 +343,12 @@ func queryNewOrderSingle44() (msg quickfix.Message) {
 
 	order.Set(queryTimeInForce())
 	msg = order.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 
 	return
 }
 
-func queryNewOrderSingle50() (msg quickfix.Message) {
+func queryNewOrderSingle50() (msg *quickfix.Message) {
 	var ordType field.OrdTypeField
 	order := fix50nos.New(queryClOrdID(), querySide(), field.NewTransactTime(time.Now()), queryOrdType(&ordType))
 	order.SetHandlInst("1")
@@ -367,59 +367,59 @@ func queryNewOrderSingle50() (msg quickfix.Message) {
 	}
 
 	msg = order.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 
 	return
 }
 
-func queryOrderCancelRequest40() (msg quickfix.Message) {
+func queryOrderCancelRequest40() (msg *quickfix.Message) {
 	cancel := fix40cxl.New(queryOrigClOrdID(), queryClOrdID(), field.NewCxlType("F"), querySymbol(), querySide(), queryOrderQty())
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryOrderCancelRequest41() (msg quickfix.Message) {
+func queryOrderCancelRequest41() (msg *quickfix.Message) {
 	cancel := fix41cxl.New(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide())
 	cancel.Set(queryOrderQty())
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryOrderCancelRequest42() (msg quickfix.Message) {
+func queryOrderCancelRequest42() (msg *quickfix.Message) {
 	cancel := fix42cxl.New(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide(), field.NewTransactTime(time.Now()))
 	cancel.Set(queryOrderQty())
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryOrderCancelRequest43() (msg quickfix.Message) {
+func queryOrderCancelRequest43() (msg *quickfix.Message) {
 	cancel := fix43cxl.New(queryOrigClOrdID(), queryClOrdID(), querySide(), field.NewTransactTime(time.Now()))
 	cancel.Set(querySymbol())
 	cancel.Set(queryOrderQty())
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryOrderCancelRequest44() (msg quickfix.Message) {
+func queryOrderCancelRequest44() (msg *quickfix.Message) {
 	cancel := fix44cxl.New(queryOrigClOrdID(), queryClOrdID(), querySide(), field.NewTransactTime(time.Now()))
 	cancel.Set(querySymbol())
 	cancel.Set(queryOrderQty())
 
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
-func queryOrderCancelRequest50() (msg quickfix.Message) {
+func queryOrderCancelRequest50() (msg *quickfix.Message) {
 	cancel := fix50cxl.New(queryOrigClOrdID(), queryClOrdID(), querySide(), field.NewTransactTime(time.Now()))
 	cancel.Set(querySymbol())
 	cancel.Set(queryOrderQty())
 	msg = cancel.ToMessage()
-	queryHeader(msg.Header)
+	queryHeader(&msg.Header)
 	return
 }
 
@@ -510,22 +510,22 @@ func QueryEnterOrder() (err error) {
 
 	var order quickfix.Messagable
 	switch beginString {
-	case enum.BeginStringFIX40:
+	case quickfix.BeginStringFIX40:
 		order = queryNewOrderSingle40()
 
-	case enum.BeginStringFIX41:
+	case quickfix.BeginStringFIX41:
 		order = queryNewOrderSingle41()
 
-	case enum.BeginStringFIX42:
+	case quickfix.BeginStringFIX42:
 		order = queryNewOrderSingle42()
 
-	case enum.BeginStringFIX43:
+	case quickfix.BeginStringFIX43:
 		order = queryNewOrderSingle43()
 
-	case enum.BeginStringFIX44:
+	case quickfix.BeginStringFIX44:
 		order = queryNewOrderSingle44()
 
-	case enum.BeginStringFIXT11:
+	case quickfix.BeginStringFIXT11:
 		order = queryNewOrderSingle50()
 	}
 
@@ -545,24 +545,24 @@ func QueryCancelOrder() (err error) {
 		return err
 	}
 
-	var cxl quickfix.Message
+	var cxl *quickfix.Message
 	switch beginString {
-	case enum.BeginStringFIX40:
+	case quickfix.BeginStringFIX40:
 		cxl = queryOrderCancelRequest40()
 
-	case enum.BeginStringFIX41:
+	case quickfix.BeginStringFIX41:
 		cxl = queryOrderCancelRequest41()
 
-	case enum.BeginStringFIX42:
+	case quickfix.BeginStringFIX42:
 		cxl = queryOrderCancelRequest42()
 
-	case enum.BeginStringFIX43:
+	case quickfix.BeginStringFIX43:
 		cxl = queryOrderCancelRequest43()
 
-	case enum.BeginStringFIX44:
+	case quickfix.BeginStringFIX44:
 		cxl = queryOrderCancelRequest44()
 
-	case enum.BeginStringFIXT11:
+	case quickfix.BeginStringFIXT11:
 		cxl = queryOrderCancelRequest50()
 	}
 
@@ -581,16 +581,16 @@ func QueryMarketDataRequest() error {
 
 	var req quickfix.Messagable
 	switch beginString {
-	case enum.BeginStringFIX42:
+	case quickfix.BeginStringFIX42:
 		req = queryMarketDataRequest42()
 
-	case enum.BeginStringFIX43:
+	case quickfix.BeginStringFIX43:
 		req = queryMarketDataRequest43()
 
-	case enum.BeginStringFIX44:
+	case quickfix.BeginStringFIX44:
 		req = queryMarketDataRequest44()
 
-	case enum.BeginStringFIXT11:
+	case quickfix.BeginStringFIXT11:
 		req = queryMarketDataRequest50()
 
 	default:

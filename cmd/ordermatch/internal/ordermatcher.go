@@ -3,7 +3,7 @@ package internal
 import (
 	"fmt"
 
-	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/enum"
 )
 
 type OrderMatcher struct {
