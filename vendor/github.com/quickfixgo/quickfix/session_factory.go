@@ -8,7 +8,6 @@ import (
 
 	"github.com/quickfixgo/quickfix/config"
 	"github.com/quickfixgo/quickfix/datadictionary"
-	"github.com/quickfixgo/quickfix/enum"
 	"github.com/quickfixgo/quickfix/internal"
 )
 
@@ -31,14 +30,14 @@ var dayLookup = map[string]time.Weekday{
 }
 
 var applVerIDLookup = map[string]string{
-	enum.BeginStringFIX40: "2",
-	enum.BeginStringFIX41: "3",
-	enum.BeginStringFIX42: "4",
-	enum.BeginStringFIX43: "5",
-	enum.BeginStringFIX44: "6",
-	"FIX.5.0":             "7",
-	"FIX.5.0SP1":          "8",
-	"FIX.5.0SP2":          "9",
+	BeginStringFIX40: "2",
+	BeginStringFIX41: "3",
+	BeginStringFIX42: "4",
+	BeginStringFIX43: "5",
+	BeginStringFIX44: "6",
+	"FIX.5.0":        "7",
+	"FIX.5.0SP1":     "8",
+	"FIX.5.0SP2":     "9",
 }
 
 type sessionFactory struct {
@@ -97,16 +96,15 @@ func (f sessionFactory) newSession(
 				return
 			}
 
-			var transportDataDictionary, appDataDictionary *datadictionary.DataDictionary
-			if transportDataDictionary, err = datadictionary.Parse(transportDataDictionaryPath); err != nil {
+			if s.transportDataDictionary, err = datadictionary.Parse(transportDataDictionaryPath); err != nil {
 				return
 			}
 
-			if appDataDictionary, err = datadictionary.Parse(appDataDictionaryPath); err != nil {
+			if s.appDataDictionary, err = datadictionary.Parse(appDataDictionaryPath); err != nil {
 				return
 			}
 
-			s.validator = &fixtValidator{transportDataDictionary, appDataDictionary, validatorSettings}
+			s.validator = &fixtValidator{s.transportDataDictionary, s.appDataDictionary, validatorSettings}
 		}
 	} else if settings.HasSetting(config.DataDictionary) {
 		var dataDictionaryPath string
@@ -114,12 +112,11 @@ func (f sessionFactory) newSession(
 			return
 		}
 
-		var dataDictionary *datadictionary.DataDictionary
-		if dataDictionary, err = datadictionary.Parse(dataDictionaryPath); err != nil {
+		if s.appDataDictionary, err = datadictionary.Parse(dataDictionaryPath); err != nil {
 			return
 		}
 
-		s.validator = &fixValidator{dataDictionary, validatorSettings}
+		s.validator = &fixValidator{s.appDataDictionary, validatorSettings}
 	}
 
 	if settings.HasSetting(config.ResetOnLogon) {
@@ -140,10 +137,41 @@ func (f sessionFactory) newSession(
 		}
 	}
 
+	if settings.HasSetting(config.ResetOnDisconnect) {
+		if s.ResetOnDisconnect, err = settings.BoolSetting(config.ResetOnDisconnect); err != nil {
+			return
+		}
+	}
+
 	if settings.HasSetting(config.EnableLastMsgSeqNumProcessed) {
 		if s.EnableLastMsgSeqNumProcessed, err = settings.BoolSetting(config.EnableLastMsgSeqNumProcessed); err != nil {
 			return
 		}
+	}
+
+	if settings.HasSetting(config.CheckLatency) {
+		var doCheckLatency bool
+		if doCheckLatency, err = settings.BoolSetting(config.CheckLatency); err != nil {
+			return
+		}
+
+		s.SkipCheckLatency = !doCheckLatency
+	}
+
+	if !settings.HasSetting(config.MaxLatency) {
+		s.MaxLatency = 120 * time.Second
+	} else {
+		var maxLatency int
+		if maxLatency, err = settings.IntSetting(config.MaxLatency); err != nil {
+			return
+		}
+
+		if maxLatency <= 0 {
+			err = errors.New("MaxLatency must be a positive integer")
+			return
+		}
+
+		s.MaxLatency = time.Duration(maxLatency) * time.Second
 	}
 
 	if settings.HasSetting(config.ResendRequestChunkSize) {
@@ -217,6 +245,37 @@ func (f sessionFactory) newSession(
 		}
 	}
 
+	if settings.HasSetting(config.TimeStampPrecision) {
+		var precisionStr string
+		if precisionStr, err = settings.Setting(config.TimeStampPrecision); err != nil {
+			return
+		}
+
+		switch precisionStr {
+		case "SECONDS":
+			s.timestampPrecision = Seconds
+		case "MILLIS":
+			s.timestampPrecision = Millis
+		case "MICROS":
+			s.timestampPrecision = Micros
+		case "NANOS":
+			s.timestampPrecision = Nanos
+
+		default:
+			err = IncorrectFormatForSetting{Setting: config.TimeStampPrecision, Value: precisionStr}
+			return
+		}
+	}
+
+	if settings.HasSetting(config.PersistMessages) {
+		var persistMessages bool
+		if persistMessages, err = settings.BoolSetting(config.PersistMessages); err != nil {
+			return
+		}
+
+		s.DisableMessagePersist = !persistMessages
+	}
+
 	if f.BuildInitiators {
 		if err = f.buildInitiatorSettings(s, settings); err != nil {
 			return
@@ -235,8 +294,6 @@ func (f sessionFactory) newSession(
 	s.messageEvent = make(chan bool, 1)
 	s.admin = make(chan interface{})
 	s.application = application
-	s.stateTimer = internal.EventTimer{Task: func() { s.sessionEvent <- internal.NeedHeartbeat }}
-	s.peerTimer = internal.EventTimer{Task: func() { s.sessionEvent <- internal.PeerTimeout }}
 	return
 }
 

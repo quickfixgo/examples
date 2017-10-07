@@ -3,7 +3,7 @@ package internal
 import (
 	"time"
 
-	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/enum"
 	"github.com/shopspring/decimal"
 )
 

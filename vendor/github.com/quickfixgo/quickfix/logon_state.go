@@ -1,7 +1,8 @@
 package quickfix
 
 import (
-	"github.com/quickfixgo/quickfix/enum"
+	"bytes"
+
 	"github.com/quickfixgo/quickfix/internal"
 )
 
@@ -9,13 +10,13 @@ type logonState struct{ connectedNotLoggedOn }
 
 func (s logonState) String() string { return "Logon State" }
 
-func (s logonState) FixMsgIn(session *session, msg Message) (nextState sessionState) {
-	var msgType FIXString
-	if err := msg.Header.GetField(tagMsgType, &msgType); err != nil {
+func (s logonState) FixMsgIn(session *session, msg *Message) (nextState sessionState) {
+	msgType, err := msg.Header.GetBytes(tagMsgType)
+	if err != nil {
 		return handleStateError(session, err)
 	}
 
-	if enum.MsgType(msgType) != enum.MsgType_LOGON {
+	if !bytes.Equal(msgType, msgTypeLogon) {
 		session.log.OnEventf("Invalid Session State: Received Msg %s while waiting for Logon", msg)
 		return latentState{}
 	}
@@ -26,7 +27,7 @@ func (s logonState) FixMsgIn(session *session, msg Message) (nextState sessionSt
 			session.log.OnEvent(err.Text)
 			logout := session.buildLogout(err.Text)
 
-			if err := session.dropAndSendInReplyTo(logout, false, &msg); err != nil {
+			if err := session.dropAndSendInReplyTo(logout, false, msg); err != nil {
 				session.logError(err)
 			}
 

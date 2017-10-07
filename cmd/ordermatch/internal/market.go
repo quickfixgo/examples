@@ -5,7 +5,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/quickfixgo/quickfix/enum"
+	"github.com/quickfixgo/enum"
 )
 
 type orderList struct {

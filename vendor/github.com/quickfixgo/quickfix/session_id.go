@@ -1,9 +1,6 @@
 package quickfix
 
-import (
-	"fmt"
-	"github.com/quickfixgo/quickfix/enum"
-)
+import "bytes"
 
 // SessionID is a unique identifer of a Session
 type SessionID struct {
@@ -12,13 +9,33 @@ type SessionID struct {
 
 //IsFIXT returns true if the SessionID has a FIXT BeginString
 func (s SessionID) IsFIXT() bool {
-	return s.BeginString == enum.BeginStringFIXT11
+	return s.BeginString == BeginStringFIXT11
+}
+
+func appendOptional(b *bytes.Buffer, delim, v string) {
+	if len(v) == 0 {
+		return
+	}
+
+	b.WriteString(delim)
+	b.WriteString(v)
 }
 
 func (s SessionID) String() string {
-	if len(s.Qualifier) > 0 {
-		return fmt.Sprintf("%s:%s->%s:%s", s.BeginString, s.SenderCompID, s.TargetCompID, s.Qualifier)
-	}
+	b := new(bytes.Buffer)
+	b.WriteString(s.BeginString)
+	b.WriteString(":")
+	b.WriteString(s.SenderCompID)
 
-	return fmt.Sprintf("%s:%s->%s", s.BeginString, s.SenderCompID, s.TargetCompID)
+	appendOptional(b, "/", s.SenderSubID)
+	appendOptional(b, "/", s.SenderLocationID)
+
+	b.WriteString("->")
+	b.WriteString(s.TargetCompID)
+
+	appendOptional(b, "/", s.TargetSubID)
+	appendOptional(b, "/", s.TargetLocationID)
+
+	appendOptional(b, ":", s.Qualifier)
+	return b.String()
 }
