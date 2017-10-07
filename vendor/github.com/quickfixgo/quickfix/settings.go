@@ -2,6 +2,7 @@ package quickfix
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"regexp"
@@ -46,8 +47,24 @@ func sessionIDFromSessionSettings(globalSettings *SessionSettings, sessionSettin
 			sessionID.TargetCompID, _ = settings.Setting(config.TargetCompID)
 		}
 
+		if settings.HasSetting(config.TargetSubID) {
+			sessionID.TargetSubID, _ = settings.Setting(config.TargetSubID)
+		}
+
+		if settings.HasSetting(config.TargetLocationID) {
+			sessionID.TargetLocationID, _ = settings.Setting(config.TargetLocationID)
+		}
+
 		if settings.HasSetting(config.SenderCompID) {
 			sessionID.SenderCompID, _ = settings.Setting(config.SenderCompID)
+		}
+
+		if settings.HasSetting(config.SenderSubID) {
+			sessionID.SenderSubID, _ = settings.Setting(config.SenderSubID)
+		}
+
+		if settings.HasSetting(config.SenderLocationID) {
+			sessionID.SenderLocationID, _ = settings.Setting(config.SenderLocationID)
 		}
 
 		if settings.HasSetting(config.SessionQualifier) {
@@ -137,6 +154,18 @@ func (s *Settings) AddSession(sessionSettings *SessionSettings) (SessionID, erro
 	s.lazyInit()
 
 	sessionID := sessionIDFromSessionSettings(s.GlobalSettings(), sessionSettings)
+
+	switch sessionID.BeginString {
+	case BeginStringFIX40:
+	case BeginStringFIX41:
+	case BeginStringFIX42:
+	case BeginStringFIX43:
+	case BeginStringFIX44:
+	case BeginStringFIXT11:
+	default:
+		return sessionID, errors.New("BeginString must be FIX.4.0 to FIX.4.4 or FIXT.1.1")
+	}
+
 	if _, dup := s.sessionSettings[sessionID]; dup {
 		return sessionID, fmt.Errorf("duplicate session configured for %v", sessionID)
 	}

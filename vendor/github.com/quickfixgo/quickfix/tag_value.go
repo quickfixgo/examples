@@ -13,41 +13,37 @@ type TagValue struct {
 	bytes []byte
 }
 
-//TagValues is a slice of TagValue
-type TagValues []TagValue
-
 func (tv *TagValue) init(tag Tag, value []byte) {
-	var buf bytes.Buffer
-	buf.WriteString(strconv.Itoa(int(tag)))
-	buf.WriteString("=")
-	buf.Write(value)
-	buf.WriteString("")
+	tv.bytes = strconv.AppendInt(nil, int64(tag), 10)
+	tv.bytes = append(tv.bytes, []byte("=")...)
+	tv.bytes = append(tv.bytes, value...)
+	tv.bytes = append(tv.bytes, []byte("")...)
 
 	tv.tag = tag
-	tv.bytes = buf.Bytes()
 	tv.value = value
 }
 
-func (tv *TagValue) parse(rawFieldBytes []byte) (err error) {
+func (tv *TagValue) parse(rawFieldBytes []byte) error {
 	sepIndex := bytes.IndexByte(rawFieldBytes, '=')
 
-	if sepIndex == -1 {
-		err = fmt.Errorf("tagValue.Parse: No '=' in '%s'", rawFieldBytes)
-		return
+	switch sepIndex {
+	case -1:
+		return fmt.Errorf("tagValue.Parse: No '=' in '%s'", rawFieldBytes)
+	case 0:
+		return fmt.Errorf("tagValue.Parse: No tag in '%s'", rawFieldBytes)
 	}
 
 	parsedTag, err := atoi(rawFieldBytes[:sepIndex])
-
 	if err != nil {
-		err = fmt.Errorf("tagValue.Parse: %s", err.Error())
-		return
+		return fmt.Errorf("tagValue.Parse: %s", err.Error())
 	}
 
 	tv.tag = Tag(parsedTag)
-	tv.value = rawFieldBytes[(sepIndex + 1):(len(rawFieldBytes) - 1)]
-	tv.bytes = rawFieldBytes
+	n := len(rawFieldBytes)
+	tv.value = rawFieldBytes[(sepIndex + 1):(n - 1):(n - 1)]
+	tv.bytes = rawFieldBytes[:n:n]
 
-	return
+	return nil
 }
 
 func (tv TagValue) String() string {

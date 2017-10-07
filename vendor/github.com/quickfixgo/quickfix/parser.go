@@ -2,18 +2,24 @@ package quickfix
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"time"
+
+	"github.com/quickfixgo/quickfix/internal"
 )
 
 const (
 	defaultBufSize = 4096
 )
 
+var bufferPool internal.BufferPool
+
 type parser struct {
-	buffer   []byte
-	reader   io.Reader
-	lastRead time.Time
+	//buffer is a slice of bigBuffer
+	bigBuffer, buffer []byte
+	reader            io.Reader
+	lastRead          time.Time
 }
 
 func newParser(reader io.Reader) *parser {
@@ -22,7 +28,23 @@ func newParser(reader io.Reader) *parser {
 
 func (p *parser) readMore() (int, error) {
 	if len(p.buffer) == cap(p.buffer) {
-		newBuffer := make([]byte, len(p.buffer), len(p.buffer)+defaultBufSize)
+		var newBuffer []byte
+		switch {
+		//initialize the parser
+		case len(p.bigBuffer) == 0:
+			p.bigBuffer = make([]byte, defaultBufSize)
+			newBuffer = p.bigBuffer[0:0]
+
+		//shift buffer back to the start of bigBuffer
+		case 2*len(p.buffer) <= len(p.bigBuffer):
+			newBuffer = p.bigBuffer[0:len(p.buffer)]
+
+		//reallocate big buffer with enough space to shift buffer
+		default:
+			p.bigBuffer = make([]byte, 2*len(p.buffer))
+			newBuffer = p.bigBuffer[0:len(p.buffer)]
+		}
+
 		copy(newBuffer, p.buffer)
 		p.buffer = newBuffer
 	}
@@ -90,32 +112,43 @@ func (p *parser) jumpLength() (int, error) {
 		return 0, err
 	}
 
+	if offset == lengthIndex {
+		return 0, errors.New("No length given")
+	}
+
 	length, err := atoi(p.buffer[lengthIndex:offset])
 	if err != nil {
 		return length, err
 	}
+
+	if length <= 0 {
+		return length, errors.New("Invalid length")
+	}
+
 	return offset + length, nil
 }
 
-func (p *parser) ReadMessage() ([]byte, error) {
+func (p *parser) ReadMessage() (msgBytes *bytes.Buffer, err error) {
 	start, err := p.findStart()
 	if err != nil {
-		return []byte{}, err
+		return
 	}
 	p.buffer = p.buffer[start:]
 
 	index, err := p.jumpLength()
 	if err != nil {
-		return []byte{}, err
+		return
 	}
 
 	index, err = p.findEndAfterOffset(index)
 	if err != nil {
-		return []byte{}, err
+		return
 	}
 
-	msgBytes := p.buffer[:index:index]
+	msgBytes = bufferPool.Get()
+	msgBytes.Reset()
+	msgBytes.Write(p.buffer[:index])
 	p.buffer = p.buffer[index:]
 
-	return msgBytes, nil
+	return
 }

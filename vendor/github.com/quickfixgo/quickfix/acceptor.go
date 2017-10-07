@@ -2,8 +2,11 @@ package quickfix
 
 import (
 	"bufio"
+	"bytes"
 	"crypto/tls"
+	"io"
 	"net"
+	"runtime/debug"
 	"strconv"
 	"sync"
 
@@ -98,11 +101,8 @@ func NewAcceptor(app Application, storeFactory MessageStoreFactory, settings *Se
 	}
 
 	for sessionID, sessionSettings := range settings.SessionSettings() {
-		sessID := SessionID{
-			BeginString:  sessionID.BeginString,
-			TargetCompID: sessionID.TargetCompID,
-			SenderCompID: sessionID.SenderCompID,
-		}
+		sessID := sessionID
+		sessID.Qualifier = ""
 
 		if _, dup := a.sessions[sessID]; dup {
 			return a, errDuplicateSessionID
@@ -131,14 +131,14 @@ func (a *Acceptor) listenForConnections() {
 	}
 }
 
-func (a *Acceptor) invalidMessage(msg []byte, err error) {
-	a.globalLog.OnEventf("Invalid Message: %s, %v", msg, err.Error())
+func (a *Acceptor) invalidMessage(msg *bytes.Buffer, err error) {
+	a.globalLog.OnEventf("Invalid Message: %s, %v", msg.Bytes(), err.Error())
 }
 
 func (a *Acceptor) handleConnection(netConn net.Conn) {
 	defer func() {
 		if err := recover(); err != nil {
-			a.globalLog.OnEventf("Connection Terminated: %v", err)
+			a.globalLog.OnEventf("Connection Terminated with Panic: %s", debug.Stack())
 		}
 
 		if err := netConn.Close(); err != nil {
@@ -151,11 +151,16 @@ func (a *Acceptor) handleConnection(netConn net.Conn) {
 
 	msgBytes, err := parser.ReadMessage()
 	if err != nil {
-		a.globalLog.OnEvent(err.Error())
+		if err == io.EOF {
+			a.globalLog.OnEvent("Connection Terminated")
+		} else {
+			a.globalLog.OnEvent(err.Error())
+		}
 		return
 	}
 
-	msg, err := ParseMessage(msgBytes)
+	msg := NewMessage()
+	err = ParseMessage(msg, msgBytes)
 	if err != nil {
 		a.invalidMessage(msgBytes, err)
 		return
@@ -173,13 +178,48 @@ func (a *Acceptor) handleConnection(netConn net.Conn) {
 		return
 	}
 
+	var senderSubID FIXString
+	if msg.Header.Has(tagSenderSubID) {
+		if err := msg.Header.GetField(tagSenderSubID, &senderSubID); err != nil {
+			a.invalidMessage(msgBytes, err)
+			return
+		}
+	}
+
+	var senderLocationID FIXString
+	if msg.Header.Has(tagSenderLocationID) {
+		if err := msg.Header.GetField(tagSenderLocationID, &senderLocationID); err != nil {
+			a.invalidMessage(msgBytes, err)
+			return
+		}
+	}
+
 	var targetCompID FIXString
 	if err := msg.Header.GetField(tagTargetCompID, &targetCompID); err != nil {
 		a.invalidMessage(msgBytes, err)
 		return
 	}
 
-	sessID := SessionID{BeginString: string(beginString), SenderCompID: string(targetCompID), TargetCompID: string(senderCompID)}
+	var targetSubID FIXString
+	if msg.Header.Has(tagTargetSubID) {
+		if err := msg.Header.GetField(tagTargetSubID, &targetSubID); err != nil {
+			a.invalidMessage(msgBytes, err)
+			return
+		}
+	}
+
+	var targetLocationID FIXString
+	if msg.Header.Has(tagTargetLocationID) {
+		if err := msg.Header.GetField(tagTargetLocationID, &targetLocationID); err != nil {
+			a.invalidMessage(msgBytes, err)
+			return
+		}
+	}
+
+	sessID := SessionID{BeginString: string(beginString),
+		SenderCompID: string(targetCompID), SenderSubID: string(targetSubID), SenderLocationID: string(targetLocationID),
+		TargetCompID: string(senderCompID), TargetSubID: string(senderSubID), TargetLocationID: string(senderLocationID),
+	}
 	session, ok := a.sessions[sessID]
 	if !ok {
 		a.globalLog.OnEventf("Session %v not found for incoming message: %s", sessID, msgBytes)

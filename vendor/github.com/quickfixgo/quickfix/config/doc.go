@@ -16,9 +16,25 @@ SenderCompID
 
 Your ID as associated with this FIX session. Value is	case-sensitive alpha-numeric string.
 
+SenderSubID
+
+(Optional) Your subID as associated with this FIX session.  Value is case-sensitive alpha-numeric string.
+
+SenderLocationID
+
+(Optional) Your locationID as associated with this FIX session.  Value is case-sensitive alpha-numeric string.
+
 TargetCompID
 
 Counter parties ID as associated with this FIX session. Value is case-sensitive alpha-numeric string.
+
+TargetSubID
+
+(Optional) Counterparty's subID as associated with this FIX session.  Value is case-sensitive alpha-numeric string.
+
+TargetLocationID
+
+(Optional) Counterparty's locationID as associated with this FIX session. Value is case-sensitive alpha-numeric string.
 
 SessionQualifier
 
@@ -106,6 +122,14 @@ Determines if sequence numbers should be reset to 1 after a normal logout termin
 
 Defaults to N.
 
+ResetOnDisconnect
+
+Determines if sequence numbers should be reset to 1 after an abnormal termination. Valid Values:
+ Y
+ N
+
+Defaults to N.
+
 RefreshOnLogon
 
 Determines if session state should be restored from persistence layer when logging on. Useful for creating hot failover sessions. Valid Values:
@@ -114,6 +138,15 @@ Determines if session state should be restored from persistence layer when loggi
 
 Defaults to N.
 
+TimeStampPrecision
+
+Determines precision for timestamps in (Orig)SendingTime fields that are sent out. Only available for FIX.4.2 and greater, FIX versions earlier than FIX.4.2 will use timestamp resolution in seconds. Valid Values:
+ SECONDS
+ MILLIS
+ MICROS
+ NANOS
+
+Defaults to MILLIS.
 
 Validation
 
@@ -169,6 +202,20 @@ If set to N, fields that are out of order (i.e. body fields in the header, or he
 
 Defaults to Y.
 
+CheckLatency
+
+If set to Y, messages must be received from the counterparty within a defined number of seconds. It is useful to turn this off if a system uses localtime for it's timestamps instead of GMT. Valid Values:
+ Y
+ N
+
+Defaults to Y.
+
+MaxLatency
+
+If CheckLatency is set to Y, this defines the number of seconds latency allowed for a message to be processed. Value must be positive integer.
+
+Defaults to 120.
+
 ReconnectInterval
 
 Time between reconnection attempts in seconds. Only used for initiators.    Value must be positive integer.
@@ -214,6 +261,18 @@ Certificate to use for secure TLS connections. Must be used with SocketPrivateKe
 SocketCAFile
 
 Optional root CA to use for secure TLS connections. For acceptors, client certificates will be verified against this CA.  For initiators, clients will use the CA to verify the server certificate. If not configurated, initiators will verify the server certificate using the host's root CA set.
+
+SocketMinimumTLSVersion
+
+Specify the Minimum TLS version to use when creating a secure connection. The valid choices are SSL30, TLS10, TLS11, TLS12. Defaults to TLS12.
+
+PersistMessages
+
+If set to N, no messages will be persisted. This will force QuickFIX/Go to always send GapFills instead of resending messages. Use this if you know you never want to resend a message. Useful for market data streams.  Valid Values:
+ Y
+ N
+
+Defaults to Y.
 
 FileLogPath
 

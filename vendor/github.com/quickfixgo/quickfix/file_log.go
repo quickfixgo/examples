@@ -14,12 +14,12 @@ type fileLog struct {
 	messageLogger *log.Logger
 }
 
-func (l fileLog) OnIncoming(msg string) {
-	l.messageLogger.Print(msg)
+func (l fileLog) OnIncoming(msg []byte) {
+	l.messageLogger.Print(string(msg))
 }
 
-func (l fileLog) OnOutgoing(msg string) {
-	l.messageLogger.Print(msg)
+func (l fileLog) OnOutgoing(msg []byte) {
+	l.messageLogger.Print(string(msg))
 }
 
 func (l fileLog) OnEvent(msg string) {
