@@ -15,29 +15,21 @@ type TradeClient struct {
 }
 
 //OnCreate implemented as part of Application interface
-func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {
-	return
-}
+func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {}
 
 //OnLogon implemented as part of Application interface
-func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {
-	return
-}
+func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
 
 //OnLogout implemented as part of Application interface
-func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {
-	return
-}
+func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {}
 
 //FromAdmin implemented as part of Application interface
 func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
-	return
+	return nil
 }
 
 //ToAdmin implemented as part of Application interface
-func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {
-	return
-}
+func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
 
 //ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
@@ -85,7 +77,11 @@ func main() {
 		return
 	}
 
-	initiator.Start()
+	err = initiator.Start()
+	if err != nil {
+		fmt.Printf("Unable to start Initiator: %s\n", err)
+		return
+	}
 
 Loop:
 	for {

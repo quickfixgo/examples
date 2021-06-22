@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"path"
+	"syscall"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
@@ -59,10 +60,10 @@ func (e *executor) genExecID() field.ExecIDField {
 }
 
 //quickfix.Application interface
-func (e executor) OnCreate(sessionID quickfix.SessionID)                           { return }
-func (e executor) OnLogon(sessionID quickfix.SessionID)                            { return }
-func (e executor) OnLogout(sessionID quickfix.SessionID)                           { return }
-func (e executor) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID)     { return }
+func (e executor) OnCreate(sessionID quickfix.SessionID)                           {}
+func (e executor) OnLogon(sessionID quickfix.SessionID)                            {}
+func (e executor) OnLogout(sessionID quickfix.SessionID)                           {}
+func (e executor) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID)     {}
 func (e executor) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error { return nil }
 func (e executor) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
@@ -123,7 +124,10 @@ func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID 
 	}
 	execReport.SetClOrdID(clOrdID)
 
-	quickfix.SendToTarget(execReport, sessionID)
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 
 	return nil
 }
@@ -179,8 +183,10 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 	}
 	execReport.SetClOrdID(clOrdID)
 
-	quickfix.SendToTarget(execReport, sessionID)
-
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 	return
 }
 
@@ -245,7 +251,10 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 		execReport.SetAccount(acct)
 	}
 
-	quickfix.SendToTarget(execReport, sessionID)
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 
 	return
 }
@@ -309,7 +318,10 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 		execReport.SetAccount(acct)
 	}
 
-	quickfix.SendToTarget(execReport, sessionID)
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 
 	return
 }
@@ -374,7 +386,10 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 		execReport.SetAccount(acct)
 	}
 
-	quickfix.SendToTarget(execReport, sessionID)
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 
 	return
 }
@@ -439,7 +454,10 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 		execReport.SetAccount(acct)
 	}
 
-	quickfix.SendToTarget(execReport, sessionID)
+	sendErr := quickfix.SendToTarget(execReport, sessionID)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
 
 	return
 }
@@ -479,8 +497,8 @@ func main() {
 		return
 	}
 
-	interrupt := make(chan os.Signal)
-	signal.Notify(interrupt, os.Interrupt, os.Kill)
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 	<-interrupt
 
 	acceptor.Stop()

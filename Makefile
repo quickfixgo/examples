@@ -3,7 +3,7 @@ SHELL := /bin/bash
 test: lint vet build
 
 lint:
-	golint ./...
+	golangci-lint run
 
 vet:
 	go vet ./...
