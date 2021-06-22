@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"path"
 	"strconv"
+	"syscall"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
@@ -39,16 +40,16 @@ func newApplication() *Application {
 }
 
 //OnCreate implemented as part of Application interface
-func (a Application) OnCreate(sessionID quickfix.SessionID) { return }
+func (a Application) OnCreate(sessionID quickfix.SessionID) {}
 
 //OnLogon implemented as part of Application interface
-func (a Application) OnLogon(sessionID quickfix.SessionID) { return }
+func (a Application) OnLogon(sessionID quickfix.SessionID) {}
 
 //OnLogout implemented as part of Application interface
-func (a Application) OnLogout(sessionID quickfix.SessionID) { return }
+func (a Application) OnLogout(sessionID quickfix.SessionID) {}
 
 //ToAdmin implemented as part of Application interface
-func (a Application) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) { return }
+func (a Application) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
 
 //ToApp implemented as part of Application interface
 func (a Application) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error {
@@ -205,7 +206,11 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 	execReport.Header.SetTargetCompID(order.SenderCompID)
 	execReport.Header.SetSenderCompID(order.TargetCompID)
 
-	quickfix.Send(execReport)
+	sendErr := quickfix.Send(execReport)
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
+
 }
 
 func main() {
@@ -243,8 +248,8 @@ func main() {
 		return
 	}
 
-	interrupt := make(chan os.Signal)
-	signal.Notify(interrupt, os.Interrupt, os.Kill)
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-interrupt
 		acceptor.Stop()

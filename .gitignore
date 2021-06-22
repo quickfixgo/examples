@@ -3,3 +3,4 @@ tmp
 vendor
 bin
 .exe
+dist/
