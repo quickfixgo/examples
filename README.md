@@ -2,9 +2,9 @@
 
 [![Build Status](https://github.com/quickfixgo/examples/workflows/CI/badge.svg)](https://github.com/quickfixgo/examples/actions) [![GoDoc](https://godoc.org/github.com/quickfixgo/examples?status.png)](https://godoc.org/github.com/quickfixgo/examples) [![Go Report Card](https://goreportcard.com/badge/github.com/quickfixgo/examples)](https://goreportcard.com/report/github.com/quickfixgo/examples)
 
-* TradeClient is a simple console based trading client
-* Executor is a server that fills every limit order it receives
-* OrderMatch is a primitive matching engine 
+* [TradeClient](cmd/tradeclient/README.md) is a simple console based trading client
+* [Executor](cmd/executor/README.md) is a server that fills every limit order it receives
+* [OrderMatch](cmd/ordermatch/README.md) is a primitive matching engine 
 
 All examples have been ported from [QuickFIX](http://quickfixengine.org)
 
@@ -13,7 +13,7 @@ All examples have been ported from [QuickFIX](http://quickfixengine.org)
 ### Build From Source
 To build and run the examples, you will first need [Go](https://www.golang.org) installed on your machine
 
-Next, clone this repository with `git clone git@github.com:quickfixgo/examples.git`. All the necessary dependencies are vendored, so you just need to type `make build`. This will compile and install the examples into the `./bin` dir in the local copy of the repo. If this exits with exit status 0, then everything is working!
+Next, clone this repository with `git clone git@github.com:quickfixgo/examples.git`. This project uses go modules, so you just need to type `make build`. This will compile the examples executables in the `./bin` dir in your local copy of the repo. If this exits with exit status 0, then everything is working! You may need to pull the module deps with `go mod download`.
 
 ```sh
 make build
@@ -25,4 +25,4 @@ Following installation, the examples can be found in `./bin`.  The examples are 
 
 ### Licensing
 
-This software is available under the QuickFIX Software License. Please see the [LICENSE.txt](https://github.com/quickfixgo/examples/blob/main/LICENSE.txt) for the terms specified by the QuickFIX Software License.
+This software is available under the QuickFIX Software License. Please see the [LICENSE](LICENSE) for the terms specified by the QuickFIX Software License.

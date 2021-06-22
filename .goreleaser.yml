@@ -1,0 +1,63 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - goos:
+      - linux
+      - darwin
+      - windows
+    ignore:
+      - goos: linux
+        goarch: 386
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: 386
+    id: "executor"
+    main: ./cmd/executor
+    binary: executor
+  - goos:
+      - linux
+      - darwin
+      - windows
+    ignore:
+      - goos: linux
+        goarch: 386
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: 386
+    id: "tradeclient"
+    main: ./cmd/tradeclient
+    binary: tradeclient
+  - goos:
+      - linux
+      - darwin
+      - windows
+    ignore:
+      - goos: linux
+        goarch: 386
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: 386
+    id: "ordermatch"
+    main: ./cmd/ordermatch
+    binary: ordermatch
+
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
