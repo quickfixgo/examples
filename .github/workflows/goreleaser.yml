@@ -1,0 +1,65 @@
+name: goreleaser
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Set up Environment
+        run: |
+          echo "GOVERSION=$(go version|awk '{print $3}')" >> $GITHUB_ENV
+      - name: Set up Snapcraft
+        # HACK: the mkdirs are  a hack for https://bugs.launchpad.net/snapcraft/+bug/1889741
+        run: |
+          sudo snap install --classic snapcraft
+          mkdir -p $HOME/.cache/snapcraft/download
+          mkdir -p $HOME/.cache/snapcraft/stage-packages
+      - name: Cache Go modules
+        uses: actions/cache@v2.1.4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Snapcraft Login
+        if: success() && startsWith(github.ref, 'refs/tags/')
+        env:
+          SNAPCRAFT_TOKEN: ${{ secrets.SNAP_LOGIN_KEY }}
+        run: |
+          snapcraft login --with <(echo "$SNAPCRAFT_TOKEN")
+      - name: Docker Login
+        if: success()
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS }}
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          install-only: true
+      - name: Run GoReleaser
+        env:
+          GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]
+          then
+            goreleaser release --rm-dist
+          else
+            goreleaser release --rm-dist --snapshot
+          fi
+      - name: Clear
+        if: always()
+        run: rm -f ${HOME}/.docker/config.json

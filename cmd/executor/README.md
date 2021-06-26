@@ -1,11 +1,16 @@
 # Executor
+Executor is a FIX acceptor service that fills every limit order it receives.
+
+## Features
+* Accept any canonical `NewOrderSingle` message for an instrument, with the instrument symbol consisting of an arbitrary string
+* Sends `ExecutionReport` messages as responses indicating order fills
 
 ## Usage
 A config file similar to the example config [here](../../config/executor.cfg) is required to run the executor.
 The cli command usage takes the form of
 
 ```sh
-executor [CONFIG_PATH_FILENAME]
+qf executor [CONFIG_PATH_FILENAME]
 ```
 where CONFIG_PATH_FILENAME defaults to `config/executor.cfg`
 

@@ -13,40 +13,16 @@ builds:
         goarch: 386
       - goos: windows
         goarch: 386
-    id: "executor"
-    main: ./cmd/executor
-    binary: executor
-  - goos:
-      - linux
-      - darwin
-      - windows
-    ignore:
-      - goos: linux
-        goarch: 386
-      - goos: darwin
-        goarch: 386
-      - goos: windows
-        goarch: 386
-    id: "tradeclient"
-    main: ./cmd/tradeclient
-    binary: tradeclient
-  - goos:
-      - linux
-      - darwin
-      - windows
-    ignore:
-      - goos: linux
-        goarch: 386
-      - goos: darwin
-        goarch: 386
-      - goos: windows
-        goarch: 386
-    id: "ordermatch"
-    main: ./cmd/ordermatch
-    binary: ordermatch
+    id: "qf"
+    binary: qf
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -X github.com/quickfixgo/examples/version.Version={{.Version}}
 
 archives:
-  - replacements:
+  - name_template: "qf_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
@@ -61,3 +37,72 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+
+brews:
+  - name: qf
+    tap:
+      owner: quickfixgo
+      name: homebrew-qf
+    homepage: "https://github.com/quickfixgo/examples"
+    description: "Example QuickFIX/Go Applications."
+    install: |
+      bin.install "qf"
+    caveats: "Thanks for installing the Quickfix/Go examples"
+    plist: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>KeepAlive</key>
+          <dict>
+            <key>SuccessfulExit</key>
+            <false/>
+          </dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>#{var}</string>
+          <key>StandardErrorPath</key>
+          <string>#{var}/log/qtrn.log</string>
+          <key>StandardOutPath</key>
+          <string>#{var}/log/qtrn.log</string>
+        </dict>
+      </plist>
+
+dockers:
+  - goos: linux
+    goarch: amd64
+    image_templates:
+      - "quickfixgo/qf:latest"
+      - "quickfixgo/qf:{{ .Tag }}"
+    dockerfile: release.Dockerfile
+    extra_files:
+    - config
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name=qf"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+
+snapcrafts:
+  - name_template: "qf_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name: quickfixgo-qf
+    publish: true
+    summary: Example QuickFIX/Go Applications.
+    description: Example QuickFIX/Go Applications.
+    grade: stable
+    confinement: strict
+    layout:
+      /etc/qf:
+        bind: $SNAP_DATA/etc
+scoop:
+    name: qf
+    bucket:
+      owner: quickfixgo
+      name: scoop-qf
+    commit_msg_template: "Scoop manifest update for {{ .ProjectName }} version {{ .Tag }}"
+    homepage: https://github.com/quickfixgo/examples
+    description: Example QuickFIX/Go Applications.
+    post_install: ["Write-Host 'Thanks for installing the Quickfix/Go examples'"]
