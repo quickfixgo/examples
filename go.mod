@@ -3,7 +3,7 @@ module github.com/quickfixgo/examples
 go 1.13
 
 require (
-	github.com/fatih/color v1.12.0
+	github.com/fatih/color v1.13.0
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.7 // indirect
