@@ -15,18 +15,24 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
+      - name: Setup
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
       - uses: actions/checkout@v2
-      - name: golangci-lint
+      - name: Get Deps
+        run: go mod vendor
+      - name: Lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.41
+          version: v1.50.1
 
   build:
     name: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [1.16, 1.15]
+        go: [1.19]
     steps:
       - name: Setup
         uses: actions/setup-go@v2
@@ -34,5 +40,7 @@ jobs:
           go-version: ${{ matrix.go }}
       - name: Check out source
         uses: actions/checkout@v2
+      - name: Get Deps
+        run: go mod vendor
       - name: Build
         run: make build
