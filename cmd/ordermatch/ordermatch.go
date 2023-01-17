@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/signal"
 	"path"
@@ -35,11 +34,12 @@ import (
 	"github.com/quickfixgo/fix42/marketdatarequest"
 	"github.com/quickfixgo/fix42/newordersingle"
 	"github.com/quickfixgo/fix42/ordercancelrequest"
-	"github.com/quickfixgo/quickfix"
 	"github.com/spf13/cobra"
+
+	"github.com/quickfixgo/quickfix"
 )
 
-//Application implements the quickfix.Application interface
+// Application implements the quickfix.Application interface
 type Application struct {
 	*quickfix.MessageRouter
 	*internal.OrderMatcher
@@ -58,29 +58,29 @@ func newApplication() *Application {
 	return app
 }
 
-//OnCreate implemented as part of Application interface
+// OnCreate implemented as part of Application interface
 func (a Application) OnCreate(sessionID quickfix.SessionID) {}
 
-//OnLogon implemented as part of Application interface
+// OnLogon implemented as part of Application interface
 func (a Application) OnLogon(sessionID quickfix.SessionID) {}
 
-//OnLogout implemented as part of Application interface
+// OnLogout implemented as part of Application interface
 func (a Application) OnLogout(sessionID quickfix.SessionID) {}
 
-//ToAdmin implemented as part of Application interface
+// ToAdmin implemented as part of Application interface
 func (a Application) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
 
-//ToApp implemented as part of Application interface
+// ToApp implemented as part of Application interface
 func (a Application) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error {
 	return nil
 }
 
-//FromAdmin implemented as part of Application interface
+// FromAdmin implemented as part of Application interface
 func (a Application) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
 
-//FromApp implemented as part of Application interface, uses Router on incoming application messages
+// FromApp implemented as part of Application interface, uses Router on incoming application messages
 func (a *Application) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return a.Route(msg, sessionID)
 }
@@ -264,23 +264,23 @@ func execute(cmd *cobra.Command, args []string) error {
 		}
 	default:
 		{
-			return fmt.Errorf("Incorrect argument number")
+			return fmt.Errorf("incorrect argument number")
 		}
 	}
 
 	cfg, err := os.Open(cfgFileName)
 	if err != nil {
-		return fmt.Errorf("Error opening %v, %v\n", cfgFileName, err)
+		return fmt.Errorf("error opening %v, %v", cfgFileName, err)
 	}
 	defer cfg.Close()
-	stringData, readErr := ioutil.ReadAll(cfg)
+	stringData, readErr := io.ReadAll(cfg)
 	if readErr != nil {
-		return fmt.Errorf("Error reading cfg: %s,", readErr)
+		return fmt.Errorf("error reading cfg: %s,", readErr)
 	}
 
 	appSettings, err := quickfix.ParseSettings(bytes.NewReader(stringData))
 	if err != nil {
-		return fmt.Errorf("Error reading cfg: %s,", err)
+		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
 	logFactory := quickfix.NewScreenLogFactory()
@@ -289,12 +289,12 @@ func execute(cmd *cobra.Command, args []string) error {
 	printConfig(bytes.NewReader(stringData))
 	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logFactory)
 	if err != nil {
-		return fmt.Errorf("Unable to create Acceptor: %s\n", err)
+		return fmt.Errorf("unable to create acceptor: %s", err)
 	}
 
 	err = acceptor.Start()
 	if err != nil {
-		return fmt.Errorf("Unable to start Acceptor: %s\n", err)
+		return fmt.Errorf("unable to start acceptor: %s", err)
 	}
 
 	interrupt := make(chan os.Signal, 1)

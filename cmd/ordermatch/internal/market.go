@@ -81,13 +81,13 @@ func offers() (o orderList) {
 	return
 }
 
-//Market is a simple CLOB
+// Market is a simple CLOB
 type Market struct {
 	Bids   orderList
 	Offers orderList
 }
 
-//NewMarket returns an initialized Market instance
+// NewMarket returns an initialized Market instance
 func NewMarket() *Market {
 	return &Market{bids(), offers()}
 }

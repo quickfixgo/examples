@@ -22,8 +22,9 @@ import (
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
-	"github.com/quickfixgo/quickfix"
 	"github.com/shopspring/decimal"
+
+	"github.com/quickfixgo/quickfix"
 
 	"os"
 	"strconv"

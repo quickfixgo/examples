@@ -20,44 +20,44 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 
 	"github.com/fatih/color"
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
-	"github.com/quickfixgo/quickfix"
 	"github.com/spf13/cobra"
+
+	"github.com/quickfixgo/quickfix"
 )
 
-//TradeClient implements the quickfix.Application interface
+// TradeClient implements the quickfix.Application interface
 type TradeClient struct {
 }
 
-//OnCreate implemented as part of Application interface
+// OnCreate implemented as part of Application interface
 func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {}
 
-//OnLogon implemented as part of Application interface
+// OnLogon implemented as part of Application interface
 func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
 
-//OnLogout implemented as part of Application interface
+// OnLogout implemented as part of Application interface
 func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {}
 
-//FromAdmin implemented as part of Application interface
+// FromAdmin implemented as part of Application interface
 func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return nil
 }
 
-//ToAdmin implemented as part of Application interface
+// ToAdmin implemented as part of Application interface
 func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
 
-//ToApp implemented as part of Application interface
+// ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
 	fmt.Printf("Sending %s\n", msg)
 	return
 }
 
-//FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
+// FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
 func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	fmt.Printf("FromApp: %s\n", msg.String())
 	return
@@ -95,41 +95,41 @@ func execute(cmd *cobra.Command, args []string) error {
 		}
 	default:
 		{
-			return fmt.Errorf("Incorrect argument number")
+			return fmt.Errorf("incorrect argument number")
 		}
 	}
 
 	cfg, err := os.Open(cfgFileName)
 	if err != nil {
-		return fmt.Errorf("Error opening %v, %v\n", cfgFileName, err)
+		return fmt.Errorf("error opening %v, %v", cfgFileName, err)
 	}
 	defer cfg.Close()
 
-	stringData, readErr := ioutil.ReadAll(cfg)
+	stringData, readErr := io.ReadAll(cfg)
 	if readErr != nil {
-		return fmt.Errorf("Error reading cfg: %s,", readErr)
+		return fmt.Errorf("error reading cfg: %s,", readErr)
 	}
 
 	appSettings, err := quickfix.ParseSettings(bytes.NewReader(stringData))
 	if err != nil {
-		return fmt.Errorf("Error reading cfg: %s,", err)
+		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
 	app := TradeClient{}
 	fileLogFactory, err := quickfix.NewFileLogFactory(appSettings)
 
 	if err != nil {
-		return fmt.Errorf("Error creating file log factory: %s,", err)
+		return fmt.Errorf("error creating file log factory: %s,", err)
 	}
 
 	initiator, err := quickfix.NewInitiator(app, quickfix.NewMemoryStoreFactory(), appSettings, fileLogFactory)
 	if err != nil {
-		return fmt.Errorf("Unable to create Initiator: %s\n", err)
+		return fmt.Errorf("unable to create initiator: %s", err)
 	}
 
 	err = initiator.Start()
 	if err != nil {
-		return fmt.Errorf("Unable to start Initiator: %s\n", err)
+		return fmt.Errorf("unable to start initiator: %s", err)
 	}
 
 	printConfig(bytes.NewReader(stringData))

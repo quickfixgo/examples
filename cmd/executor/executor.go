@@ -20,17 +20,17 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"path"
 	"syscall"
 
 	"github.com/fatih/color"
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
-	"github.com/quickfixgo/quickfix"
 	"github.com/quickfixgo/tag"
 	"github.com/shopspring/decimal"
 	"github.com/spf13/cobra"
+
+	"github.com/quickfixgo/quickfix"
 
 	fix40nos "github.com/quickfixgo/fix40/newordersingle"
 	fix41nos "github.com/quickfixgo/fix41/newordersingle"
@@ -79,7 +79,7 @@ func (e *executor) genExecID() field.ExecIDField {
 	return field.NewExecID(strconv.Itoa(e.execID))
 }
 
-//quickfix.Application interface
+// quickfix.Application interface
 func (e executor) OnCreate(sessionID quickfix.SessionID)                           {}
 func (e executor) OnLogon(sessionID quickfix.SessionID)                            {}
 func (e executor) OnLogout(sessionID quickfix.SessionID)                           {}
@@ -89,7 +89,7 @@ func (e executor) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID)
 	return nil
 }
 
-//Use Message Cracker on Incoming Application Messages
+// Use Message Cracker on Incoming Application Messages
 func (e *executor) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return e.Route(msg, sessionID)
 }
@@ -514,22 +514,22 @@ func execute(cmd *cobra.Command, args []string) error {
 		}
 	default:
 		{
-			return fmt.Errorf("Incorrect argument number")
+			return fmt.Errorf("incorrect argument number")
 		}
 	}
 	cfg, err := os.Open(cfgFileName)
 	if err != nil {
-		return fmt.Errorf("Error opening %v, %v\n", cfgFileName, err)
+		return fmt.Errorf("error opening %v, %v", cfgFileName, err)
 	}
 	defer cfg.Close()
-	stringData, readErr := ioutil.ReadAll(cfg)
+	stringData, readErr := io.ReadAll(cfg)
 	if readErr != nil {
-		return fmt.Errorf("Error reading cfg: %s,", readErr)
+		return fmt.Errorf("error reading cfg: %s,", readErr)
 	}
 
 	appSettings, err := quickfix.ParseSettings(bytes.NewReader(stringData))
 	if err != nil {
-		return fmt.Errorf("Error reading cfg: %s,", err)
+		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
 	logFactory := quickfix.NewScreenLogFactory()
@@ -538,12 +538,12 @@ func execute(cmd *cobra.Command, args []string) error {
 	printConfig(bytes.NewReader(stringData))
 	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logFactory)
 	if err != nil {
-		return fmt.Errorf("Unable to create Acceptor: %s\n", err)
+		return fmt.Errorf("unable to create acceptor: %s", err)
 	}
 
 	err = acceptor.Start()
 	if err != nil {
-		return fmt.Errorf("Unable to start Acceptor: %s\n", err)
+		return fmt.Errorf("unable to start acceptor: %s", err)
 	}
 
 	interrupt := make(chan os.Signal, 1)
