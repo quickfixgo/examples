@@ -4,7 +4,7 @@
 
 * [TradeClient](cmd/tradeclient/README.md) is a simple FIX initiator console-based trading client
 * [Executor](cmd/executor/README.md) is a FIX acceptor service that fills every limit order it receives
-* [OrderMatch](cmd/ordermatch/README.md) is a primitive matching engine and FIX acceptor serice
+* [OrderMatch](cmd/ordermatch/README.md) is a primitive matching engine and FIX acceptor service
 
 All examples have been ported from [QuickFIX](http://quickfixengine.org)
 
