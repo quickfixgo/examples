@@ -65,9 +65,9 @@ brews:
           <key>WorkingDirectory</key>
           <string>#{var}</string>
           <key>StandardErrorPath</key>
-          <string>#{var}/log/qtrn.log</string>
+          <string>#{var}/log/qf.log</string>
           <key>StandardOutPath</key>
-          <string>#{var}/log/qtrn.log</string>
+          <string>#{var}/log/qf.log</string>
         </dict>
       </plist>
 
