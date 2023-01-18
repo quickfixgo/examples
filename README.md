@@ -2,7 +2,9 @@
 
 [![Build Status](https://github.com/quickfixgo/examples/workflows/CI/badge.svg)](https://github.com/quickfixgo/examples/actions) [![GoDoc](https://godoc.org/github.com/quickfixgo/examples?status.png)](https://godoc.org/github.com/quickfixgo/examples) [![Go Report Card](https://goreportcard.com/badge/github.com/quickfixgo/examples)](https://goreportcard.com/report/github.com/quickfixgo/examples)
 
-:wave: Hi! The code in this project showcases common scenarios for FIX applications. The project is structured as a cli application that you can easily install on your machine and use it to explore the mechanics behind sending/receiving simple FIX messages. You can also use the cli app as a validator/counter-party against your own FIX application. If you are interested in writing your own code right away, take a look at the sub-applications descriptions below, navigate to their READMEs to get a better sense of the required ins and outs of FIX apps, and then browse their source code for an example that fits your needs.
+:wave: Hi! The code in this project showcases common scenarios for FIX applications. The project is structured as a cli application that you can easily install on your machine and use it to explore the mechanics behind sending/receiving simple FIX messages. You can also use the cli app as a validator/counter-party against your own FIX application.
+
+If you are interested in writing your own code right away, take a look at the sub-applications descriptions below, navigate to their READMEs to get a better sense of the required ins and outs of FIX apps, and then browse their source code for an example that fits your needs.
 
 * [TradeClient](cmd/tradeclient/README.md) is a simple FIX initiator console-based trading client
 * [Executor](cmd/executor/README.md) is a FIX acceptor service that fills every limit order it receives
