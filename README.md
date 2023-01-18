@@ -2,6 +2,8 @@
 
 [![Build Status](https://github.com/quickfixgo/examples/workflows/CI/badge.svg)](https://github.com/quickfixgo/examples/actions) [![GoDoc](https://godoc.org/github.com/quickfixgo/examples?status.png)](https://godoc.org/github.com/quickfixgo/examples) [![Go Report Card](https://goreportcard.com/badge/github.com/quickfixgo/examples)](https://goreportcard.com/report/github.com/quickfixgo/examples)
 
+:wave: Hi! The code in this project showcases common scenarios for FIX applications. The project is structured as a cli application that you can easily install on your machine and use it to explore the mechanics behind sending/receiving simple FIX messages. You can also use the cli app as a validator/counter-party against your own FIX application. If you are interested in writing your own code right away, take a look at the sub-applications descriptions below, navigate to their READMEs to get a better sense of the required ins and outs of FIX apps, and then browse their source code for an example that fits your needs.
+
 * [TradeClient](cmd/tradeclient/README.md) is a simple FIX initiator console-based trading client
 * [Executor](cmd/executor/README.md) is a FIX acceptor service that fills every limit order it receives
 * [OrderMatch](cmd/ordermatch/README.md) is a primitive matching engine and FIX acceptor service
@@ -74,14 +76,8 @@ docker run -it -p 5001:5001 quickfixgo/qf ordermatch
 ```
 Note: The docker image comes pre-loaded with the default configs. If you want to supply your own, you can specify a volume binding to your local directory in the run command.
 
-## Contributing
-The preferred way to build the examples for development is using `make`. Run `make build` to compile and test any new fixes or features.
-
-1. Fork the repo and clone your fork
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request :)
-
 ## Licensing
 This software is available under the QuickFIX Software License. Please see the [LICENSE](LICENSE) for the terms specified by the QuickFIX Software License.
+
+<br>
+<img width="196" alt="Sponsored by Connamara" src="https://user-images.githubusercontent.com/3065126/212457799-abd6408a-972d-4168-9feb-b80ce1f1ec83.png">
