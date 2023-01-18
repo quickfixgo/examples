@@ -35,10 +35,10 @@ jobs:
       #       ${{ runner.os }}-go-
       - name: Snapcraft Login
         if: success() && startsWith(github.ref, 'refs/tags/')
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_LOGIN_KEY }}
-        run: |
-          snapcraft login
+        uses: samuelmeuli/action-snapcraft@v1
+        with:
+          snapcraft_token: ${{ secrets.SNAP_LOGIN_KEY }}
+          skip_install: true
       - name: Docker Login
         if: success()
         env:
