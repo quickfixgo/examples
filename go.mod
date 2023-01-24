@@ -3,7 +3,7 @@ module github.com/quickfixgo/examples
 go 1.19
 
 require (
-	github.com/fatih/color v1.13.0
+	github.com/fatih/color v1.14.1
 	github.com/quickfixgo/enum v0.1.0
 	github.com/quickfixgo/field v0.1.0
 	github.com/quickfixgo/fix40 v0.1.0
