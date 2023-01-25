@@ -26,9 +26,9 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/fatih/color"
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
+	"github.com/quickfixgo/examples/cmd/utils"
 	"github.com/quickfixgo/field"
 	"github.com/quickfixgo/fix42/executionreport"
 	"github.com/quickfixgo/fix42/marketdatarequest"
@@ -234,8 +234,8 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 
 const (
 	usage = "ordermatch"
-	short = "Start an ordermatcher"
-	long  = "Start an ordermatcher."
+	short = "Start an order matching (FIX acceptor) service"
+	long  = "Start an order matching (FIX acceptor) service."
 )
 
 var (
@@ -245,7 +245,7 @@ var (
 		Short:   short,
 		Long:    long,
 		Aliases: []string{"oms"},
-		Example: "qf ordermatch config/ordermatch.cfg",
+		Example: "qf ordermatch [YOUR_FIX_CONFIG_FILE_HERE.cfg] (default is ./config/ordermatch.cfg)",
 		RunE:    execute,
 	}
 )
@@ -256,6 +256,8 @@ func execute(cmd *cobra.Command, args []string) error {
 	switch argLen {
 	case 0:
 		{
+			utils.PrintInfo("FIX config file not provided...")
+			utils.PrintInfo("attempting to use default location './config/ordermatch.cfg' ...")
 			cfgFileName = path.Join("config", "ordermatch.cfg")
 		}
 	case 1:
@@ -283,18 +285,18 @@ func execute(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
-	logFactory := quickfix.NewScreenLogFactory()
+	logger := utils.NewFancyLog()
 	app := newApplication()
 
-	printConfig(bytes.NewReader(stringData))
-	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logFactory)
+	utils.PrintConfig("acceptor", bytes.NewReader(stringData))
+	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logger)
 	if err != nil {
 		return fmt.Errorf("unable to create acceptor: %s", err)
 	}
 
 	err = acceptor.Start()
 	if err != nil {
-		return fmt.Errorf("unable to start acceptor: %s", err)
+		return fmt.Errorf("unable to start FIX acceptor: %s", err)
 	}
 
 	interrupt := make(chan os.Signal, 1)
@@ -316,19 +318,4 @@ func execute(cmd *cobra.Command, args []string) error {
 			app.DisplayMarket(value)
 		}
 	}
-}
-
-func printConfig(reader io.Reader) {
-	scanner := bufio.NewScanner(reader)
-	color.Set(color.Bold)
-	fmt.Println("Starting FIX acceptor with config:")
-	color.Unset()
-
-	color.Set(color.FgHiMagenta)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
-	}
-
-	color.Unset()
 }

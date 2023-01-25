@@ -1,5 +1,5 @@
 # Ordermatch
-Ordermatch is a simple matching engine (A set of orderbooks) with a FIX acceptor serving as the point of ingress. 
+Ordermatch is a simple matching engine (A set of orderbooks) with a FIX acceptor service as the point of ingress. 
 
 ## Features
 * Accept any canonical `NewOrderSingle` message for an instrument, with the instrument symbol consisting of an arbitrary string

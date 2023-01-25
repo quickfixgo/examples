@@ -16,15 +16,14 @@
 package tradeclient
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"path"
 
-	"github.com/fatih/color"
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
+	"github.com/quickfixgo/examples/cmd/utils"
 	"github.com/spf13/cobra"
 
 	"github.com/quickfixgo/quickfix"
@@ -53,20 +52,20 @@ func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID
 
 // ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
-	fmt.Printf("Sending %s\n", msg)
+	utils.PrintInfo(fmt.Sprintf("Sending: %s", msg.String()))
 	return
 }
 
 // FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
 func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
-	fmt.Printf("FromApp: %s\n", msg.String())
+	utils.PrintInfo(fmt.Sprintf("FromApp: %s", msg.String()))
 	return
 }
 
 const (
 	usage = "tradeclient"
-	short = "Start a tradeclient"
-	long  = "Start a tradeclient."
+	short = "Start a tradeclient (FIX initiator) cli trading agent"
+	long  = "Start a tradeclient (FIX initiator) cli trading agent."
 )
 
 var (
@@ -76,7 +75,7 @@ var (
 		Short:   short,
 		Long:    long,
 		Aliases: []string{"tc"},
-		Example: "qf tradeclient config/tradeclient.cfg",
+		Example: "qf tradeclient [YOUR_FIX_CONFIG_FILE_HERE.cfg] (default is ./config/tradeclient.cfg)",
 		RunE:    execute,
 	}
 )
@@ -87,6 +86,8 @@ func execute(cmd *cobra.Command, args []string) error {
 	switch argLen {
 	case 0:
 		{
+			utils.PrintInfo("FIX config file not provided...")
+			utils.PrintInfo("attempting to use default location './config/tradeclient.cfg' ...")
 			cfgFileName = path.Join("config", "tradeclient.cfg")
 		}
 	case 1:
@@ -132,7 +133,7 @@ func execute(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("unable to start initiator: %s", err)
 	}
 
-	printConfig(bytes.NewReader(stringData))
+	utils.PrintConfig("initiator", bytes.NewReader(stringData))
 
 Loop:
 	for {
@@ -160,25 +161,12 @@ Loop:
 		}
 
 		if err != nil {
-			fmt.Printf("%v\n", err)
+			utils.PrintBad(err.Error())
 		}
 	}
 
+	utils.PrintInfo("stopping FIX initiator ..")
 	initiator.Stop()
+	utils.PrintInfo("stopped")
 	return nil
-}
-
-func printConfig(reader io.Reader) {
-	scanner := bufio.NewScanner(reader)
-	color.Set(color.Bold)
-	fmt.Println("Started FIX initiator with config:")
-	color.Unset()
-
-	color.Set(color.FgHiMagenta)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
-	}
-
-	color.Unset()
 }

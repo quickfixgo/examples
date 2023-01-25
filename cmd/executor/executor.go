@@ -16,15 +16,14 @@
 package executor
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"io"
 	"path"
 	"syscall"
 
-	"github.com/fatih/color"
 	"github.com/quickfixgo/enum"
+	"github.com/quickfixgo/examples/cmd/utils"
 	"github.com/quickfixgo/field"
 	"github.com/quickfixgo/tag"
 	"github.com/shopspring/decimal"
@@ -101,6 +100,7 @@ func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID 
 	}
 
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -146,7 +146,7 @@ func (e *executor) OnFIX40NewOrderSingle(msg fix40nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 
 	return nil
@@ -158,6 +158,7 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 		return
 	}
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -205,7 +206,7 @@ func (e *executor) OnFIX41NewOrderSingle(msg fix41nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 	return
 }
@@ -217,6 +218,7 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 	}
 
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -273,7 +275,7 @@ func (e *executor) OnFIX42NewOrderSingle(msg fix42nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 
 	return
@@ -285,6 +287,7 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 		return err
 	}
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -340,7 +343,7 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 
 	return
@@ -353,6 +356,7 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 	}
 
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -408,7 +412,7 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 
 	return
@@ -421,6 +425,7 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 	}
 
 	if ordType != enum.OrdType_LIMIT {
+		utils.PrintBad("incoming order was not a limit order and was rejected")
 		return quickfix.ValueIsIncorrect(tag.OrdType)
 	}
 
@@ -476,7 +481,7 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 
 	sendErr := quickfix.SendToTarget(execReport, sessionID)
 	if sendErr != nil {
-		fmt.Println(sendErr)
+		utils.PrintBad(sendErr.Error())
 	}
 
 	return
@@ -484,18 +489,18 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 
 const (
 	usage = "executor"
-	short = "Start an executor"
-	long  = "Start an executor."
+	short = "Start an order execution (FIX acceptor) service"
+	long  = "Start an order execution (FIX acceptor) service."
 )
 
 var (
-	// Cmd is the quote command.
+	// Cmd is the executor command.
 	Cmd = &cobra.Command{
 		Use:     usage,
 		Short:   short,
 		Long:    long,
 		Aliases: []string{"x"},
-		Example: "qf ordermatch config/executor.cfg",
+		Example: "qf executor [YOUR_FIX_CONFIG_FILE_HERE.cfg] (default is ./config/executor.cfg)",
 		RunE:    execute,
 	}
 )
@@ -506,6 +511,8 @@ func execute(cmd *cobra.Command, args []string) error {
 	switch argLen {
 	case 0:
 		{
+			utils.PrintInfo("FIX config file not provided...")
+			utils.PrintInfo("attempting to use default location './config/executor.cfg' ...")
 			cfgFileName = path.Join("config", "executor.cfg")
 		}
 	case 1:
@@ -532,40 +539,27 @@ func execute(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
-	logFactory := quickfix.NewScreenLogFactory()
+	logger := utils.NewFancyLog()
 	app := newExecutor()
 
-	printConfig(bytes.NewReader(stringData))
-	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logFactory)
+	utils.PrintConfig("acceptor", bytes.NewReader(stringData))
+	acceptor, err := quickfix.NewAcceptor(app, quickfix.NewMemoryStoreFactory(), appSettings, logger)
 	if err != nil {
 		return fmt.Errorf("unable to create acceptor: %s", err)
 	}
 
 	err = acceptor.Start()
 	if err != nil {
-		return fmt.Errorf("unable to start acceptor: %s", err)
+		return fmt.Errorf("unable to start FIX acceptor: %s", err)
 	}
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 	<-interrupt
 
+	utils.PrintInfo("stopping FIX acceptor service..")
 	acceptor.Stop()
+	utils.PrintInfo("stopped")
 
 	return nil
-}
-
-func printConfig(reader io.Reader) {
-	scanner := bufio.NewScanner(reader)
-	color.Set(color.Bold)
-	fmt.Println("Starting FIX acceptor with config:")
-	color.Unset()
-
-	color.Set(color.FgHiMagenta)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
-	}
-
-	color.Unset()
 }

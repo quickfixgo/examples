@@ -1,5 +1,7 @@
 # Executor
-Executor is a FIX acceptor service that fills every limit order it receives.
+Executor is a FIX acceptor service that fills every limit order it receives. 
+
+(Note: it will reject any non-limit order type)
 
 ## Features
 * Accept any canonical `NewOrderSingle` message for an instrument, with the instrument symbol consisting of an arbitrary string
