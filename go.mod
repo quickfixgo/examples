@@ -3,7 +3,7 @@ module github.com/quickfixgo/examples
 go 1.19
 
 require (
-	github.com/fatih/color v1.14.1
+	github.com/fatih/color v1.15.0
 	github.com/gosuri/uitable v0.0.4
 	github.com/quickfixgo/enum v0.1.0
 	github.com/quickfixgo/field v0.1.0
@@ -40,6 +40,6 @@ require (
 	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 )
