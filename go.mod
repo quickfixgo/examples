@@ -16,7 +16,7 @@ require (
 	github.com/quickfixgo/quickfix v0.7.0
 	github.com/quickfixgo/tag v0.1.0
 	github.com/shopspring/decimal v1.3.1
-	github.com/spf13/cobra v1.6.1
+	github.com/spf13/cobra v1.7.0
 )
 
 require (
