@@ -101,7 +101,7 @@ func (m Market) Display() {
 		fmt.Printf("%+v\n", bid)
 	}
 
-	fmt.Println("OFFERS:")
+	fmt.Println("ASKS:")
 	fmt.Println("-----")
 	fmt.Println()
 

@@ -34,10 +34,12 @@ type TradeClient struct {
 }
 
 // OnCreate implemented as part of Application interface
-func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {
+}
 
 // OnLogon implemented as part of Application interface
-func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {
+}
 
 // OnLogout implemented as part of Application interface
 func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {}

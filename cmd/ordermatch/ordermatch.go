@@ -30,10 +30,10 @@ import (
 	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
 	"github.com/quickfixgo/examples/cmd/utils"
 	"github.com/quickfixgo/field"
-	"github.com/quickfixgo/fix42/executionreport"
-	"github.com/quickfixgo/fix42/marketdatarequest"
-	"github.com/quickfixgo/fix42/newordersingle"
-	"github.com/quickfixgo/fix42/ordercancelrequest"
+	"github.com/quickfixgo/fix50/executionreport"
+	"github.com/quickfixgo/fix50/marketdatarequest"
+	"github.com/quickfixgo/fix50/newordersingle"
+	"github.com/quickfixgo/fix50/ordercancelrequest"
 	"github.com/spf13/cobra"
 
 	"github.com/quickfixgo/quickfix"
@@ -62,7 +62,9 @@ func newApplication() *Application {
 func (a Application) OnCreate(sessionID quickfix.SessionID) {}
 
 // OnLogon implemented as part of Application interface
-func (a Application) OnLogon(sessionID quickfix.SessionID) {}
+func (a Application) OnLogon(sessionID quickfix.SessionID) {
+
+}
 
 // OnLogout implemented as part of Application interface
 func (a Application) OnLogout(sessionID quickfix.SessionID) {}
@@ -204,21 +206,21 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 	execReport := executionreport.New(
 		field.NewOrderID(order.ClOrdID),
 		field.NewExecID(a.genExecID()),
-		field.NewExecTransType(enum.ExecTransType_NEW),
 		field.NewExecType(enum.ExecType(status)),
 		field.NewOrdStatus(status),
-		field.NewSymbol(order.Symbol),
 		field.NewSide(order.Side),
 		field.NewLeavesQty(order.OpenQuantity(), 2),
 		field.NewCumQty(order.ExecutedQuantity, 2),
-		field.NewAvgPx(order.AvgPx, 2),
 	)
-	execReport.SetOrderQty(order.Quantity, 2)
+
 	execReport.SetClOrdID(order.ClOrdID)
+	execReport.SetSymbol(order.Symbol)
+	execReport.SetOrderQty(order.Quantity, 2)
+	execReport.SetAvgPx(order.AvgPx, 2)
 
 	switch status {
 	case enum.OrdStatus_FILLED, enum.OrdStatus_PARTIALLY_FILLED:
-		execReport.SetLastShares(order.LastExecutedQuantity, 2)
+		execReport.SetLastQty(order.LastExecutedQuantity, 2)
 		execReport.SetLastPx(order.LastExecutedPrice, 2)
 	}
 

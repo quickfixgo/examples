@@ -23,3 +23,9 @@ build-linux:
 
 build-docker: clean build-linux
 	docker build -t quickfixgo/qf:latest .
+
+run-client:
+	./bin/qf tradeclient ./config/tradeclient.cfg
+
+run-server:
+	./bin/qf ordermatch ./config/ordermatch.cfg
