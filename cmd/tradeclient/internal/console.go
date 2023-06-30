@@ -137,7 +137,7 @@ func queryClOrdID() field.ClOrdIDField {
 }
 
 func queryOrigClOrdID() field.OrigClOrdIDField {
-	return field.NewOrigClOrdID(("OrigClOrdID"))
+	return field.NewOrigClOrdID(queryString("OrigClOrdID"))
 }
 
 func querySymbol() field.SymbolField {
@@ -207,15 +207,17 @@ func queryTimeInForce() field.TimeInForceField {
 }
 
 func queryOrderQty() field.OrderQtyField {
-	return field.NewOrderQty(queryDecimal("OrderQty"), 2)
+	dec := queryDecimal("OrderQty").Truncate(8)
+	return field.NewOrderQty(dec, 8)
 }
 
 func queryPrice() field.PriceField {
-	return field.NewPrice(queryDecimal("Price"), 2)
+	dec := queryDecimal("Price").Truncate(8)
+	return field.NewPrice(dec, 8)
 }
 
 func queryStopPx() field.StopPxField {
-	return field.NewStopPx(queryDecimal("Stop Price"), 2)
+	return field.NewStopPx(queryDecimal("Stop Price"), 8)
 }
 
 func querySenderCompID() field.SenderCompIDField {
@@ -370,7 +372,6 @@ func queryNewOrderSingle50() (msg *quickfix.Message) {
 	order.SetHandlInst("1")
 	order.Set(querySymbol())
 	order.Set(queryOrderQty())
-	order.Set(queryTimeInForce())
 
 	switch ordType.Value() {
 	case enum.OrdType_LIMIT, enum.OrdType_STOP_LIMIT:
@@ -381,6 +382,8 @@ func queryNewOrderSingle50() (msg *quickfix.Message) {
 	case enum.OrdType_STOP, enum.OrdType_STOP_LIMIT:
 		order.Set(queryStopPx())
 	}
+
+	order.Set(queryTimeInForce())
 
 	msg = order.ToMessage()
 	queryHeader(&msg.Header)

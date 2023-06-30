@@ -4,3 +4,4 @@ vendor
 bin
 .exe
 dist/
+.idea

@@ -17,10 +17,12 @@ package tradeclient
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path"
+	"strconv"
 
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 	"github.com/quickfixgo/examples/cmd/utils"
@@ -34,10 +36,12 @@ type TradeClient struct {
 }
 
 // OnCreate implemented as part of Application interface
-func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {
+}
 
 // OnLogon implemented as part of Application interface
-func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {
+}
 
 // OnLogout implemented as part of Application interface
 func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {}
@@ -58,7 +62,17 @@ func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) 
 
 // FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
 func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+	fmt.Println()
+	fmt.Println()
 	utils.PrintInfo(fmt.Sprintf("FromApp: %s", msg.String()))
+	typeString, _ := msg.MsgType()
+	utils.PrintInfo(fmt.Sprintf("Response type: %s", typeString))
+	for _, tag := range msg.Body.Tags() {
+		value, _ := msg.Body.GetString(tag)
+		intVar, _ := strconv.Atoi(fmt.Sprintf("%v", tag))
+		utils.PrintInfo(fmt.Sprintf("%s: %v", Dic.TagField[intVar].Name, value))
+	}
+
 	return
 }
 
@@ -80,7 +94,37 @@ var (
 	}
 )
 
+type FixDicField struct {
+	Tag  int `json:"Tag"`
+	Name string `json:"Name"`
+	Type string `json:"Type"`
+}
+
+type FixDic struct {
+	FixVersion string              `json:"FixVersion"`
+	Fields     []FixDicField       `json:"Fields"`
+	TagField   map[int]FixDicField `json:"-"`
+}
+
+var Dic FixDic
+
 func execute(cmd *cobra.Command, args []string) error {
+	file, err := os.ReadFile("./dictionary/fix5.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = json.Unmarshal(file, &Dic)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	Dic.TagField = make(map[int]FixDicField, 0)
+
+	for _, field := range Dic.Fields {
+		Dic.TagField[field.Tag] = field
+	}
+
 	var cfgFileName string
 	argLen := len(args)
 	switch argLen {
