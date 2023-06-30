@@ -1,0 +1,5455 @@
+{
+  "FixVersion": "FIX5.0",
+  "Fields": [
+    {
+      "Tag": 1,
+      "Name": "Account",
+      "Type": "String"
+    },
+    {
+      "Tag": 2,
+      "Name": "AdvId",
+      "Type": "String"
+    },
+    {
+      "Tag": 3,
+      "Name": "AdvRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 4,
+      "Name": "AdvSide",
+      "Type": "char"
+    },
+    {
+      "Tag": 5,
+      "Name": "AdvTransType",
+      "Type": "String"
+    },
+    {
+      "Tag": 6,
+      "Name": "AvgPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 7,
+      "Name": "BeginSeqNo",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 8,
+      "Name": "BeginString",
+      "Type": "String"
+    },
+    {
+      "Tag": 9,
+      "Name": "BodyLength",
+      "Type": "Length"
+    },
+    {
+      "Tag": 10,
+      "Name": "CheckSum",
+      "Type": "String"
+    },
+    {
+      "Tag": 11,
+      "Name": "ClOrdID",
+      "Type": "String"
+    },
+    {
+      "Tag": 12,
+      "Name": "Commission",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 13,
+      "Name": "CommType",
+      "Type": "char"
+    },
+    {
+      "Tag": 14,
+      "Name": "CumQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 15,
+      "Name": "Currency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 16,
+      "Name": "EndSeqNo",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 17,
+      "Name": "ExecID",
+      "Type": "String"
+    },
+    {
+      "Tag": 18,
+      "Name": "ExecInst",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 19,
+      "Name": "ExecRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 21,
+      "Name": "HandlInst",
+      "Type": "char"
+    },
+    {
+      "Tag": 22,
+      "Name": "SecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 23,
+      "Name": "IOIID",
+      "Type": "String"
+    },
+    {
+      "Tag": 25,
+      "Name": "IOIQltyInd",
+      "Type": "char"
+    },
+    {
+      "Tag": 26,
+      "Name": "IOIRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 27,
+      "Name": "IOIQty",
+      "Type": "String"
+    },
+    {
+      "Tag": 28,
+      "Name": "IOITransType",
+      "Type": "char"
+    },
+    {
+      "Tag": 29,
+      "Name": "LastCapacity",
+      "Type": "char"
+    },
+    {
+      "Tag": 30,
+      "Name": "LastMkt",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 31,
+      "Name": "LastPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 32,
+      "Name": "LastQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 33,
+      "Name": "NoLinesOfText",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 34,
+      "Name": "MsgSeqNum",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 35,
+      "Name": "MsgType",
+      "Type": "String"
+    },
+    {
+      "Tag": 36,
+      "Name": "NewSeqNo",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 37,
+      "Name": "OrderID",
+      "Type": "String"
+    },
+    {
+      "Tag": 38,
+      "Name": "OrderQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 39,
+      "Name": "OrdStatus",
+      "Type": "char"
+    },
+    {
+      "Tag": 40,
+      "Name": "OrdType",
+      "Type": "char"
+    },
+    {
+      "Tag": 41,
+      "Name": "OrigClOrdID",
+      "Type": "String"
+    },
+    {
+      "Tag": 42,
+      "Name": "OrigTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 43,
+      "Name": "PossDupFlag",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 44,
+      "Name": "Price",
+      "Type": "Price"
+    },
+    {
+      "Tag": 45,
+      "Name": "RefSeqNum",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 48,
+      "Name": "SecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 49,
+      "Name": "SenderCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 50,
+      "Name": "SenderSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 52,
+      "Name": "SendingTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 53,
+      "Name": "Quantity",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 54,
+      "Name": "Side",
+      "Type": "char"
+    },
+    {
+      "Tag": 55,
+      "Name": "Symbol",
+      "Type": "String"
+    },
+    {
+      "Tag": 56,
+      "Name": "TargetCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 57,
+      "Name": "TargetSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 58,
+      "Name": "Text",
+      "Type": "String"
+    },
+    {
+      "Tag": 59,
+      "Name": "TimeInForce",
+      "Type": "char"
+    },
+    {
+      "Tag": 60,
+      "Name": "TransactTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 61,
+      "Name": "Urgency",
+      "Type": "char"
+    },
+    {
+      "Tag": 62,
+      "Name": "ValidUntilTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 63,
+      "Name": "SettlType",
+      "Type": "String"
+    },
+    {
+      "Tag": 64,
+      "Name": "SettlDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 65,
+      "Name": "SymbolSfx",
+      "Type": "String"
+    },
+    {
+      "Tag": 66,
+      "Name": "ListID",
+      "Type": "String"
+    },
+    {
+      "Tag": 67,
+      "Name": "ListSeqNo",
+      "Type": "int"
+    },
+    {
+      "Tag": 68,
+      "Name": "TotNoOrders",
+      "Type": "int"
+    },
+    {
+      "Tag": 69,
+      "Name": "ListExecInst",
+      "Type": "String"
+    },
+    {
+      "Tag": 70,
+      "Name": "AllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 71,
+      "Name": "AllocTransType",
+      "Type": "char"
+    },
+    {
+      "Tag": 72,
+      "Name": "RefAllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 73,
+      "Name": "NoOrders",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 74,
+      "Name": "AvgPxPrecision",
+      "Type": "int"
+    },
+    {
+      "Tag": 75,
+      "Name": "TradeDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 77,
+      "Name": "PositionEffect",
+      "Type": "char"
+    },
+    {
+      "Tag": 78,
+      "Name": "NoAllocs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 79,
+      "Name": "AllocAccount",
+      "Type": "String"
+    },
+    {
+      "Tag": 80,
+      "Name": "AllocQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 81,
+      "Name": "ProcessCode",
+      "Type": "char"
+    },
+    {
+      "Tag": 82,
+      "Name": "NoRpts",
+      "Type": "int"
+    },
+    {
+      "Tag": 83,
+      "Name": "RptSeq",
+      "Type": "int"
+    },
+    {
+      "Tag": 84,
+      "Name": "CxlQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 85,
+      "Name": "NoDlvyInst",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 87,
+      "Name": "AllocStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 88,
+      "Name": "AllocRejCode",
+      "Type": "int"
+    },
+    {
+      "Tag": 89,
+      "Name": "Signature",
+      "Type": "data"
+    },
+    {
+      "Tag": 90,
+      "Name": "SecureDataLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 91,
+      "Name": "SecureData",
+      "Type": "data"
+    },
+    {
+      "Tag": 93,
+      "Name": "SignatureLength",
+      "Type": "Length"
+    },
+    {
+      "Tag": 94,
+      "Name": "EmailType",
+      "Type": "char"
+    },
+    {
+      "Tag": 95,
+      "Name": "RawDataLength",
+      "Type": "Length"
+    },
+    {
+      "Tag": 96,
+      "Name": "RawData",
+      "Type": "data"
+    },
+    {
+      "Tag": 97,
+      "Name": "PossResend",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 98,
+      "Name": "EncryptMethod",
+      "Type": "int"
+    },
+    {
+      "Tag": 99,
+      "Name": "StopPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 100,
+      "Name": "ExDestination",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 102,
+      "Name": "CxlRejReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 103,
+      "Name": "OrdRejReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 104,
+      "Name": "IOIQualifier",
+      "Type": "char"
+    },
+    {
+      "Tag": 106,
+      "Name": "Issuer",
+      "Type": "String"
+    },
+    {
+      "Tag": 107,
+      "Name": "SecurityDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 108,
+      "Name": "HeartBtInt",
+      "Type": "int"
+    },
+    {
+      "Tag": 110,
+      "Name": "MinQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 111,
+      "Name": "MaxFloor",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 112,
+      "Name": "TestReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 113,
+      "Name": "ReportToExch",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 114,
+      "Name": "LocateReqd",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 115,
+      "Name": "OnBehalfOfCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 116,
+      "Name": "OnBehalfOfSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 117,
+      "Name": "QuoteID",
+      "Type": "String"
+    },
+    {
+      "Tag": 118,
+      "Name": "NetMoney",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 119,
+      "Name": "SettlCurrAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 120,
+      "Name": "SettlCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 121,
+      "Name": "ForexReq",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 122,
+      "Name": "OrigSendingTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 123,
+      "Name": "GapFillFlag",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 124,
+      "Name": "NoExecs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 126,
+      "Name": "ExpireTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 127,
+      "Name": "DKReason",
+      "Type": "char"
+    },
+    {
+      "Tag": 128,
+      "Name": "DeliverToCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 129,
+      "Name": "DeliverToSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 130,
+      "Name": "IOINaturalFlag",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 131,
+      "Name": "QuoteReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 132,
+      "Name": "BidPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 133,
+      "Name": "OfferPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 134,
+      "Name": "BidSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 135,
+      "Name": "OfferSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 136,
+      "Name": "NoMiscFees",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 137,
+      "Name": "MiscFeeAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 138,
+      "Name": "MiscFeeCurr",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 139,
+      "Name": "MiscFeeType",
+      "Type": "String"
+    },
+    {
+      "Tag": 140,
+      "Name": "PrevClosePx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 141,
+      "Name": "ResetSeqNumFlag",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 142,
+      "Name": "SenderLocationID",
+      "Type": "String"
+    },
+    {
+      "Tag": 143,
+      "Name": "TargetLocationID",
+      "Type": "String"
+    },
+    {
+      "Tag": 144,
+      "Name": "OnBehalfOfLocationID",
+      "Type": "String"
+    },
+    {
+      "Tag": 145,
+      "Name": "DeliverToLocationID",
+      "Type": "String"
+    },
+    {
+      "Tag": 146,
+      "Name": "NoRelatedSym",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 147,
+      "Name": "Subject",
+      "Type": "String"
+    },
+    {
+      "Tag": 148,
+      "Name": "Headline",
+      "Type": "String"
+    },
+    {
+      "Tag": 149,
+      "Name": "URLLink",
+      "Type": "String"
+    },
+    {
+      "Tag": 150,
+      "Name": "ExecType",
+      "Type": "char"
+    },
+    {
+      "Tag": 151,
+      "Name": "LeavesQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 152,
+      "Name": "CashOrderQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 153,
+      "Name": "AllocAvgPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 154,
+      "Name": "AllocNetMoney",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 155,
+      "Name": "SettlCurrFxRate",
+      "Type": "float"
+    },
+    {
+      "Tag": 156,
+      "Name": "SettlCurrFxRateCalc",
+      "Type": "char"
+    },
+    {
+      "Tag": 157,
+      "Name": "NumDaysInterest",
+      "Type": "int"
+    },
+    {
+      "Tag": 158,
+      "Name": "AccruedInterestRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 159,
+      "Name": "AccruedInterestAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 160,
+      "Name": "SettlInstMode",
+      "Type": "char"
+    },
+    {
+      "Tag": 161,
+      "Name": "AllocText",
+      "Type": "String"
+    },
+    {
+      "Tag": 162,
+      "Name": "SettlInstID",
+      "Type": "String"
+    },
+    {
+      "Tag": 163,
+      "Name": "SettlInstTransType",
+      "Type": "char"
+    },
+    {
+      "Tag": 164,
+      "Name": "EmailThreadID",
+      "Type": "String"
+    },
+    {
+      "Tag": 165,
+      "Name": "SettlInstSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 167,
+      "Name": "SecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 168,
+      "Name": "EffectiveTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 169,
+      "Name": "StandInstDbType",
+      "Type": "int"
+    },
+    {
+      "Tag": 170,
+      "Name": "StandInstDbName",
+      "Type": "String"
+    },
+    {
+      "Tag": 171,
+      "Name": "StandInstDbID",
+      "Type": "String"
+    },
+    {
+      "Tag": 172,
+      "Name": "SettlDeliveryType",
+      "Type": "int"
+    },
+    {
+      "Tag": 188,
+      "Name": "BidSpotRate",
+      "Type": "Price"
+    },
+    {
+      "Tag": 189,
+      "Name": "BidForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 190,
+      "Name": "OfferSpotRate",
+      "Type": "Price"
+    },
+    {
+      "Tag": 191,
+      "Name": "OfferForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 192,
+      "Name": "OrderQty2",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 193,
+      "Name": "SettlDate2",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 194,
+      "Name": "LastSpotRate",
+      "Type": "Price"
+    },
+    {
+      "Tag": 195,
+      "Name": "LastForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 196,
+      "Name": "AllocLinkID",
+      "Type": "String"
+    },
+    {
+      "Tag": 197,
+      "Name": "AllocLinkType",
+      "Type": "int"
+    },
+    {
+      "Tag": 198,
+      "Name": "SecondaryOrderID",
+      "Type": "String"
+    },
+    {
+      "Tag": 199,
+      "Name": "NoIOIQualifiers",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 200,
+      "Name": "MaturityMonthYear",
+      "Type": "MonthYear"
+    },
+    {
+      "Tag": 201,
+      "Name": "PutOrCall",
+      "Type": "int"
+    },
+    {
+      "Tag": 202,
+      "Name": "StrikePrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 203,
+      "Name": "CoveredOrUncovered",
+      "Type": "int"
+    },
+    {
+      "Tag": 206,
+      "Name": "OptAttribute",
+      "Type": "char"
+    },
+    {
+      "Tag": 207,
+      "Name": "SecurityExchange",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 208,
+      "Name": "NotifyBrokerOfCredit",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 209,
+      "Name": "AllocHandlInst",
+      "Type": "int"
+    },
+    {
+      "Tag": 210,
+      "Name": "MaxShow",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 211,
+      "Name": "PegOffsetValue",
+      "Type": "float"
+    },
+    {
+      "Tag": 212,
+      "Name": "XmlDataLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 213,
+      "Name": "XmlData",
+      "Type": "data"
+    },
+    {
+      "Tag": 214,
+      "Name": "SettlInstRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 215,
+      "Name": "NoRoutingIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 216,
+      "Name": "RoutingType",
+      "Type": "int"
+    },
+    {
+      "Tag": 217,
+      "Name": "RoutingID",
+      "Type": "String"
+    },
+    {
+      "Tag": 218,
+      "Name": "Spread",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 220,
+      "Name": "BenchmarkCurveCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 221,
+      "Name": "BenchmarkCurveName",
+      "Type": "String"
+    },
+    {
+      "Tag": 222,
+      "Name": "BenchmarkCurvePoint",
+      "Type": "String"
+    },
+    {
+      "Tag": 223,
+      "Name": "CouponRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 224,
+      "Name": "CouponPaymentDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 225,
+      "Name": "IssueDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 226,
+      "Name": "RepurchaseTerm",
+      "Type": "int"
+    },
+    {
+      "Tag": 227,
+      "Name": "RepurchaseRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 228,
+      "Name": "Factor",
+      "Type": "float"
+    },
+    {
+      "Tag": 229,
+      "Name": "TradeOriginationDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 230,
+      "Name": "ExDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 231,
+      "Name": "ContractMultiplier",
+      "Type": "float"
+    },
+    {
+      "Tag": 232,
+      "Name": "NoStipulations",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 233,
+      "Name": "StipulationType",
+      "Type": "String"
+    },
+    {
+      "Tag": 234,
+      "Name": "StipulationValue",
+      "Type": "String"
+    },
+    {
+      "Tag": 235,
+      "Name": "YieldType",
+      "Type": "String"
+    },
+    {
+      "Tag": 236,
+      "Name": "Yield",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 237,
+      "Name": "TotalTakedown",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 238,
+      "Name": "Concession",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 239,
+      "Name": "RepoCollateralSecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 240,
+      "Name": "RedemptionDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 241,
+      "Name": "UnderlyingCouponPaymentDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 242,
+      "Name": "UnderlyingIssueDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 243,
+      "Name": "UnderlyingRepoCollateralSecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 244,
+      "Name": "UnderlyingRepurchaseTerm",
+      "Type": "int"
+    },
+    {
+      "Tag": 245,
+      "Name": "UnderlyingRepurchaseRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 246,
+      "Name": "UnderlyingFactor",
+      "Type": "float"
+    },
+    {
+      "Tag": 247,
+      "Name": "UnderlyingRedemptionDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 248,
+      "Name": "LegCouponPaymentDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 249,
+      "Name": "LegIssueDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 250,
+      "Name": "LegRepoCollateralSecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 251,
+      "Name": "LegRepurchaseTerm",
+      "Type": "int"
+    },
+    {
+      "Tag": 252,
+      "Name": "LegRepurchaseRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 253,
+      "Name": "LegFactor",
+      "Type": "float"
+    },
+    {
+      "Tag": 254,
+      "Name": "LegRedemptionDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 255,
+      "Name": "CreditRating",
+      "Type": "String"
+    },
+    {
+      "Tag": 256,
+      "Name": "UnderlyingCreditRating",
+      "Type": "String"
+    },
+    {
+      "Tag": 257,
+      "Name": "LegCreditRating",
+      "Type": "String"
+    },
+    {
+      "Tag": 258,
+      "Name": "TradedFlatSwitch",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 259,
+      "Name": "BasisFeatureDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 260,
+      "Name": "BasisFeaturePrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 262,
+      "Name": "MDReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 263,
+      "Name": "SubscriptionRequestType",
+      "Type": "char"
+    },
+    {
+      "Tag": 264,
+      "Name": "MarketDepth",
+      "Type": "int"
+    },
+    {
+      "Tag": 265,
+      "Name": "MDUpdateType",
+      "Type": "int"
+    },
+    {
+      "Tag": 266,
+      "Name": "AggregatedBook",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 267,
+      "Name": "NoMDEntryTypes",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 268,
+      "Name": "NoMDEntries",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 269,
+      "Name": "MDEntryType",
+      "Type": "char"
+    },
+    {
+      "Tag": 270,
+      "Name": "MDEntryPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 271,
+      "Name": "MDEntrySize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 272,
+      "Name": "MDEntryDate",
+      "Type": "UTCDateOnly"
+    },
+    {
+      "Tag": 273,
+      "Name": "MDEntryTime",
+      "Type": "UTCTimeOnly"
+    },
+    {
+      "Tag": 274,
+      "Name": "TickDirection",
+      "Type": "char"
+    },
+    {
+      "Tag": 275,
+      "Name": "MDMkt",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 276,
+      "Name": "QuoteCondition",
+      "Type": "MultipleStringValue"
+    },
+    {
+      "Tag": 277,
+      "Name": "TradeCondition",
+      "Type": "MultipleStringValue"
+    },
+    {
+      "Tag": 278,
+      "Name": "MDEntryID",
+      "Type": "String"
+    },
+    {
+      "Tag": 279,
+      "Name": "MDUpdateAction",
+      "Type": "char"
+    },
+    {
+      "Tag": 280,
+      "Name": "MDEntryRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 281,
+      "Name": "MDReqRejReason",
+      "Type": "char"
+    },
+    {
+      "Tag": 282,
+      "Name": "MDEntryOriginator",
+      "Type": "String"
+    },
+    {
+      "Tag": 283,
+      "Name": "LocationID",
+      "Type": "String"
+    },
+    {
+      "Tag": 284,
+      "Name": "DeskID",
+      "Type": "String"
+    },
+    {
+      "Tag": 285,
+      "Name": "DeleteReason",
+      "Type": "char"
+    },
+    {
+      "Tag": 286,
+      "Name": "OpenCloseSettlFlag",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 287,
+      "Name": "SellerDays",
+      "Type": "int"
+    },
+    {
+      "Tag": 288,
+      "Name": "MDEntryBuyer",
+      "Type": "String"
+    },
+    {
+      "Tag": 289,
+      "Name": "MDEntrySeller",
+      "Type": "String"
+    },
+    {
+      "Tag": 290,
+      "Name": "MDEntryPositionNo",
+      "Type": "int"
+    },
+    {
+      "Tag": 291,
+      "Name": "FinancialStatus",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 292,
+      "Name": "CorporateAction",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 293,
+      "Name": "DefBidSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 294,
+      "Name": "DefOfferSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 295,
+      "Name": "NoQuoteEntries",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 296,
+      "Name": "NoQuoteSets",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 297,
+      "Name": "QuoteStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 298,
+      "Name": "QuoteCancelType",
+      "Type": "int"
+    },
+    {
+      "Tag": 299,
+      "Name": "QuoteEntryID",
+      "Type": "String"
+    },
+    {
+      "Tag": 300,
+      "Name": "QuoteRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 301,
+      "Name": "QuoteResponseLevel",
+      "Type": "int"
+    },
+    {
+      "Tag": 302,
+      "Name": "QuoteSetID",
+      "Type": "String"
+    },
+    {
+      "Tag": 303,
+      "Name": "QuoteRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 304,
+      "Name": "TotNoQuoteEntries",
+      "Type": "int"
+    },
+    {
+      "Tag": 305,
+      "Name": "UnderlyingSecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 306,
+      "Name": "UnderlyingIssuer",
+      "Type": "String"
+    },
+    {
+      "Tag": 307,
+      "Name": "UnderlyingSecurityDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 308,
+      "Name": "UnderlyingSecurityExchange",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 309,
+      "Name": "UnderlyingSecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 310,
+      "Name": "UnderlyingSecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 311,
+      "Name": "UnderlyingSymbol",
+      "Type": "String"
+    },
+    {
+      "Tag": 312,
+      "Name": "UnderlyingSymbolSfx",
+      "Type": "String"
+    },
+    {
+      "Tag": 313,
+      "Name": "UnderlyingMaturityMonthYear",
+      "Type": "MonthYear"
+    },
+    {
+      "Tag": 315,
+      "Name": "UnderlyingPutOrCall",
+      "Type": "int"
+    },
+    {
+      "Tag": 316,
+      "Name": "UnderlyingStrikePrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 317,
+      "Name": "UnderlyingOptAttribute",
+      "Type": "char"
+    },
+    {
+      "Tag": 318,
+      "Name": "UnderlyingCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 320,
+      "Name": "SecurityReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 321,
+      "Name": "SecurityRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 322,
+      "Name": "SecurityResponseID",
+      "Type": "String"
+    },
+    {
+      "Tag": 323,
+      "Name": "SecurityResponseType",
+      "Type": "int"
+    },
+    {
+      "Tag": 324,
+      "Name": "SecurityStatusReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 325,
+      "Name": "UnsolicitedIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 326,
+      "Name": "SecurityTradingStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 327,
+      "Name": "HaltReason",
+      "Type": "char"
+    },
+    {
+      "Tag": 328,
+      "Name": "InViewOfCommon",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 329,
+      "Name": "DueToRelated",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 330,
+      "Name": "BuyVolume",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 331,
+      "Name": "SellVolume",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 332,
+      "Name": "HighPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 333,
+      "Name": "LowPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 334,
+      "Name": "Adjustment",
+      "Type": "int"
+    },
+    {
+      "Tag": 335,
+      "Name": "TradSesReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 336,
+      "Name": "TradingSessionID",
+      "Type": "String"
+    },
+    {
+      "Tag": 337,
+      "Name": "ContraTrader",
+      "Type": "String"
+    },
+    {
+      "Tag": 338,
+      "Name": "TradSesMethod",
+      "Type": "int"
+    },
+    {
+      "Tag": 339,
+      "Name": "TradSesMode",
+      "Type": "int"
+    },
+    {
+      "Tag": 340,
+      "Name": "TradSesStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 341,
+      "Name": "TradSesStartTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 342,
+      "Name": "TradSesOpenTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 343,
+      "Name": "TradSesPreCloseTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 344,
+      "Name": "TradSesCloseTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 345,
+      "Name": "TradSesEndTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 346,
+      "Name": "NumberOfOrders",
+      "Type": "int"
+    },
+    {
+      "Tag": 347,
+      "Name": "MessageEncoding",
+      "Type": "String"
+    },
+    {
+      "Tag": 348,
+      "Name": "EncodedIssuerLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 349,
+      "Name": "EncodedIssuer",
+      "Type": "data"
+    },
+    {
+      "Tag": 350,
+      "Name": "EncodedSecurityDescLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 351,
+      "Name": "EncodedSecurityDesc",
+      "Type": "data"
+    },
+    {
+      "Tag": 352,
+      "Name": "EncodedListExecInstLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 353,
+      "Name": "EncodedListExecInst",
+      "Type": "data"
+    },
+    {
+      "Tag": 354,
+      "Name": "EncodedTextLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 355,
+      "Name": "EncodedText",
+      "Type": "data"
+    },
+    {
+      "Tag": 356,
+      "Name": "EncodedSubjectLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 357,
+      "Name": "EncodedSubject",
+      "Type": "data"
+    },
+    {
+      "Tag": 358,
+      "Name": "EncodedHeadlineLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 359,
+      "Name": "EncodedHeadline",
+      "Type": "data"
+    },
+    {
+      "Tag": 360,
+      "Name": "EncodedAllocTextLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 361,
+      "Name": "EncodedAllocText",
+      "Type": "data"
+    },
+    {
+      "Tag": 362,
+      "Name": "EncodedUnderlyingIssuerLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 363,
+      "Name": "EncodedUnderlyingIssuer",
+      "Type": "data"
+    },
+    {
+      "Tag": 364,
+      "Name": "EncodedUnderlyingSecurityDescLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 365,
+      "Name": "EncodedUnderlyingSecurityDesc",
+      "Type": "data"
+    },
+    {
+      "Tag": 366,
+      "Name": "AllocPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 367,
+      "Name": "QuoteSetValidUntilTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 368,
+      "Name": "QuoteEntryRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 369,
+      "Name": "LastMsgSeqNumProcessed",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 371,
+      "Name": "RefTagID",
+      "Type": "int"
+    },
+    {
+      "Tag": 372,
+      "Name": "RefMsgType",
+      "Type": "String"
+    },
+    {
+      "Tag": 373,
+      "Name": "SessionRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 374,
+      "Name": "BidRequestTransType",
+      "Type": "char"
+    },
+    {
+      "Tag": 375,
+      "Name": "ContraBroker",
+      "Type": "String"
+    },
+    {
+      "Tag": 376,
+      "Name": "ComplianceID",
+      "Type": "String"
+    },
+    {
+      "Tag": 377,
+      "Name": "SolicitedFlag",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 378,
+      "Name": "ExecRestatementReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 379,
+      "Name": "BusinessRejectRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 380,
+      "Name": "BusinessRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 381,
+      "Name": "GrossTradeAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 382,
+      "Name": "NoContraBrokers",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 383,
+      "Name": "MaxMessageSize",
+      "Type": "Length"
+    },
+    {
+      "Tag": 384,
+      "Name": "NoMsgTypes",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 385,
+      "Name": "MsgDirection",
+      "Type": "char"
+    },
+    {
+      "Tag": 386,
+      "Name": "NoTradingSessions",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 387,
+      "Name": "TotalVolumeTraded",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 388,
+      "Name": "DiscretionInst",
+      "Type": "char"
+    },
+    {
+      "Tag": 389,
+      "Name": "DiscretionOffsetValue",
+      "Type": "float"
+    },
+    {
+      "Tag": 390,
+      "Name": "BidID",
+      "Type": "String"
+    },
+    {
+      "Tag": 391,
+      "Name": "ClientBidID",
+      "Type": "String"
+    },
+    {
+      "Tag": 392,
+      "Name": "ListName",
+      "Type": "String"
+    },
+    {
+      "Tag": 393,
+      "Name": "TotNoRelatedSym",
+      "Type": "int"
+    },
+    {
+      "Tag": 394,
+      "Name": "BidType",
+      "Type": "int"
+    },
+    {
+      "Tag": 395,
+      "Name": "NumTickets",
+      "Type": "int"
+    },
+    {
+      "Tag": 396,
+      "Name": "SideValue1",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 397,
+      "Name": "SideValue2",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 398,
+      "Name": "NoBidDescriptors",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 399,
+      "Name": "BidDescriptorType",
+      "Type": "int"
+    },
+    {
+      "Tag": 400,
+      "Name": "BidDescriptor",
+      "Type": "String"
+    },
+    {
+      "Tag": 401,
+      "Name": "SideValueInd",
+      "Type": "int"
+    },
+    {
+      "Tag": 402,
+      "Name": "LiquidityPctLow",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 403,
+      "Name": "LiquidityPctHigh",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 404,
+      "Name": "LiquidityValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 405,
+      "Name": "EFPTrackingError",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 406,
+      "Name": "FairValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 407,
+      "Name": "OutsideIndexPct",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 408,
+      "Name": "ValueOfFutures",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 409,
+      "Name": "LiquidityIndType",
+      "Type": "int"
+    },
+    {
+      "Tag": 410,
+      "Name": "WtAverageLiquidity",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 411,
+      "Name": "ExchangeForPhysical",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 412,
+      "Name": "OutMainCntryUIndex",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 413,
+      "Name": "CrossPercent",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 414,
+      "Name": "ProgRptReqs",
+      "Type": "int"
+    },
+    {
+      "Tag": 415,
+      "Name": "ProgPeriodInterval",
+      "Type": "int"
+    },
+    {
+      "Tag": 416,
+      "Name": "IncTaxInd",
+      "Type": "int"
+    },
+    {
+      "Tag": 417,
+      "Name": "NumBidders",
+      "Type": "int"
+    },
+    {
+      "Tag": 418,
+      "Name": "BidTradeType",
+      "Type": "char"
+    },
+    {
+      "Tag": 419,
+      "Name": "BasisPxType",
+      "Type": "char"
+    },
+    {
+      "Tag": 420,
+      "Name": "NoBidComponents",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 421,
+      "Name": "Country",
+      "Type": "Country"
+    },
+    {
+      "Tag": 422,
+      "Name": "TotNoStrikes",
+      "Type": "int"
+    },
+    {
+      "Tag": 423,
+      "Name": "PriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 424,
+      "Name": "DayOrderQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 425,
+      "Name": "DayCumQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 426,
+      "Name": "DayAvgPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 427,
+      "Name": "GTBookingInst",
+      "Type": "int"
+    },
+    {
+      "Tag": 428,
+      "Name": "NoStrikes",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 429,
+      "Name": "ListStatusType",
+      "Type": "int"
+    },
+    {
+      "Tag": 430,
+      "Name": "NetGrossInd",
+      "Type": "int"
+    },
+    {
+      "Tag": 431,
+      "Name": "ListOrderStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 432,
+      "Name": "ExpireDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 433,
+      "Name": "ListExecInstType",
+      "Type": "char"
+    },
+    {
+      "Tag": 434,
+      "Name": "CxlRejResponseTo",
+      "Type": "char"
+    },
+    {
+      "Tag": 435,
+      "Name": "UnderlyingCouponRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 436,
+      "Name": "UnderlyingContractMultiplier",
+      "Type": "float"
+    },
+    {
+      "Tag": 437,
+      "Name": "ContraTradeQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 438,
+      "Name": "ContraTradeTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 441,
+      "Name": "LiquidityNumSecurities",
+      "Type": "int"
+    },
+    {
+      "Tag": 442,
+      "Name": "MultiLegReportingType",
+      "Type": "char"
+    },
+    {
+      "Tag": 443,
+      "Name": "StrikeTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 444,
+      "Name": "ListStatusText",
+      "Type": "String"
+    },
+    {
+      "Tag": 445,
+      "Name": "EncodedListStatusTextLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 446,
+      "Name": "EncodedListStatusText",
+      "Type": "data"
+    },
+    {
+      "Tag": 447,
+      "Name": "PartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 448,
+      "Name": "PartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 451,
+      "Name": "NetChgPrevDay",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 452,
+      "Name": "PartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 453,
+      "Name": "NoPartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 454,
+      "Name": "NoSecurityAltID",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 455,
+      "Name": "SecurityAltID",
+      "Type": "String"
+    },
+    {
+      "Tag": 456,
+      "Name": "SecurityAltIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 457,
+      "Name": "NoUnderlyingSecurityAltID",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 458,
+      "Name": "UnderlyingSecurityAltID",
+      "Type": "String"
+    },
+    {
+      "Tag": 459,
+      "Name": "UnderlyingSecurityAltIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 460,
+      "Name": "Product",
+      "Type": "int"
+    },
+    {
+      "Tag": 461,
+      "Name": "CFICode",
+      "Type": "String"
+    },
+    {
+      "Tag": 462,
+      "Name": "UnderlyingProduct",
+      "Type": "int"
+    },
+    {
+      "Tag": 463,
+      "Name": "UnderlyingCFICode",
+      "Type": "String"
+    },
+    {
+      "Tag": 464,
+      "Name": "TestMessageIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 466,
+      "Name": "BookingRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 467,
+      "Name": "IndividualAllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 468,
+      "Name": "RoundingDirection",
+      "Type": "char"
+    },
+    {
+      "Tag": 469,
+      "Name": "RoundingModulus",
+      "Type": "float"
+    },
+    {
+      "Tag": 470,
+      "Name": "CountryOfIssue",
+      "Type": "Country"
+    },
+    {
+      "Tag": 471,
+      "Name": "StateOrProvinceOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 472,
+      "Name": "LocaleOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 473,
+      "Name": "NoRegistDtls",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 474,
+      "Name": "MailingDtls",
+      "Type": "String"
+    },
+    {
+      "Tag": 475,
+      "Name": "InvestorCountryOfResidence",
+      "Type": "Country"
+    },
+    {
+      "Tag": 476,
+      "Name": "PaymentRef",
+      "Type": "String"
+    },
+    {
+      "Tag": 477,
+      "Name": "DistribPaymentMethod",
+      "Type": "int"
+    },
+    {
+      "Tag": 478,
+      "Name": "CashDistribCurr",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 479,
+      "Name": "CommCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 480,
+      "Name": "CancellationRights",
+      "Type": "char"
+    },
+    {
+      "Tag": 481,
+      "Name": "MoneyLaunderingStatus",
+      "Type": "char"
+    },
+    {
+      "Tag": 482,
+      "Name": "MailingInst",
+      "Type": "String"
+    },
+    {
+      "Tag": 483,
+      "Name": "TransBkdTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 484,
+      "Name": "ExecPriceType",
+      "Type": "char"
+    },
+    {
+      "Tag": 485,
+      "Name": "ExecPriceAdjustment",
+      "Type": "float"
+    },
+    {
+      "Tag": 486,
+      "Name": "DateOfBirth",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 487,
+      "Name": "TradeReportTransType",
+      "Type": "int"
+    },
+    {
+      "Tag": 488,
+      "Name": "CardHolderName",
+      "Type": "String"
+    },
+    {
+      "Tag": 489,
+      "Name": "CardNumber",
+      "Type": "String"
+    },
+    {
+      "Tag": 490,
+      "Name": "CardExpDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 491,
+      "Name": "CardIssNum",
+      "Type": "String"
+    },
+    {
+      "Tag": 492,
+      "Name": "PaymentMethod",
+      "Type": "int"
+    },
+    {
+      "Tag": 493,
+      "Name": "RegistAcctType",
+      "Type": "String"
+    },
+    {
+      "Tag": 494,
+      "Name": "Designation",
+      "Type": "String"
+    },
+    {
+      "Tag": 495,
+      "Name": "TaxAdvantageType",
+      "Type": "int"
+    },
+    {
+      "Tag": 496,
+      "Name": "RegistRejReasonText",
+      "Type": "String"
+    },
+    {
+      "Tag": 497,
+      "Name": "FundRenewWaiv",
+      "Type": "char"
+    },
+    {
+      "Tag": 498,
+      "Name": "CashDistribAgentName",
+      "Type": "String"
+    },
+    {
+      "Tag": 499,
+      "Name": "CashDistribAgentCode",
+      "Type": "String"
+    },
+    {
+      "Tag": 500,
+      "Name": "CashDistribAgentAcctNumber",
+      "Type": "String"
+    },
+    {
+      "Tag": 501,
+      "Name": "CashDistribPayRef",
+      "Type": "String"
+    },
+    {
+      "Tag": 502,
+      "Name": "CashDistribAgentAcctName",
+      "Type": "String"
+    },
+    {
+      "Tag": 503,
+      "Name": "CardStartDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 504,
+      "Name": "PaymentDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 505,
+      "Name": "PaymentRemitterID",
+      "Type": "String"
+    },
+    {
+      "Tag": 506,
+      "Name": "RegistStatus",
+      "Type": "char"
+    },
+    {
+      "Tag": 507,
+      "Name": "RegistRejReasonCode",
+      "Type": "int"
+    },
+    {
+      "Tag": 508,
+      "Name": "RegistRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 509,
+      "Name": "RegistDtls",
+      "Type": "String"
+    },
+    {
+      "Tag": 510,
+      "Name": "NoDistribInsts",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 511,
+      "Name": "RegistEmail",
+      "Type": "String"
+    },
+    {
+      "Tag": 512,
+      "Name": "DistribPercentage",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 513,
+      "Name": "RegistID",
+      "Type": "String"
+    },
+    {
+      "Tag": 514,
+      "Name": "RegistTransType",
+      "Type": "char"
+    },
+    {
+      "Tag": 515,
+      "Name": "ExecValuationPoint",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 516,
+      "Name": "OrderPercent",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 517,
+      "Name": "OwnershipType",
+      "Type": "char"
+    },
+    {
+      "Tag": 518,
+      "Name": "NoContAmts",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 519,
+      "Name": "ContAmtType",
+      "Type": "int"
+    },
+    {
+      "Tag": 520,
+      "Name": "ContAmtValue",
+      "Type": "float"
+    },
+    {
+      "Tag": 521,
+      "Name": "ContAmtCurr",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 522,
+      "Name": "OwnerType",
+      "Type": "int"
+    },
+    {
+      "Tag": 523,
+      "Name": "PartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 524,
+      "Name": "NestedPartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 525,
+      "Name": "NestedPartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 526,
+      "Name": "SecondaryClOrdID",
+      "Type": "String"
+    },
+    {
+      "Tag": 527,
+      "Name": "SecondaryExecID",
+      "Type": "String"
+    },
+    {
+      "Tag": 528,
+      "Name": "OrderCapacity",
+      "Type": "char"
+    },
+    {
+      "Tag": 529,
+      "Name": "OrderRestrictions",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 530,
+      "Name": "MassCancelRequestType",
+      "Type": "char"
+    },
+    {
+      "Tag": 531,
+      "Name": "MassCancelResponse",
+      "Type": "char"
+    },
+    {
+      "Tag": 532,
+      "Name": "MassCancelRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 533,
+      "Name": "TotalAffectedOrders",
+      "Type": "int"
+    },
+    {
+      "Tag": 534,
+      "Name": "NoAffectedOrders",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 535,
+      "Name": "AffectedOrderID",
+      "Type": "String"
+    },
+    {
+      "Tag": 536,
+      "Name": "AffectedSecondaryOrderID",
+      "Type": "String"
+    },
+    {
+      "Tag": 537,
+      "Name": "QuoteType",
+      "Type": "int"
+    },
+    {
+      "Tag": 538,
+      "Name": "NestedPartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 539,
+      "Name": "NoNestedPartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 540,
+      "Name": "TotalAccruedInterestAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 541,
+      "Name": "MaturityDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 542,
+      "Name": "UnderlyingMaturityDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 543,
+      "Name": "InstrRegistry",
+      "Type": "String"
+    },
+    {
+      "Tag": 544,
+      "Name": "CashMargin",
+      "Type": "char"
+    },
+    {
+      "Tag": 545,
+      "Name": "NestedPartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 546,
+      "Name": "Scope",
+      "Type": "MultipleCharValue"
+    },
+    {
+      "Tag": 547,
+      "Name": "MDImplicitDelete",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 548,
+      "Name": "CrossID",
+      "Type": "String"
+    },
+    {
+      "Tag": 549,
+      "Name": "CrossType",
+      "Type": "int"
+    },
+    {
+      "Tag": 550,
+      "Name": "CrossPrioritization",
+      "Type": "int"
+    },
+    {
+      "Tag": 551,
+      "Name": "OrigCrossID",
+      "Type": "String"
+    },
+    {
+      "Tag": 552,
+      "Name": "NoSides",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 553,
+      "Name": "Username",
+      "Type": "String"
+    },
+    {
+      "Tag": 554,
+      "Name": "Password",
+      "Type": "String"
+    },
+    {
+      "Tag": 555,
+      "Name": "NoLegs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 556,
+      "Name": "LegCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 557,
+      "Name": "TotNoSecurityTypes",
+      "Type": "int"
+    },
+    {
+      "Tag": 558,
+      "Name": "NoSecurityTypes",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 559,
+      "Name": "SecurityListRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 560,
+      "Name": "SecurityRequestResult",
+      "Type": "int"
+    },
+    {
+      "Tag": 561,
+      "Name": "RoundLot",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 562,
+      "Name": "MinTradeVol",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 563,
+      "Name": "MultiLegRptTypeReq",
+      "Type": "int"
+    },
+    {
+      "Tag": 564,
+      "Name": "LegPositionEffect",
+      "Type": "char"
+    },
+    {
+      "Tag": 565,
+      "Name": "LegCoveredOrUncovered",
+      "Type": "int"
+    },
+    {
+      "Tag": 566,
+      "Name": "LegPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 567,
+      "Name": "TradSesStatusRejReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 568,
+      "Name": "TradeRequestID",
+      "Type": "String"
+    },
+    {
+      "Tag": 569,
+      "Name": "TradeRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 570,
+      "Name": "PreviouslyReported",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 571,
+      "Name": "TradeReportID",
+      "Type": "String"
+    },
+    {
+      "Tag": 572,
+      "Name": "TradeReportRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 573,
+      "Name": "MatchStatus",
+      "Type": "char"
+    },
+    {
+      "Tag": 574,
+      "Name": "MatchType",
+      "Type": "String"
+    },
+    {
+      "Tag": 575,
+      "Name": "OddLot",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 576,
+      "Name": "NoClearingInstructions",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 577,
+      "Name": "ClearingInstruction",
+      "Type": "int"
+    },
+    {
+      "Tag": 578,
+      "Name": "TradeInputSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 579,
+      "Name": "TradeInputDevice",
+      "Type": "String"
+    },
+    {
+      "Tag": 580,
+      "Name": "NoDates",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 581,
+      "Name": "AccountType",
+      "Type": "int"
+    },
+    {
+      "Tag": 582,
+      "Name": "CustOrderCapacity",
+      "Type": "int"
+    },
+    {
+      "Tag": 583,
+      "Name": "ClOrdLinkID",
+      "Type": "String"
+    },
+    {
+      "Tag": 584,
+      "Name": "MassStatusReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 585,
+      "Name": "MassStatusReqType",
+      "Type": "int"
+    },
+    {
+      "Tag": 586,
+      "Name": "OrigOrdModTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 587,
+      "Name": "LegSettlType",
+      "Type": "char"
+    },
+    {
+      "Tag": 588,
+      "Name": "LegSettlDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 589,
+      "Name": "DayBookingInst",
+      "Type": "char"
+    },
+    {
+      "Tag": 590,
+      "Name": "BookingUnit",
+      "Type": "char"
+    },
+    {
+      "Tag": 591,
+      "Name": "PreallocMethod",
+      "Type": "char"
+    },
+    {
+      "Tag": 592,
+      "Name": "UnderlyingCountryOfIssue",
+      "Type": "Country"
+    },
+    {
+      "Tag": 593,
+      "Name": "UnderlyingStateOrProvinceOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 594,
+      "Name": "UnderlyingLocaleOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 595,
+      "Name": "UnderlyingInstrRegistry",
+      "Type": "String"
+    },
+    {
+      "Tag": 596,
+      "Name": "LegCountryOfIssue",
+      "Type": "Country"
+    },
+    {
+      "Tag": 597,
+      "Name": "LegStateOrProvinceOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 598,
+      "Name": "LegLocaleOfIssue",
+      "Type": "String"
+    },
+    {
+      "Tag": 599,
+      "Name": "LegInstrRegistry",
+      "Type": "String"
+    },
+    {
+      "Tag": 600,
+      "Name": "LegSymbol",
+      "Type": "String"
+    },
+    {
+      "Tag": 601,
+      "Name": "LegSymbolSfx",
+      "Type": "String"
+    },
+    {
+      "Tag": 602,
+      "Name": "LegSecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 603,
+      "Name": "LegSecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 604,
+      "Name": "NoLegSecurityAltID",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 605,
+      "Name": "LegSecurityAltID",
+      "Type": "String"
+    },
+    {
+      "Tag": 606,
+      "Name": "LegSecurityAltIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 607,
+      "Name": "LegProduct",
+      "Type": "int"
+    },
+    {
+      "Tag": 608,
+      "Name": "LegCFICode",
+      "Type": "String"
+    },
+    {
+      "Tag": 609,
+      "Name": "LegSecurityType",
+      "Type": "String"
+    },
+    {
+      "Tag": 610,
+      "Name": "LegMaturityMonthYear",
+      "Type": "MonthYear"
+    },
+    {
+      "Tag": 611,
+      "Name": "LegMaturityDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 612,
+      "Name": "LegStrikePrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 613,
+      "Name": "LegOptAttribute",
+      "Type": "char"
+    },
+    {
+      "Tag": 614,
+      "Name": "LegContractMultiplier",
+      "Type": "float"
+    },
+    {
+      "Tag": 615,
+      "Name": "LegCouponRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 616,
+      "Name": "LegSecurityExchange",
+      "Type": "Exchange"
+    },
+    {
+      "Tag": 617,
+      "Name": "LegIssuer",
+      "Type": "String"
+    },
+    {
+      "Tag": 618,
+      "Name": "EncodedLegIssuerLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 619,
+      "Name": "EncodedLegIssuer",
+      "Type": "data"
+    },
+    {
+      "Tag": 620,
+      "Name": "LegSecurityDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 621,
+      "Name": "EncodedLegSecurityDescLen",
+      "Type": "Length"
+    },
+    {
+      "Tag": 622,
+      "Name": "EncodedLegSecurityDesc",
+      "Type": "data"
+    },
+    {
+      "Tag": 623,
+      "Name": "LegRatioQty",
+      "Type": "float"
+    },
+    {
+      "Tag": 624,
+      "Name": "LegSide",
+      "Type": "char"
+    },
+    {
+      "Tag": 625,
+      "Name": "TradingSessionSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 626,
+      "Name": "AllocType",
+      "Type": "int"
+    },
+    {
+      "Tag": 627,
+      "Name": "NoHops",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 628,
+      "Name": "HopCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 629,
+      "Name": "HopSendingTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 630,
+      "Name": "HopRefID",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 631,
+      "Name": "MidPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 632,
+      "Name": "BidYield",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 633,
+      "Name": "MidYield",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 634,
+      "Name": "OfferYield",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 635,
+      "Name": "ClearingFeeIndicator",
+      "Type": "String"
+    },
+    {
+      "Tag": 636,
+      "Name": "WorkingIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 637,
+      "Name": "LegLastPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 638,
+      "Name": "PriorityIndicator",
+      "Type": "int"
+    },
+    {
+      "Tag": 639,
+      "Name": "PriceImprovement",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 640,
+      "Name": "Price2",
+      "Type": "Price"
+    },
+    {
+      "Tag": 641,
+      "Name": "LastForwardPoints2",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 642,
+      "Name": "BidForwardPoints2",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 643,
+      "Name": "OfferForwardPoints2",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 644,
+      "Name": "RFQReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 645,
+      "Name": "MktBidPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 646,
+      "Name": "MktOfferPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 647,
+      "Name": "MinBidSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 648,
+      "Name": "MinOfferSize",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 649,
+      "Name": "QuoteStatusReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 650,
+      "Name": "LegalConfirm",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 651,
+      "Name": "UnderlyingLastPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 652,
+      "Name": "UnderlyingLastQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 654,
+      "Name": "LegRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 655,
+      "Name": "ContraLegRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 656,
+      "Name": "SettlCurrBidFxRate",
+      "Type": "float"
+    },
+    {
+      "Tag": 657,
+      "Name": "SettlCurrOfferFxRate",
+      "Type": "float"
+    },
+    {
+      "Tag": 658,
+      "Name": "QuoteRequestRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 659,
+      "Name": "SideComplianceID",
+      "Type": "String"
+    },
+    {
+      "Tag": 660,
+      "Name": "AcctIDSource",
+      "Type": "int"
+    },
+    {
+      "Tag": 661,
+      "Name": "AllocAcctIDSource",
+      "Type": "int"
+    },
+    {
+      "Tag": 662,
+      "Name": "BenchmarkPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 663,
+      "Name": "BenchmarkPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 664,
+      "Name": "ConfirmID",
+      "Type": "String"
+    },
+    {
+      "Tag": 665,
+      "Name": "ConfirmStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 666,
+      "Name": "ConfirmTransType",
+      "Type": "int"
+    },
+    {
+      "Tag": 667,
+      "Name": "ContractSettlMonth",
+      "Type": "MonthYear"
+    },
+    {
+      "Tag": 668,
+      "Name": "DeliveryForm",
+      "Type": "int"
+    },
+    {
+      "Tag": 669,
+      "Name": "LastParPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 670,
+      "Name": "NoLegAllocs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 671,
+      "Name": "LegAllocAccount",
+      "Type": "String"
+    },
+    {
+      "Tag": 672,
+      "Name": "LegIndividualAllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 673,
+      "Name": "LegAllocQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 674,
+      "Name": "LegAllocAcctIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 675,
+      "Name": "LegSettlCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 676,
+      "Name": "LegBenchmarkCurveCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 677,
+      "Name": "LegBenchmarkCurveName",
+      "Type": "String"
+    },
+    {
+      "Tag": 678,
+      "Name": "LegBenchmarkCurvePoint",
+      "Type": "String"
+    },
+    {
+      "Tag": 679,
+      "Name": "LegBenchmarkPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 680,
+      "Name": "LegBenchmarkPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 681,
+      "Name": "LegBidPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 682,
+      "Name": "LegIOIQty",
+      "Type": "String"
+    },
+    {
+      "Tag": 683,
+      "Name": "NoLegStipulations",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 684,
+      "Name": "LegOfferPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 685,
+      "Name": "LegOrderQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 686,
+      "Name": "LegPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 687,
+      "Name": "LegQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 688,
+      "Name": "LegStipulationType",
+      "Type": "String"
+    },
+    {
+      "Tag": 689,
+      "Name": "LegStipulationValue",
+      "Type": "String"
+    },
+    {
+      "Tag": 690,
+      "Name": "LegSwapType",
+      "Type": "int"
+    },
+    {
+      "Tag": 691,
+      "Name": "Pool",
+      "Type": "String"
+    },
+    {
+      "Tag": 692,
+      "Name": "QuotePriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 693,
+      "Name": "QuoteRespID",
+      "Type": "String"
+    },
+    {
+      "Tag": 694,
+      "Name": "QuoteRespType",
+      "Type": "int"
+    },
+    {
+      "Tag": 695,
+      "Name": "QuoteQualifier",
+      "Type": "char"
+    },
+    {
+      "Tag": 696,
+      "Name": "YieldRedemptionDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 697,
+      "Name": "YieldRedemptionPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 698,
+      "Name": "YieldRedemptionPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 699,
+      "Name": "BenchmarkSecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 700,
+      "Name": "ReversalIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 701,
+      "Name": "YieldCalcDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 702,
+      "Name": "NoPositions",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 703,
+      "Name": "PosType",
+      "Type": "String"
+    },
+    {
+      "Tag": 704,
+      "Name": "LongQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 705,
+      "Name": "ShortQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 706,
+      "Name": "PosQtyStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 707,
+      "Name": "PosAmtType",
+      "Type": "String"
+    },
+    {
+      "Tag": 708,
+      "Name": "PosAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 709,
+      "Name": "PosTransType",
+      "Type": "int"
+    },
+    {
+      "Tag": 710,
+      "Name": "PosReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 711,
+      "Name": "NoUnderlyings",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 712,
+      "Name": "PosMaintAction",
+      "Type": "int"
+    },
+    {
+      "Tag": 713,
+      "Name": "OrigPosReqRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 714,
+      "Name": "PosMaintRptRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 715,
+      "Name": "ClearingBusinessDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 716,
+      "Name": "SettlSessID",
+      "Type": "String"
+    },
+    {
+      "Tag": 717,
+      "Name": "SettlSessSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 718,
+      "Name": "AdjustmentType",
+      "Type": "int"
+    },
+    {
+      "Tag": 719,
+      "Name": "ContraryInstructionIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 720,
+      "Name": "PriorSpreadIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 721,
+      "Name": "PosMaintRptID",
+      "Type": "String"
+    },
+    {
+      "Tag": 722,
+      "Name": "PosMaintStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 723,
+      "Name": "PosMaintResult",
+      "Type": "int"
+    },
+    {
+      "Tag": 724,
+      "Name": "PosReqType",
+      "Type": "int"
+    },
+    {
+      "Tag": 725,
+      "Name": "ResponseTransportType",
+      "Type": "int"
+    },
+    {
+      "Tag": 726,
+      "Name": "ResponseDestination",
+      "Type": "String"
+    },
+    {
+      "Tag": 727,
+      "Name": "TotalNumPosReports",
+      "Type": "int"
+    },
+    {
+      "Tag": 728,
+      "Name": "PosReqResult",
+      "Type": "int"
+    },
+    {
+      "Tag": 729,
+      "Name": "PosReqStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 730,
+      "Name": "SettlPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 731,
+      "Name": "SettlPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 732,
+      "Name": "UnderlyingSettlPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 733,
+      "Name": "UnderlyingSettlPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 734,
+      "Name": "PriorSettlPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 735,
+      "Name": "NoQuoteQualifiers",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 736,
+      "Name": "AllocSettlCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 737,
+      "Name": "AllocSettlCurrAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 738,
+      "Name": "InterestAtMaturity",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 739,
+      "Name": "LegDatedDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 740,
+      "Name": "LegPool",
+      "Type": "String"
+    },
+    {
+      "Tag": 741,
+      "Name": "AllocInterestAtMaturity",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 742,
+      "Name": "AllocAccruedInterestAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 743,
+      "Name": "DeliveryDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 744,
+      "Name": "AssignmentMethod",
+      "Type": "char"
+    },
+    {
+      "Tag": 745,
+      "Name": "AssignmentUnit",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 746,
+      "Name": "OpenInterest",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 747,
+      "Name": "ExerciseMethod",
+      "Type": "char"
+    },
+    {
+      "Tag": 748,
+      "Name": "TotNumTradeReports",
+      "Type": "int"
+    },
+    {
+      "Tag": 749,
+      "Name": "TradeRequestResult",
+      "Type": "int"
+    },
+    {
+      "Tag": 750,
+      "Name": "TradeRequestStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 751,
+      "Name": "TradeReportRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 752,
+      "Name": "SideMultiLegReportingType",
+      "Type": "int"
+    },
+    {
+      "Tag": 753,
+      "Name": "NoPosAmt",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 754,
+      "Name": "AutoAcceptIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 755,
+      "Name": "AllocReportID",
+      "Type": "String"
+    },
+    {
+      "Tag": 756,
+      "Name": "NoNested2PartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 757,
+      "Name": "Nested2PartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 758,
+      "Name": "Nested2PartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 759,
+      "Name": "Nested2PartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 760,
+      "Name": "Nested2PartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 761,
+      "Name": "BenchmarkSecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 762,
+      "Name": "SecuritySubType",
+      "Type": "String"
+    },
+    {
+      "Tag": 763,
+      "Name": "UnderlyingSecuritySubType",
+      "Type": "String"
+    },
+    {
+      "Tag": 764,
+      "Name": "LegSecuritySubType",
+      "Type": "String"
+    },
+    {
+      "Tag": 765,
+      "Name": "AllowableOneSidednessPct",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 766,
+      "Name": "AllowableOneSidednessValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 767,
+      "Name": "AllowableOneSidednessCurr",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 768,
+      "Name": "NoTrdRegTimestamps",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 769,
+      "Name": "TrdRegTimestamp",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 770,
+      "Name": "TrdRegTimestampType",
+      "Type": "int"
+    },
+    {
+      "Tag": 771,
+      "Name": "TrdRegTimestampOrigin",
+      "Type": "String"
+    },
+    {
+      "Tag": 772,
+      "Name": "ConfirmRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 773,
+      "Name": "ConfirmType",
+      "Type": "int"
+    },
+    {
+      "Tag": 774,
+      "Name": "ConfirmRejReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 775,
+      "Name": "BookingType",
+      "Type": "int"
+    },
+    {
+      "Tag": 776,
+      "Name": "IndividualAllocRejCode",
+      "Type": "int"
+    },
+    {
+      "Tag": 777,
+      "Name": "SettlInstMsgID",
+      "Type": "String"
+    },
+    {
+      "Tag": 778,
+      "Name": "NoSettlInst",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 779,
+      "Name": "LastUpdateTime",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 780,
+      "Name": "AllocSettlInstType",
+      "Type": "int"
+    },
+    {
+      "Tag": 781,
+      "Name": "NoSettlPartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 782,
+      "Name": "SettlPartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 783,
+      "Name": "SettlPartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 784,
+      "Name": "SettlPartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 785,
+      "Name": "SettlPartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 786,
+      "Name": "SettlPartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 787,
+      "Name": "DlvyInstType",
+      "Type": "char"
+    },
+    {
+      "Tag": 788,
+      "Name": "TerminationType",
+      "Type": "int"
+    },
+    {
+      "Tag": 789,
+      "Name": "NextExpectedMsgSeqNum",
+      "Type": "SeqNum"
+    },
+    {
+      "Tag": 790,
+      "Name": "OrdStatusReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 791,
+      "Name": "SettlInstReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 792,
+      "Name": "SettlInstReqRejCode",
+      "Type": "int"
+    },
+    {
+      "Tag": 793,
+      "Name": "SecondaryAllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 794,
+      "Name": "AllocReportType",
+      "Type": "int"
+    },
+    {
+      "Tag": 795,
+      "Name": "AllocReportRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 796,
+      "Name": "AllocCancReplaceReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 797,
+      "Name": "CopyMsgIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 798,
+      "Name": "AllocAccountType",
+      "Type": "int"
+    },
+    {
+      "Tag": 799,
+      "Name": "OrderAvgPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 800,
+      "Name": "OrderBookingQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 801,
+      "Name": "NoSettlPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 802,
+      "Name": "NoPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 803,
+      "Name": "PartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 804,
+      "Name": "NoNestedPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 805,
+      "Name": "NestedPartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 806,
+      "Name": "NoNested2PartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 807,
+      "Name": "Nested2PartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 808,
+      "Name": "AllocIntermedReqType",
+      "Type": "int"
+    },
+    {
+      "Tag": 810,
+      "Name": "UnderlyingPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 811,
+      "Name": "PriceDelta",
+      "Type": "float"
+    },
+    {
+      "Tag": 812,
+      "Name": "ApplQueueMax",
+      "Type": "int"
+    },
+    {
+      "Tag": 813,
+      "Name": "ApplQueueDepth",
+      "Type": "int"
+    },
+    {
+      "Tag": 814,
+      "Name": "ApplQueueResolution",
+      "Type": "int"
+    },
+    {
+      "Tag": 815,
+      "Name": "ApplQueueAction",
+      "Type": "int"
+    },
+    {
+      "Tag": 816,
+      "Name": "NoAltMDSource",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 817,
+      "Name": "AltMDSourceID",
+      "Type": "String"
+    },
+    {
+      "Tag": 818,
+      "Name": "SecondaryTradeReportID",
+      "Type": "String"
+    },
+    {
+      "Tag": 819,
+      "Name": "AvgPxIndicator",
+      "Type": "int"
+    },
+    {
+      "Tag": 820,
+      "Name": "TradeLinkID",
+      "Type": "String"
+    },
+    {
+      "Tag": 821,
+      "Name": "OrderInputDevice",
+      "Type": "String"
+    },
+    {
+      "Tag": 822,
+      "Name": "UnderlyingTradingSessionID",
+      "Type": "String"
+    },
+    {
+      "Tag": 823,
+      "Name": "UnderlyingTradingSessionSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 824,
+      "Name": "TradeLegRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 825,
+      "Name": "ExchangeRule",
+      "Type": "String"
+    },
+    {
+      "Tag": 826,
+      "Name": "TradeAllocIndicator",
+      "Type": "int"
+    },
+    {
+      "Tag": 827,
+      "Name": "ExpirationCycle",
+      "Type": "int"
+    },
+    {
+      "Tag": 828,
+      "Name": "TrdType",
+      "Type": "int"
+    },
+    {
+      "Tag": 829,
+      "Name": "TrdSubType",
+      "Type": "int"
+    },
+    {
+      "Tag": 830,
+      "Name": "TransferReason",
+      "Type": "String"
+    },
+    {
+      "Tag": 832,
+      "Name": "TotNumAssignmentReports",
+      "Type": "int"
+    },
+    {
+      "Tag": 833,
+      "Name": "AsgnRptID",
+      "Type": "String"
+    },
+    {
+      "Tag": 834,
+      "Name": "ThresholdAmount",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 835,
+      "Name": "PegMoveType",
+      "Type": "int"
+    },
+    {
+      "Tag": 836,
+      "Name": "PegOffsetType",
+      "Type": "int"
+    },
+    {
+      "Tag": 837,
+      "Name": "PegLimitType",
+      "Type": "int"
+    },
+    {
+      "Tag": 838,
+      "Name": "PegRoundDirection",
+      "Type": "int"
+    },
+    {
+      "Tag": 839,
+      "Name": "PeggedPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 840,
+      "Name": "PegScope",
+      "Type": "int"
+    },
+    {
+      "Tag": 841,
+      "Name": "DiscretionMoveType",
+      "Type": "int"
+    },
+    {
+      "Tag": 842,
+      "Name": "DiscretionOffsetType",
+      "Type": "int"
+    },
+    {
+      "Tag": 843,
+      "Name": "DiscretionLimitType",
+      "Type": "int"
+    },
+    {
+      "Tag": 844,
+      "Name": "DiscretionRoundDirection",
+      "Type": "int"
+    },
+    {
+      "Tag": 845,
+      "Name": "DiscretionPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 846,
+      "Name": "DiscretionScope",
+      "Type": "int"
+    },
+    {
+      "Tag": 847,
+      "Name": "TargetStrategy",
+      "Type": "int"
+    },
+    {
+      "Tag": 848,
+      "Name": "TargetStrategyParameters",
+      "Type": "String"
+    },
+    {
+      "Tag": 849,
+      "Name": "ParticipationRate",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 850,
+      "Name": "TargetStrategyPerformance",
+      "Type": "float"
+    },
+    {
+      "Tag": 851,
+      "Name": "LastLiquidityInd",
+      "Type": "int"
+    },
+    {
+      "Tag": 852,
+      "Name": "PublishTrdIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 853,
+      "Name": "ShortSaleReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 854,
+      "Name": "QtyType",
+      "Type": "int"
+    },
+    {
+      "Tag": 855,
+      "Name": "SecondaryTrdType",
+      "Type": "int"
+    },
+    {
+      "Tag": 856,
+      "Name": "TradeReportType",
+      "Type": "int"
+    },
+    {
+      "Tag": 857,
+      "Name": "AllocNoOrdersType",
+      "Type": "int"
+    },
+    {
+      "Tag": 858,
+      "Name": "SharedCommission",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 859,
+      "Name": "ConfirmReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 860,
+      "Name": "AvgParPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 861,
+      "Name": "ReportedPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 862,
+      "Name": "NoCapacities",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 863,
+      "Name": "OrderCapacityQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 864,
+      "Name": "NoEvents",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 865,
+      "Name": "EventType",
+      "Type": "int"
+    },
+    {
+      "Tag": 866,
+      "Name": "EventDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 867,
+      "Name": "EventPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 868,
+      "Name": "EventText",
+      "Type": "String"
+    },
+    {
+      "Tag": 869,
+      "Name": "PctAtRisk",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 870,
+      "Name": "NoInstrAttrib",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 871,
+      "Name": "InstrAttribType",
+      "Type": "int"
+    },
+    {
+      "Tag": 872,
+      "Name": "InstrAttribValue",
+      "Type": "String"
+    },
+    {
+      "Tag": 873,
+      "Name": "DatedDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 874,
+      "Name": "InterestAccrualDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 875,
+      "Name": "CPProgram",
+      "Type": "int"
+    },
+    {
+      "Tag": 876,
+      "Name": "CPRegType",
+      "Type": "String"
+    },
+    {
+      "Tag": 877,
+      "Name": "UnderlyingCPProgram",
+      "Type": "String"
+    },
+    {
+      "Tag": 878,
+      "Name": "UnderlyingCPRegType",
+      "Type": "String"
+    },
+    {
+      "Tag": 879,
+      "Name": "UnderlyingQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 880,
+      "Name": "TrdMatchID",
+      "Type": "String"
+    },
+    {
+      "Tag": 881,
+      "Name": "SecondaryTradeReportRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 882,
+      "Name": "UnderlyingDirtyPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 883,
+      "Name": "UnderlyingEndPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 884,
+      "Name": "UnderlyingStartValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 885,
+      "Name": "UnderlyingCurrentValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 886,
+      "Name": "UnderlyingEndValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 887,
+      "Name": "NoUnderlyingStips",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 888,
+      "Name": "UnderlyingStipType",
+      "Type": "String"
+    },
+    {
+      "Tag": 889,
+      "Name": "UnderlyingStipValue",
+      "Type": "String"
+    },
+    {
+      "Tag": 890,
+      "Name": "MaturityNetMoney",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 891,
+      "Name": "MiscFeeBasis",
+      "Type": "int"
+    },
+    {
+      "Tag": 892,
+      "Name": "TotNoAllocs",
+      "Type": "int"
+    },
+    {
+      "Tag": 893,
+      "Name": "LastFragment",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 894,
+      "Name": "CollReqID",
+      "Type": "String"
+    },
+    {
+      "Tag": 895,
+      "Name": "CollAsgnReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 896,
+      "Name": "CollInquiryQualifier",
+      "Type": "int"
+    },
+    {
+      "Tag": 897,
+      "Name": "NoTrades",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 898,
+      "Name": "MarginRatio",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 899,
+      "Name": "MarginExcess",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 900,
+      "Name": "TotalNetValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 901,
+      "Name": "CashOutstanding",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 902,
+      "Name": "CollAsgnID",
+      "Type": "String"
+    },
+    {
+      "Tag": 903,
+      "Name": "CollAsgnTransType",
+      "Type": "int"
+    },
+    {
+      "Tag": 904,
+      "Name": "CollRespID",
+      "Type": "String"
+    },
+    {
+      "Tag": 905,
+      "Name": "CollAsgnRespType",
+      "Type": "int"
+    },
+    {
+      "Tag": 906,
+      "Name": "CollAsgnRejectReason",
+      "Type": "int"
+    },
+    {
+      "Tag": 907,
+      "Name": "CollAsgnRefID",
+      "Type": "String"
+    },
+    {
+      "Tag": 908,
+      "Name": "CollRptID",
+      "Type": "String"
+    },
+    {
+      "Tag": 909,
+      "Name": "CollInquiryID",
+      "Type": "String"
+    },
+    {
+      "Tag": 910,
+      "Name": "CollStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 911,
+      "Name": "TotNumReports",
+      "Type": "int"
+    },
+    {
+      "Tag": 912,
+      "Name": "LastRptRequested",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 913,
+      "Name": "AgreementDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 914,
+      "Name": "AgreementID",
+      "Type": "String"
+    },
+    {
+      "Tag": 915,
+      "Name": "AgreementDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 916,
+      "Name": "StartDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 917,
+      "Name": "EndDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 918,
+      "Name": "AgreementCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 919,
+      "Name": "DeliveryType",
+      "Type": "int"
+    },
+    {
+      "Tag": 920,
+      "Name": "EndAccruedInterestAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 921,
+      "Name": "StartCash",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 922,
+      "Name": "EndCash",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 923,
+      "Name": "UserRequestID",
+      "Type": "String"
+    },
+    {
+      "Tag": 924,
+      "Name": "UserRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 925,
+      "Name": "NewPassword",
+      "Type": "String"
+    },
+    {
+      "Tag": 926,
+      "Name": "UserStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 927,
+      "Name": "UserStatusText",
+      "Type": "String"
+    },
+    {
+      "Tag": 928,
+      "Name": "StatusValue",
+      "Type": "int"
+    },
+    {
+      "Tag": 929,
+      "Name": "StatusText",
+      "Type": "String"
+    },
+    {
+      "Tag": 930,
+      "Name": "RefCompID",
+      "Type": "String"
+    },
+    {
+      "Tag": 931,
+      "Name": "RefSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 932,
+      "Name": "NetworkResponseID",
+      "Type": "String"
+    },
+    {
+      "Tag": 933,
+      "Name": "NetworkRequestID",
+      "Type": "String"
+    },
+    {
+      "Tag": 934,
+      "Name": "LastNetworkResponseID",
+      "Type": "String"
+    },
+    {
+      "Tag": 935,
+      "Name": "NetworkRequestType",
+      "Type": "int"
+    },
+    {
+      "Tag": 936,
+      "Name": "NoCompIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 937,
+      "Name": "NetworkStatusResponseType",
+      "Type": "int"
+    },
+    {
+      "Tag": 938,
+      "Name": "NoCollInquiryQualifier",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 939,
+      "Name": "TrdRptStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 940,
+      "Name": "AffirmStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 941,
+      "Name": "UnderlyingStrikeCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 942,
+      "Name": "LegStrikeCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 943,
+      "Name": "TimeBracket",
+      "Type": "String"
+    },
+    {
+      "Tag": 944,
+      "Name": "CollAction",
+      "Type": "int"
+    },
+    {
+      "Tag": 945,
+      "Name": "CollInquiryStatus",
+      "Type": "int"
+    },
+    {
+      "Tag": 946,
+      "Name": "CollInquiryResult",
+      "Type": "int"
+    },
+    {
+      "Tag": 947,
+      "Name": "StrikeCurrency",
+      "Type": "Currency"
+    },
+    {
+      "Tag": 948,
+      "Name": "NoNested3PartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 949,
+      "Name": "Nested3PartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 950,
+      "Name": "Nested3PartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 951,
+      "Name": "Nested3PartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 952,
+      "Name": "NoNested3PartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 953,
+      "Name": "Nested3PartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 954,
+      "Name": "Nested3PartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 955,
+      "Name": "LegContractSettlMonth",
+      "Type": "MonthYear"
+    },
+    {
+      "Tag": 956,
+      "Name": "LegInterestAccrualDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 957,
+      "Name": "NoStrategyParameters",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 958,
+      "Name": "StrategyParameterName",
+      "Type": "String"
+    },
+    {
+      "Tag": 959,
+      "Name": "StrategyParameterType",
+      "Type": "int"
+    },
+    {
+      "Tag": 960,
+      "Name": "StrategyParameterValue",
+      "Type": "String"
+    },
+    {
+      "Tag": 961,
+      "Name": "HostCrossID",
+      "Type": "String"
+    },
+    {
+      "Tag": 962,
+      "Name": "SideTimeInForce",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 963,
+      "Name": "MDReportID",
+      "Type": "int"
+    },
+    {
+      "Tag": 964,
+      "Name": "SecurityReportID",
+      "Type": "int"
+    },
+    {
+      "Tag": 965,
+      "Name": "SecurityStatus",
+      "Type": "String"
+    },
+    {
+      "Tag": 966,
+      "Name": "SettleOnOpenFlag",
+      "Type": "String"
+    },
+    {
+      "Tag": 967,
+      "Name": "StrikeMultiplier",
+      "Type": "float"
+    },
+    {
+      "Tag": 968,
+      "Name": "StrikeValue",
+      "Type": "float"
+    },
+    {
+      "Tag": 969,
+      "Name": "MinPriceIncrement",
+      "Type": "float"
+    },
+    {
+      "Tag": 970,
+      "Name": "PositionLimit",
+      "Type": "int"
+    },
+    {
+      "Tag": 971,
+      "Name": "NTPositionLimit",
+      "Type": "int"
+    },
+    {
+      "Tag": 972,
+      "Name": "UnderlyingAllocationPercent",
+      "Type": "Percentage"
+    },
+    {
+      "Tag": 973,
+      "Name": "UnderlyingCashAmount",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 974,
+      "Name": "UnderlyingCashType",
+      "Type": "String"
+    },
+    {
+      "Tag": 975,
+      "Name": "UnderlyingSettlementType",
+      "Type": "int"
+    },
+    {
+      "Tag": 976,
+      "Name": "QuantityDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 977,
+      "Name": "ContIntRptID",
+      "Type": "String"
+    },
+    {
+      "Tag": 978,
+      "Name": "LateIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 979,
+      "Name": "InputSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 980,
+      "Name": "SecurityUpdateAction",
+      "Type": "char"
+    },
+    {
+      "Tag": 981,
+      "Name": "NoExpiration",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 982,
+      "Name": "ExpType",
+      "Type": "int"
+    },
+    {
+      "Tag": 983,
+      "Name": "ExpQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 984,
+      "Name": "NoUnderlyingAmounts",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 985,
+      "Name": "UnderlyingPayAmount",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 986,
+      "Name": "UnderlyingCollectAmount",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 987,
+      "Name": "UnderlyingSettlementDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 988,
+      "Name": "UnderlyingSettlementStatus",
+      "Type": "String"
+    },
+    {
+      "Tag": 989,
+      "Name": "SecondaryIndividualAllocID",
+      "Type": "String"
+    },
+    {
+      "Tag": 990,
+      "Name": "LegReportID",
+      "Type": "String"
+    },
+    {
+      "Tag": 991,
+      "Name": "RndPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 992,
+      "Name": "IndividualAllocType",
+      "Type": "int"
+    },
+    {
+      "Tag": 993,
+      "Name": "AllocCustomerCapacity",
+      "Type": "String"
+    },
+    {
+      "Tag": 994,
+      "Name": "TierCode",
+      "Type": "String"
+    },
+    {
+      "Tag": 996,
+      "Name": "UnitofMeasure",
+      "Type": "String"
+    },
+    {
+      "Tag": 997,
+      "Name": "TimeUnit",
+      "Type": "String"
+    },
+    {
+      "Tag": 998,
+      "Name": "UnderlyingUnitofMeasure",
+      "Type": "String"
+    },
+    {
+      "Tag": 999,
+      "Name": "LegUnitofMeasure",
+      "Type": "String"
+    },
+    {
+      "Tag": 1000,
+      "Name": "UnderlyingTimeUnit",
+      "Type": "String"
+    },
+    {
+      "Tag": 1001,
+      "Name": "LegTimeUnit",
+      "Type": "String"
+    },
+    {
+      "Tag": 1002,
+      "Name": "AllocMethod",
+      "Type": "int"
+    },
+    {
+      "Tag": 1003,
+      "Name": "TradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1005,
+      "Name": "SideTradeReportID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1006,
+      "Name": "SideFillStationCd",
+      "Type": "String"
+    },
+    {
+      "Tag": 1007,
+      "Name": "SideReasonCd",
+      "Type": "String"
+    },
+    {
+      "Tag": 1008,
+      "Name": "SideTrdSubTyp",
+      "Type": "int"
+    },
+    {
+      "Tag": 1009,
+      "Name": "SideQty",
+      "Type": "int"
+    },
+    {
+      "Tag": 1011,
+      "Name": "MessageEventSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 1012,
+      "Name": "SideTrdRegTimestamp",
+      "Type": "UTCTimestamp"
+    },
+    {
+      "Tag": 1013,
+      "Name": "SideTrdRegTimestampType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1014,
+      "Name": "SideTrdRegTimestampSrc",
+      "Type": "String"
+    },
+    {
+      "Tag": 1015,
+      "Name": "AsOfIndicator",
+      "Type": "char"
+    },
+    {
+      "Tag": 1016,
+      "Name": "NoSideTrdRegTS",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1017,
+      "Name": "LegOptionRatio",
+      "Type": "float"
+    },
+    {
+      "Tag": 1018,
+      "Name": "NoInstrumentParties",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1019,
+      "Name": "InstrumentPartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1020,
+      "Name": "TradeVolume",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1021,
+      "Name": "MDBookType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1022,
+      "Name": "MDFeedType",
+      "Type": "String"
+    },
+    {
+      "Tag": 1023,
+      "Name": "MDPriceLevel",
+      "Type": "int"
+    },
+    {
+      "Tag": 1024,
+      "Name": "MDOriginType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1025,
+      "Name": "FirstPx",
+      "Type": "Price"
+    },
+    {
+      "Tag": 1026,
+      "Name": "MDEntrySpotRate",
+      "Type": "float"
+    },
+    {
+      "Tag": 1027,
+      "Name": "MDEntryForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1028,
+      "Name": "ManualOrderIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 1029,
+      "Name": "CustDirectedOrder",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 1030,
+      "Name": "ReceivedDeptID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1031,
+      "Name": "CustOrderHandlingInst",
+      "Type": "MultipleStringValue"
+    },
+    {
+      "Tag": 1032,
+      "Name": "OrderHandlingInstSource",
+      "Type": "int"
+    },
+    {
+      "Tag": 1033,
+      "Name": "DeskType",
+      "Type": "String"
+    },
+    {
+      "Tag": 1034,
+      "Name": "DeskTypeSource",
+      "Type": "int"
+    },
+    {
+      "Tag": 1035,
+      "Name": "DeskOrderHandlingInst",
+      "Type": "MultipleStringValue"
+    },
+    {
+      "Tag": 1036,
+      "Name": "ExecAckStatus",
+      "Type": "char"
+    },
+    {
+      "Tag": 1037,
+      "Name": "UnderlyingDeliveryAmount",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 1038,
+      "Name": "UnderlyingCapValue",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 1039,
+      "Name": "UnderlyingSettlMethod",
+      "Type": "String"
+    },
+    {
+      "Tag": 1040,
+      "Name": "SecondaryTradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1041,
+      "Name": "FirmTradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1042,
+      "Name": "SecondaryFirmTradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1043,
+      "Name": "CollApplType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1044,
+      "Name": "UnderlyingAdjustedQuantity",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1045,
+      "Name": "UnderlyingFXRate",
+      "Type": "float"
+    },
+    {
+      "Tag": 1046,
+      "Name": "UnderlyingFXRateCalc",
+      "Type": "char"
+    },
+    {
+      "Tag": 1047,
+      "Name": "AllocPositionEffect",
+      "Type": "char"
+    },
+    {
+      "Tag": 1048,
+      "Name": "DealingCapacity",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1049,
+      "Name": "InstrmtAssignmentMethod",
+      "Type": "char"
+    },
+    {
+      "Tag": 1050,
+      "Name": "InstrumentPartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 1051,
+      "Name": "InstrumentPartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 1052,
+      "Name": "NoInstrumentPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1053,
+      "Name": "InstrumentPartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1054,
+      "Name": "InstrumentPartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1055,
+      "Name": "PositionCurrency",
+      "Type": "String"
+    },
+    {
+      "Tag": 1056,
+      "Name": "CalculatedCcyLastQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1057,
+      "Name": "AggressorIndicator",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 1058,
+      "Name": "NoUndlyInstrumentParties",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1059,
+      "Name": "UndlyInstrumentPartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1060,
+      "Name": "UndlyInstrumentPartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 1061,
+      "Name": "UndlyInstrumentPartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 1062,
+      "Name": "NoUndlyInstrumentPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1063,
+      "Name": "UndlyInstrumentPartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1064,
+      "Name": "UndlyInstrumentPartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1065,
+      "Name": "BidSwapPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1066,
+      "Name": "OfferSwapPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1067,
+      "Name": "LegBidForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1068,
+      "Name": "LegOfferForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1069,
+      "Name": "SwapPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1070,
+      "Name": "MDQuoteType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1071,
+      "Name": "LastSwapPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1072,
+      "Name": "SideGrossTradeAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 1073,
+      "Name": "LegLastForwardPoints",
+      "Type": "PriceOffset"
+    },
+    {
+      "Tag": 1074,
+      "Name": "LegCalculatedCcyLastQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1075,
+      "Name": "LegGrossTradeAmt",
+      "Type": "Amt"
+    },
+    {
+      "Tag": 1079,
+      "Name": "MaturityTime",
+      "Type": "TZTimeOnly"
+    },
+    {
+      "Tag": 1080,
+      "Name": "RefOrderID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1081,
+      "Name": "RefOrderIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 1082,
+      "Name": "SecondaryDisplayQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1083,
+      "Name": "DisplayWhen",
+      "Type": "char"
+    },
+    {
+      "Tag": 1084,
+      "Name": "DisplayMethod",
+      "Type": "char"
+    },
+    {
+      "Tag": 1085,
+      "Name": "DisplayLowQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1086,
+      "Name": "DisplayHighQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1087,
+      "Name": "DisplayMinIncr",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1088,
+      "Name": "RefreshQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1089,
+      "Name": "MatchIncrement",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1090,
+      "Name": "MaxPriceLevels",
+      "Type": "int"
+    },
+    {
+      "Tag": 1091,
+      "Name": "PreTradeAnonymity",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 1092,
+      "Name": "PriceProtectionScope",
+      "Type": "char"
+    },
+    {
+      "Tag": 1093,
+      "Name": "LotType",
+      "Type": "char"
+    },
+    {
+      "Tag": 1094,
+      "Name": "PegPriceType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1095,
+      "Name": "PeggedRefPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 1096,
+      "Name": "PegSecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 1097,
+      "Name": "PegSecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1098,
+      "Name": "PegSymbol",
+      "Type": "String"
+    },
+    {
+      "Tag": 1099,
+      "Name": "PegSecurityDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 1100,
+      "Name": "TriggerType",
+      "Type": "char"
+    },
+    {
+      "Tag": 1101,
+      "Name": "TriggerAction",
+      "Type": "char"
+    },
+    {
+      "Tag": 1102,
+      "Name": "TriggerPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 1103,
+      "Name": "TriggerSymbol",
+      "Type": "String"
+    },
+    {
+      "Tag": 1104,
+      "Name": "TriggerSecurityID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1105,
+      "Name": "TriggerSecurityIDSource",
+      "Type": "String"
+    },
+    {
+      "Tag": 1106,
+      "Name": "TriggerSecurityDesc",
+      "Type": "String"
+    },
+    {
+      "Tag": 1107,
+      "Name": "TriggerPriceType",
+      "Type": "char"
+    },
+    {
+      "Tag": 1108,
+      "Name": "TriggerPriceTypeScope",
+      "Type": "char"
+    },
+    {
+      "Tag": 1109,
+      "Name": "TriggerPriceDirection",
+      "Type": "char"
+    },
+    {
+      "Tag": 1110,
+      "Name": "TriggerNewPrice",
+      "Type": "Price"
+    },
+    {
+      "Tag": 1111,
+      "Name": "TriggerOrderType",
+      "Type": "char"
+    },
+    {
+      "Tag": 1112,
+      "Name": "TriggerNewQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1113,
+      "Name": "TriggerTradingSessionID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1114,
+      "Name": "TriggerTradingSessionSubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1115,
+      "Name": "OrderCategory",
+      "Type": "char"
+    },
+    {
+      "Tag": 1116,
+      "Name": "NoRootPartyIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1117,
+      "Name": "RootPartyID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1118,
+      "Name": "RootPartyIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 1119,
+      "Name": "RootPartyRole",
+      "Type": "int"
+    },
+    {
+      "Tag": 1120,
+      "Name": "NoRootPartySubIDs",
+      "Type": "NumInGroup"
+    },
+    {
+      "Tag": 1121,
+      "Name": "RootPartySubID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1122,
+      "Name": "RootPartySubIDType",
+      "Type": "int"
+    },
+    {
+      "Tag": 1123,
+      "Name": "TradeHandlingInstr",
+      "Type": "char"
+    },
+    {
+      "Tag": 1124,
+      "Name": "OrigTradeHandlingInstr",
+      "Type": "char"
+    },
+    {
+      "Tag": 1125,
+      "Name": "OrigTradeDate",
+      "Type": "LocalMktDate"
+    },
+    {
+      "Tag": 1126,
+      "Name": "OrigTradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1127,
+      "Name": "OrigSecondaryTradeID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1128,
+      "Name": "ApplVerID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1129,
+      "Name": "CstmApplVerID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1130,
+      "Name": "RefApplVerID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1131,
+      "Name": "RefCstmApplVerID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1132,
+      "Name": "TZTransactTime",
+      "Type": "TZTimestamp"
+    },
+    {
+      "Tag": 1133,
+      "Name": "ExDestinationIDSource",
+      "Type": "char"
+    },
+    {
+      "Tag": 1134,
+      "Name": "ReportedPxDiff",
+      "Type": "Boolean"
+    },
+    {
+      "Tag": 1135,
+      "Name": "RptSys",
+      "Type": "String"
+    },
+    {
+      "Tag": 1136,
+      "Name": "AllocClearingFeeIndicator",
+      "Type": "String"
+    },
+    {
+      "Tag": 1137,
+      "Name": "DefaultApplVerID",
+      "Type": "String"
+    },
+    {
+      "Tag": 1138,
+      "Name": "DisplayQty",
+      "Type": "Qty"
+    },
+    {
+      "Tag": 1139,
+      "Name": "ExchangeSpecialInstructions",
+      "Type": "String"
+    }
+  ]
+}
