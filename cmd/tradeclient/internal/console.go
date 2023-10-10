@@ -137,7 +137,7 @@ func queryClOrdID() field.ClOrdIDField {
 }
 
 func queryOrigClOrdID() field.OrigClOrdIDField {
-	return field.NewOrigClOrdID(("OrigClOrdID"))
+	return field.NewOrigClOrdID(queryString("OrigClOrdID"))
 }
 
 func querySymbol() field.SymbolField {
