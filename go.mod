@@ -1,6 +1,6 @@
 module github.com/quickfixgo/examples
 
-go 1.19
+go 1.21
 
 require (
 	github.com/fatih/color v1.14.1
@@ -13,7 +13,7 @@ require (
 	github.com/quickfixgo/fix43 v0.1.0
 	github.com/quickfixgo/fix44 v0.1.0
 	github.com/quickfixgo/fix50 v0.1.0
-	github.com/quickfixgo/quickfix v0.7.0
+	github.com/quickfixgo/quickfix v0.8.1
 	github.com/quickfixgo/tag v0.1.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.6.1
@@ -36,10 +36,10 @@ require (
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
-	go.mongodb.org/mongo-driver v1.11.1 // indirect
-	golang.org/x/crypto v0.5.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
+	go.mongodb.org/mongo-driver v1.12.1 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 )
