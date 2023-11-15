@@ -86,4 +86,4 @@ Note: The docker image comes pre-loaded with the default configs. If you want to
 This software is available under the QuickFIX Software License. Please see the [LICENSE](LICENSE) for the terms specified by the QuickFIX Software License.
 
 <br>
-<img width="196" alt="Sponsored by Connamara" src="https://user-images.githubusercontent.com/3065126/212457799-abd6408a-972d-4168-9feb-b80ce1f1ec83.png">
+<img width="208" alt="Sponsored by Connamara" src="https://user-images.githubusercontent.com/3065126/282546730-16220337-4960-48ae-8c2f-760fbaedb135.png">
