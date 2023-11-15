@@ -11,9 +11,10 @@ If you are interested in modifying the examples to suit your own purposes, take 
 * [Executor](cmd/executor/README.md) is a FIX acceptor service that fills every limit order it receives
 * [OrderMatch](cmd/ordermatch/README.md) is a primitive matching engine and FIX acceptor service
 
-All examples have been ported from [QuickFIX](http://quickfixengine.org)
+An initiator service with a web UI for visualizing the quickfix messaging interface can be found in the [trader ui repo](https://github.com/quickfixgo/traderui)
 
-An initiator with a web UI for visualizing the quickfix messaging interface can be found [here](https://github.com/quickfixgo/traderui)
+All examples have been ported from the original [QuickFIX](http://quickfixengine.org)
+
 
 ## Usage
 This project builds a cli tool `qf` with 3 commands corresponding to each example.
