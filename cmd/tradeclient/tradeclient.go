@@ -61,8 +61,6 @@ const (
 	FIX_SEP    = "\u0001"
 	Publickey  = "public key"
 	Privatekey = "private key"
-	// APIKey = "83a538df07046f4430303faf09e9c6933306b5e7f4157b5c0cdc35d16f0f9033"
-	// APIKey = "4044a57206f7494b8692079e720aa911f3234e4d61079db28d36a405ae3630cb"
 	//use the api key ID for now
 	APIKey = "api key"
 )
