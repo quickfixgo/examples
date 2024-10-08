@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"github.com/quickfixgo/examples/cmd/executor"
+	"github.com/quickfixgo/examples/cmd/loadtest"
 	"github.com/quickfixgo/examples/cmd/ordermatch"
 	"github.com/quickfixgo/examples/cmd/tradeclient"
 	"github.com/quickfixgo/examples/version"
@@ -45,6 +46,7 @@ func Execute() error {
 	c.AddCommand(executor.Cmd)
 	c.AddCommand(ordermatch.Cmd)
 	c.AddCommand(tradeclient.Cmd)
+	c.AddCommand(loadtest.Cmd)
 	c.Flags().BoolVarP(&versionF, "version", "v", false, "show the version and exit")
 	return c.Execute()
 }

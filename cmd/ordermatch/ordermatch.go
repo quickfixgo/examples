@@ -184,7 +184,7 @@ func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataReques
 	fmt.Printf("%+v\n", msg)
 	marketdatafullrefresh := marketdatasnapshotfullrefresh.New()
 
-	marketdatafullrefresh.SetSymbol("symbol")
+	marketdatafullrefresh.SetSymbol("BTC/USD")
 	marketdatafullrefresh.SetMDReqID("MDReq1")
 	marketdatafullrefresh.SetProduct(enum.Product_CURRENCY)
 

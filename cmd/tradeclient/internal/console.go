@@ -262,7 +262,7 @@ func queryHeader(h header) {
 	//h.Set(field.NewSenderCompID(senderCompId))
 	//h.Set(field.NewTargetCompID(targetCompId))
 	h.Set(field.NewSenderCompID("CLIENT1_Order"))
-	h.Set(field.NewTargetCompID("ANCHOR"))
+	h.Set(field.NewTargetCompID("A"))
 }
 
 func setHeader(h header, senderCompId string, targetCompId string) {
@@ -572,7 +572,7 @@ func QueryEnterOrder(senderCompId, targetCompId string) (err error) {
 
 		start := time.Now()
 		midsize := 0.01
-		for i := range 1000 {
+		for i := range 1 {
 			if i%2 == 0 {
 				side = "2"
 				qty = fmt.Sprintf("%f", midsize+float64(rand.Intn(10))/1000.0)

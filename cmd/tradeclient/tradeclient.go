@@ -24,7 +24,6 @@ import (
 	"os"
 	"path"
 	"strconv"
-	"time"
 
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 	"github.com/quickfixgo/examples/cmd/utils"
@@ -62,7 +61,8 @@ const (
 	FIX_SEP    = "\u0001"
 	Publickey  = "public key"
 	Privatekey = "private key"
-
+	// APIKey = "83a538df07046f4430303faf09e9c6933306b5e7f4157b5c0cdc35d16f0f9033"
+	// APIKey = "4044a57206f7494b8692079e720aa911f3234e4d61079db28d36a405ae3630cb"
 	//use the api key ID for now
 	APIKey = "api key"
 )
@@ -159,13 +159,19 @@ func execute(cmd *cobra.Command, args []string) error {
 	argLen := len(args)
 	switch argLen {
 	case 0:
-		utils.PrintInfo("FIX config file not provided...")
-		utils.PrintInfo("attempting to use default location './config/tradeclient.cfg' ...")
-		cfgFileName = path.Join("config", "tradeclient.cfg")
+		{
+			utils.PrintInfo("FIX config file not provided...")
+			utils.PrintInfo("attempting to use default location './config/tradeclient.cfg' ...")
+			cfgFileName = path.Join("config", "tradeclient.cfg")
+		}
 	case 1:
-		cfgFileName = args[0]
+		{
+			cfgFileName = args[0]
+		}
 	default:
-		return fmt.Errorf("incorrect argument number")
+		{
+			return fmt.Errorf("incorrect argument number")
+		}
 	}
 
 	cfg, err := os.Open(cfgFileName)
@@ -184,22 +190,9 @@ func execute(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("error reading cfg: %s,", err)
 	}
 
-	// Read orders per second and number of sessions from config
-	globalSettings := appSettings.GlobalSettings()
-	ordersPerSecond := 1 // default value
-	if globalSettings.HasSetting("OrdersPerSecond") {
-		value, _ := globalSettings.Setting("OrdersPerSecond")
-		ordersPerSecond, _ = strconv.Atoi(value)
-	}
-
-	numSessions := 1 // default value
-	if globalSettings.HasSetting("NumSessions") {
-		value, _ := globalSettings.Setting("NumSessions")
-		numSessions, _ = strconv.Atoi(value)
-	}
-
 	app := TradeClient{}
 	fileLogFactory, err := quickfix.NewFileLogFactory(appSettings)
+
 	if err != nil {
 		return fmt.Errorf("error creating file log factory: %s,", err)
 	}
@@ -216,6 +209,17 @@ func execute(cmd *cobra.Command, args []string) error {
 
 	utils.PrintConfig("initiator", bytes.NewReader(stringData))
 
+	/*
+		var senderCompId, targetCompID string
+		globalsettings := appSettings.GlobalSettings()
+		if globalsettings.HasSetting(config.SenderCompID){
+			senderCompId,_ = globalsettings.Setting(config.SenderCompID)
+		}
+		if globalsettings.HasSetting(config.TargetCompID){
+			targetCompID,_ = globalsettings.Setting(config.TargetCompID)
+		}
+	*/
+
 Loop:
 	for {
 		action, err := internal.QueryAction()
@@ -225,29 +229,15 @@ Loop:
 
 		switch action {
 		case "1":
-			for i := 0; i < numSessions; i++ { // Loop for the number of sessions
-				go func(sessionID int) {
-					ticker := time.NewTicker(time.Second / time.Duration(ordersPerSecond))
-					defer ticker.Stop()
-					for {
-						select {
-						case <-ticker.C:
-							err := internal.QueryEnterOrder(fmt.Sprintf("CUST2_Order_%d", sessionID), "ANCHORAGE")
-							if err != nil {
-								utils.PrintBad(err.Error())
-							}
-						}
-					}
-				}(i)
-			}
+			err = internal.QueryEnterOrder("CUST2_Order", "an")
 
 		case "2":
 			err = internal.QueryCancelOrder()
 
 		case "3":
-			err = internal.QueryMarketDataRequest("CUST2_Marketdata", "ANCHORAGE")
+			err = internal.QueryMarketDataRequest("CUST2_Marketdata", "an")
 		case "4":
-			// quit
+			//quit
 			break Loop
 
 		default:
