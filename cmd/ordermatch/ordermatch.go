@@ -25,15 +25,19 @@ import (
 	"path"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/examples/cmd/ordermatch/internal"
 	"github.com/quickfixgo/examples/cmd/utils"
 	"github.com/quickfixgo/field"
-	"github.com/quickfixgo/fix42/executionreport"
-	"github.com/quickfixgo/fix42/marketdatarequest"
-	"github.com/quickfixgo/fix42/newordersingle"
-	"github.com/quickfixgo/fix42/ordercancelrequest"
+	"github.com/quickfixgo/fix44/executionreport"
+	"github.com/quickfixgo/fix44/marketdatarequest"
+	"github.com/quickfixgo/fix44/marketdatasnapshotfullrefresh"
+
+	"github.com/quickfixgo/fix44/newordersingle"
+	"github.com/quickfixgo/fix44/ordercancelrequest"
+	"github.com/shopspring/decimal"
 	"github.com/spf13/cobra"
 
 	"github.com/quickfixgo/quickfix"
@@ -77,11 +81,13 @@ func (a Application) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) 
 
 // FromAdmin implemented as part of Application interface
 func (a Application) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+	fmt.Printf("FromAdmin ###########>%+v\n", msg)
 	return nil
 }
 
 // FromApp implemented as part of Application interface, uses Router on incoming application messages
 func (a *Application) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+	fmt.Printf("FromApp ###########>\n")
 	return a.Route(msg, sessionID)
 }
 
@@ -176,7 +182,49 @@ func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelReq
 
 func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
 	fmt.Printf("%+v\n", msg)
-	return
+	marketdatafullrefresh := marketdatasnapshotfullrefresh.New()
+
+	marketdatafullrefresh.SetSymbol("BTC/USD")
+	marketdatafullrefresh.SetMDReqID("MDReq1")
+	marketdatafullrefresh.SetProduct(enum.Product_CURRENCY)
+
+	noMDEntriesRptGrp := marketdatasnapshotfullrefresh.NewNoMDEntriesRepeatingGroup()
+
+	median_px := 68000.0
+	for i := 0; i < 5; i++ {
+		sz := decimal.NewFromInt(int64(i + 1))
+		noMDEntries0 := noMDEntriesRptGrp.Add()
+		noMDEntries0.SetMDEntryType(enum.MDEntryType_BID)
+		var bid_px = median_px - (float64(i+1) * 5.0)
+		p0 := decimal.NewFromFloat(bid_px)
+		noMDEntries0.SetMDEntryPx(p0, 5)
+		noMDEntries0.SetMDEntrySize(sz, 2)
+
+		noMDEntries1 := noMDEntriesRptGrp.Add()
+		noMDEntries1.SetMDEntryType(enum.MDEntryType_OFFER)
+		var off_px = median_px + (float64(i+1) * 5.0)
+		p1 := decimal.NewFromFloat(off_px)
+		noMDEntries1.SetMDEntryPx(p1, 5)
+		noMDEntries1.SetMDEntrySize(sz, 2)
+	}
+
+	marketdatafullrefresh.SetNoMDEntries(noMDEntriesRptGrp)
+
+	marketdatafullrefresh.Header.SetTargetCompID("TW")
+	marketdatafullrefresh.Header.SetSenderCompID("ISLD")
+
+	sendErr := quickfix.Send(marketdatafullrefresh)
+
+	if sendErr != nil {
+		fmt.Println(sendErr)
+	}
+
+	errUpdate := StartUpdateRefresh()
+	if errUpdate != nil {
+		fmt.Printf("failed to start update refresher!!")
+	}
+
+	return nil
 }
 
 func (a *Application) acceptOrder(order internal.Order) {
@@ -204,10 +252,10 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 	execReport := executionreport.New(
 		field.NewOrderID(order.ClOrdID),
 		field.NewExecID(a.genExecID()),
-		field.NewExecTransType(enum.ExecTransType_NEW),
+		//field.NewExecTransType(enum.ExecTransType_NEW),
 		field.NewExecType(enum.ExecType(status)),
 		field.NewOrdStatus(status),
-		field.NewSymbol(order.Symbol),
+		//field.NewSymbol(order.Symbol),
 		field.NewSide(order.Side),
 		field.NewLeavesQty(order.OpenQuantity(), 2),
 		field.NewCumQty(order.ExecutedQuantity, 2),
@@ -215,10 +263,11 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 	)
 	execReport.SetOrderQty(order.Quantity, 2)
 	execReport.SetClOrdID(order.ClOrdID)
+	execReport.SetSymbol(order.Symbol)
 
 	switch status {
 	case enum.OrdStatus_FILLED, enum.OrdStatus_PARTIALLY_FILLED:
-		execReport.SetLastShares(order.LastExecutedQuantity, 2)
+		execReport.SetLastQty(order.LastExecutedQuantity, 2)
 		execReport.SetLastPx(order.LastExecutedPrice, 2)
 	}
 
@@ -230,6 +279,56 @@ func (a *Application) updateOrder(order internal.Order, status enum.OrdStatus) {
 		fmt.Println(sendErr)
 	}
 
+}
+
+func StartUpdateRefresh() (err error) {
+	fmt.Printf("StartUpdateRefresh==>")
+	go func() {
+		for j := 0; ; j++ {
+
+			time.Sleep(20 * time.Second)
+
+			marketdatafullrefresh := marketdatasnapshotfullrefresh.New()
+
+			marketdatafullrefresh.SetSymbol("BTC/USD")
+			marketdatafullrefresh.SetMDReqID("MDReq" + fmt.Sprint(j))
+			marketdatafullrefresh.SetProduct(enum.Product_CURRENCY)
+
+			noMDEntriesRptGrp := marketdatasnapshotfullrefresh.NewNoMDEntriesRepeatingGroup()
+
+			median_px := 68000.0 + float64(j*2)
+			for i := 0; i < 5; i++ {
+				sz := decimal.NewFromInt(int64(i + 1))
+				sprd := float64(i+1) * 5.0
+
+				noMDEntries0 := noMDEntriesRptGrp.Add()
+				noMDEntries0.SetMDEntryType(enum.MDEntryType_BID)
+				var bid_px = median_px - sprd
+				p0 := decimal.NewFromFloat(bid_px)
+				noMDEntries0.SetMDEntryPx(p0, 5)
+				noMDEntries0.SetMDEntrySize(sz, 2)
+
+				noMDEntries1 := noMDEntriesRptGrp.Add()
+				noMDEntries1.SetMDEntryType(enum.MDEntryType_OFFER)
+				var off_px = median_px + sprd
+				p1 := decimal.NewFromFloat(off_px)
+				noMDEntries1.SetMDEntryPx(p1, 5)
+				noMDEntries1.SetMDEntrySize(sz, 2)
+			}
+
+			marketdatafullrefresh.SetNoMDEntries(noMDEntriesRptGrp)
+
+			marketdatafullrefresh.Header.SetTargetCompID("TW")
+			marketdatafullrefresh.Header.SetSenderCompID("ISLD")
+
+			sendErr := quickfix.Send(marketdatafullrefresh)
+
+			if sendErr != nil {
+				fmt.Println(sendErr)
+			}
+		}
+	}()
+	return nil
 }
 
 const (
