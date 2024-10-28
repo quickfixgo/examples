@@ -1,6 +1,7 @@
 package loadtest
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -20,10 +21,12 @@ type LoadTestConfig struct {
 
 // OrderTimestamp holds the sent, response, and local arrival time of an order.
 type OrderTimestamp struct {
-	SentTime     time.Time
-	ResponseTime time.Time
-	LocalArrival time.Time     // Time when the response is received
-	Latency      time.Duration // Latency calculated
+	SentTime       time.Time
+	ResponseTime   time.Time
+	LocalArrival   time.Time     // Time when the response is received
+	Latency        time.Duration // Latency calculated
+	Status         string        // "success" or "failure"
+	ErrorMessage   string        // Detailed error message in case of failure
 }
 
 // RunLoadTest runs the load test based on the provided configuration.
@@ -35,6 +38,7 @@ func RunLoadTest(cfg LoadTestConfig) {
 	defer outputFile.Close()
 
 	var wg sync.WaitGroup
+	var mu sync.Mutex // Mutex for safely accessing shared resources
 	successCount := 0
 	failureCount := 0
 	timestamps := make([]OrderTimestamp, 0, cfg.TotalOrders)
@@ -55,19 +59,33 @@ func RunLoadTest(cfg LoadTestConfig) {
 
 			// Calculate latency
 			latency := localArrival.Sub(sentTime)
+			status := "success"
+			errorMessage := ""
 
+			// Log failure details if error occurs
+			if err != nil {
+				status = "failure"
+				errorMessage = err.Error()
+				mu.Lock()
+				failureCount++
+				mu.Unlock()
+			} else {
+				mu.Lock()
+				successCount++
+				mu.Unlock()
+			}
+
+			// Append order timestamp with status
+			mu.Lock()
 			timestamps = append(timestamps, OrderTimestamp{
 				SentTime:     sentTime,
 				ResponseTime: responseTime,
 				LocalArrival: localArrival,
 				Latency:      latency,
+				Status:       status,
+				ErrorMessage: errorMessage,
 			})
-
-			if err != nil {
-				failureCount++
-				return
-			}
-			successCount++
+			mu.Unlock()
 		}(i)
 
 		time.Sleep(time.Second / time.Duration(cfg.OrdersPerSecond))
@@ -77,36 +95,24 @@ func RunLoadTest(cfg LoadTestConfig) {
 	wg.Wait()
 	totalTime := time.Since(startTime)
 
-	// Log results only after all orders are processed
+	// Calculate success and failure rates
 	successRate := float64(successCount) / float64(cfg.TotalOrders) * 100
 	failRate := float64(failureCount) / float64(cfg.TotalOrders) * 100
 
-	// Prepare detailed results for logging
+	// Prepare result summary
 	resultSummary := fmt.Sprintf("Sent %d orders in %s\nSuccess Rate: %.2f%%\nFailure Rate: %.2f%%\n",
 		cfg.TotalOrders, totalTime, successRate, failRate)
-
-	// Log the results to output.log
 	if _, err := outputFile.WriteString(resultSummary); err != nil {
 		log.Fatalf("error writing to output.log: %v", err)
 	}
 
-	// Print only a simple message to the console
-	fmt.Println("Load test complete.")
-
-	// Analyze the timestamps and log intervals
-	for i, ts := range timestamps {
-		if i > 0 {
-			interval := ts.ResponseTime.Sub(timestamps[i-1].ResponseTime)
-			if _, err := outputFile.WriteString(fmt.Sprintf("Order %d - Interval from previous response: %v\n", i+1, interval)); err != nil {
-				log.Fatalf("error writing to output.log: %v", err)
-			}
-		}
-		responseTime := ts.ResponseTime.Sub(ts.SentTime)
-		if _, err := outputFile.WriteString(fmt.Sprintf("Order %d - Time taken to process: %v\n", i+1, responseTime)); err != nil {
-			log.Fatalf("error writing to output.log: %v", err)
-		}
-		if _, err := outputFile.WriteString(fmt.Sprintf("Order %d - Latency: %v\n", i+1, ts.Latency)); err != nil {
+	// Log detailed results in JSON format for easy parsing
+	for _, ts := range timestamps {
+		tsJson, _ := json.Marshal(ts)
+		if _, err := outputFile.WriteString(fmt.Sprintf("%s\n", tsJson)); err != nil {
 			log.Fatalf("error writing to output.log: %v", err)
 		}
 	}
+
+	fmt.Println("Load test complete.")
 }
