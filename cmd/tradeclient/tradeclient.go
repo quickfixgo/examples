@@ -60,11 +60,11 @@ func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.Session
 const (
 	FIX_SEP = "\u0001"
 
-	Publickey = "Publickey"
+	Publickey = "2e8fea3e981fe67995454becedecdd74bfcdc346d83a3660cbf71a26e513f014"
 
-	Privatekey = "Privatekey"
+	Privatekey = "7284a20e7c9f033aacf6b8184eb651679e499fb29447cc9f462fbd8155c99d042e8fea3e981fe67995454becedecdd74bfcdc346d83a3660cbf71a26e513f014"
 
-	APIKey = "APIKey"
+	APIKey = "4044a57206f7494b8692079e720aa911f3234e4d61079db28d36a405ae3630cb"
 )
 
 // ToAdmin implemented as part of Application interface

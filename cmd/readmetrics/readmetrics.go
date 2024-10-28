@@ -1,6 +1,3 @@
-// readmetrics.go
-// Package readmetrics provides functionality to read and process metrics from a FIX log file.
-
 package readmetrics
 
 import (
@@ -10,17 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"github.com/spf13/cobra"
 )
-
-// Define the command
-var Cmd = &cobra.Command{
-	Use:   "readmetrics [file]",
-	Short: "Read metrics from a FIX log file",
-	Args:  cobra.ExactArgs(1),
-	RunE:  execute,
-}
 
 // Struct to hold timestamps
 type TestTS struct {
@@ -33,10 +20,8 @@ const (
 	TTimeLayout = "15:04:05.999"
 )
 
-// Execute the readmetrics command
-func execute(cmd *cobra.Command, args []string) error {
-	testFileArg := args[0]
-
+// Execute reads metrics from a specified FIX log file.
+func Execute(testFileArg string) error {
 	// Create the metrics log file
 	metricsLogFile := "metrics.log"
 	metricsLog, err := os.Create(metricsLogFile)

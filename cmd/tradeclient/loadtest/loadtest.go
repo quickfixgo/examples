@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/quickfixgo/examples/cmd/readmetrics"
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 )
 
@@ -21,12 +22,12 @@ type LoadTestConfig struct {
 
 // OrderTimestamp holds the sent, response, and local arrival time of an order.
 type OrderTimestamp struct {
-	SentTime       time.Time
-	ResponseTime   time.Time
-	LocalArrival   time.Time     // Time when the response is received
-	Latency        time.Duration // Latency calculated
-	Status         string        // "success" or "failure"
-	ErrorMessage   string        // Detailed error message in case of failure
+	SentTime     time.Time
+	ResponseTime time.Time
+	LocalArrival time.Time     // Time when the response is received
+	Latency      time.Duration // Latency calculated
+	Status       string        // "success" or "failure"
+	ErrorMessage string        // Detailed error message in case of failure
 }
 
 // RunLoadTest runs the load test based on the provided configuration.
@@ -115,4 +116,11 @@ func RunLoadTest(cfg LoadTestConfig) {
 	}
 
 	fmt.Println("Load test complete.")
+
+	// Call readmetrics after the load test
+	logFile := "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log" // Specify the path to your log file
+	err = readmetrics.Execute(logFile)
+	if err != nil {
+		log.Fatalf("Error executing readmetrics: %v", err)
+	}
 }
