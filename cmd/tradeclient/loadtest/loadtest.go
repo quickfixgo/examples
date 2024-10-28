@@ -39,7 +39,7 @@ func RunLoadTest(cfg LoadTestConfig) {
 	defer outputFile.Close()
 
 	var wg sync.WaitGroup
-	var mu sync.Mutex // Mutex for safely accessing shared resources
+	var mu sync.Mutex
 	successCount := 0
 	failureCount := 0
 	timestamps := make([]OrderTimestamp, 0, cfg.TotalOrders)
@@ -55,15 +55,11 @@ func RunLoadTest(cfg LoadTestConfig) {
 			err := internal.QueryEnterOrder(cfg.SenderCompID, cfg.TargetCompID)
 			responseTime := time.Now()
 
-			// Simulate local arrival time (could be the same as response time for simplicity)
 			localArrival := responseTime
-
-			// Calculate latency
 			latency := localArrival.Sub(sentTime)
 			status := "success"
 			errorMessage := ""
 
-			// Log failure details if error occurs
 			if err != nil {
 				status = "failure"
 				errorMessage = err.Error()
@@ -76,7 +72,6 @@ func RunLoadTest(cfg LoadTestConfig) {
 				mu.Unlock()
 			}
 
-			// Append order timestamp with status
 			mu.Lock()
 			timestamps = append(timestamps, OrderTimestamp{
 				SentTime:     sentTime,
@@ -107,7 +102,7 @@ func RunLoadTest(cfg LoadTestConfig) {
 		log.Fatalf("error writing to output.log: %v", err)
 	}
 
-	// Log detailed results in JSON format for easy parsing
+	// Log detailed results in JSON format
 	for _, ts := range timestamps {
 		tsJson, _ := json.Marshal(ts)
 		if _, err := outputFile.WriteString(fmt.Sprintf("%s\n", tsJson)); err != nil {
@@ -118,8 +113,7 @@ func RunLoadTest(cfg LoadTestConfig) {
 	fmt.Println("Load test complete.")
 
 	// Call readmetrics after the load test
-	logFile := "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log" // Specify the path to your log file
-	err = readmetrics.Execute(logFile)
+	err = readmetrics.Execute()
 	if err != nil {
 		log.Fatalf("Error executing readmetrics: %v", err)
 	}

@@ -18,11 +18,24 @@ type TestTS struct {
 const (
 	LTimeLayout = "15:04:05.999999"
 	TTimeLayout = "15:04:05.999"
+	LogFilePath = "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log"
 )
 
-// Execute reads metrics from a specified FIX log file.
-func Execute(testFileArg string) error {
-	// Create the metrics log file
+// Execute reads and processes metrics from a FIX log file
+func Execute() error {
+	// Open the log file
+	dir, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("error getting working directory: %v", err)
+	}
+
+	logFile, err := os.Open(filepath.Join(dir, LogFilePath))
+	if err != nil {
+		return fmt.Errorf("error opening log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Open metrics log file
 	metricsLogFile := "metrics.log"
 	metricsLog, err := os.Create(metricsLogFile)
 	if err != nil {
@@ -30,26 +43,12 @@ func Execute(testFileArg string) error {
 	}
 	defer metricsLog.Close()
 
-	// Open the input log file
-	dir, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("error getting working directory: %v", err)
-	}
-
-	testFile, err := os.Open(filepath.Join(dir, testFileArg))
-	if err != nil {
-		return fmt.Errorf("error opening %v: %v", testFileArg, err)
-	}
-	defer testFile.Close()
-
-	// Create a scanner to read the file
-	scanner := bufio.NewScanner(testFile)
-
-	// Read the file line by line and process the timestamps
+	// Read log lines and parse timestamps
+	scanner := bufio.NewScanner(logFile)
 	times := make([]TestTS, 0)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "35=D") { // Modify this condition based on your message type
+		if strings.Contains(line, "35=D") { // Filter based on message type
 			sub1 := strings.Split(line, " ")
 			if len(sub1) > 2 {
 				localTime := sub1[1]
@@ -59,44 +58,57 @@ func Execute(testFileArg string) error {
 				}
 
 				sub2 := strings.Split(sub1[2], "\u0001")
-				if len(sub2) > 5 {
-					if strings.Contains(sub2[5], "52=") {
-						sub3 := strings.Split(sub2[5], "-")
-						if len(sub3) > 1 {
-							talosTime := sub3[1]
-							parsedTTime, err := time.Parse(TTimeLayout, talosTime)
-							if err != nil {
-								return fmt.Errorf("error parsing talos time: %v", err)
-							}
-
-							testTS := TestTS{
-								LTime: parsedLTime,
-								TTime: parsedTTime,
-							}
-							times = append(times, testTS)
+				if len(sub2) > 5 && strings.Contains(sub2[5], "52=") {
+					sub3 := strings.Split(sub2[5], "-")
+					if len(sub3) > 1 {
+						talosTime := sub3[1]
+						parsedTTime, err := time.Parse(TTimeLayout, talosTime)
+						if err != nil {
+							return fmt.Errorf("error parsing talos time: %v", err)
 						}
+
+						times = append(times, TestTS{LTime: parsedLTime, TTime: parsedTTime})
 					}
 				}
 			}
 		}
 	}
 
-	// Check for errors during scanning
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading file: %v", err)
-	}
+	// Variables for calculating averages
+	var totalInterval float64
+	var totalLatency float64
 
-	// Calculate latencies and write to the metrics log
+	// Calculate latency and throughput, then write to metrics log
 	for i := 1; i < len(times); i++ {
 		t := times[i]
 		t0 := times[i-1]
 
-		// Convert latency and interval to milliseconds
 		latency := float64(t.LTime.Sub(t.TTime)) / float64(time.Millisecond)
 		interval := float64(t.TTime.Sub(t0.TTime)) / float64(time.Millisecond)
+
+		totalLatency += latency
+		totalInterval += interval
+
+		// Logging the individual message metrics
 		fmt.Fprintf(metricsLog, "Message %d: Interval = %.3fms, Latency = %.3fms\n", i, interval, latency)
 	}
 
-	fmt.Println("Latency metrics logged to metrics.log")
+	// Calculate averages
+	avgLatency := totalLatency / float64(len(times)-1)
+	avgInterval := totalInterval / float64(len(times)-1)
+
+	// Throughput Measurement
+	totalMessages := len(times) - 1 // Total messages should exclude the first (which has no interval)
+	totalDuration := times[len(times)-1].TTime.Sub(times[0].TTime).Seconds()
+	throughput := float64(totalMessages) / totalDuration
+
+	// Write averages and throughput to metrics log
+	fmt.Fprintf(metricsLog, "Average Interval = %.3fms, Average Latency = %.3fms\n", avgInterval, avgLatency)
+	fmt.Fprintf(metricsLog, "Throughput: %.2f messages per second\n", throughput)
+
+	// Print overall metrics to console
+	fmt.Printf("Average Interval = %.3fms, Average Latency = %.3fms\n", avgInterval, avgLatency)
+	fmt.Printf("Throughput: %.2f messages per second\n", throughput)
+	fmt.Println("Latency and throughput metrics logged to metrics.log")
 	return nil
 }

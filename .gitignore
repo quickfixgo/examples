@@ -4,3 +4,5 @@ vendor
 bin
 .exe
 dist/
+metrics.log
+output.log
