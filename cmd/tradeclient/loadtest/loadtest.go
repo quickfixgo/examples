@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"sync"
 	"time"
 
@@ -32,12 +31,6 @@ type OrderTimestamp struct {
 
 // RunLoadTest runs the load test based on the provided configuration.
 func RunLoadTest(cfg LoadTestConfig) {
-	outputFile, err := os.OpenFile("output.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening output.log: %v", err)
-	}
-	defer outputFile.Close()
-
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	successCount := 0
@@ -95,25 +88,21 @@ func RunLoadTest(cfg LoadTestConfig) {
 	successRate := float64(successCount) / float64(cfg.TotalOrders) * 100
 	failRate := float64(failureCount) / float64(cfg.TotalOrders) * 100
 
-	// Prepare result summary
+	// Print result summary to the console (instead of output.log)
 	resultSummary := fmt.Sprintf("Sent %d orders in %s\nSuccess Rate: %.2f%%\nFailure Rate: %.2f%%\n",
 		cfg.TotalOrders, totalTime, successRate, failRate)
-	if _, err := outputFile.WriteString(resultSummary); err != nil {
-		log.Fatalf("error writing to output.log: %v", err)
-	}
+	fmt.Println(resultSummary)
 
-	// Log detailed results in JSON format
+	// Print detailed results in JSON format to the console
 	for _, ts := range timestamps {
 		tsJson, _ := json.Marshal(ts)
-		if _, err := outputFile.WriteString(fmt.Sprintf("%s\n", tsJson)); err != nil {
-			log.Fatalf("error writing to output.log: %v", err)
-		}
+		fmt.Println(string(tsJson))
 	}
 
 	fmt.Println("Load test complete.")
 
 	// Call readmetrics after the load test
-	err = readmetrics.Execute()
+	err := readmetrics.Execute()
 	if err != nil {
 		log.Fatalf("Error executing readmetrics: %v", err)
 	}
