@@ -84,6 +84,16 @@ func Execute() error {
 		return fmt.Errorf("error calculating latencies: %v", err)
 	}
 
+	// Calculate success and failure percentages and write to metrics file
+	filledPct, rejectedPct, err := calculateSuccessFailure()
+	if err != nil {
+		return fmt.Errorf("error calculating success/failure percentages: %v", err)
+	}
+
+	if err := writeMetricsToFile(dir, filledPct, rejectedPct); err != nil {
+		return fmt.Errorf("error writing metrics to file: %v", err)
+	}
+
 	fmt.Printf("Raw Data saved to %s\n", OutputFilePath)
 	return nil
 }
@@ -191,8 +201,8 @@ func CalculateLatenciesToFile(logFilePath string) error {
 	writer := bufio.NewWriter(latencyFile)
 
 	// Write latency data
-	for _, latency := range latencies {
-		_, err := writer.WriteString(fmt.Sprintf("Latency: %d ms\n", latency))
+	for index, latency := range latencies {
+		_, err := writer.WriteString(fmt.Sprintf("Latency %d: %d ms\n", index+1, latency))
 		if err != nil {
 			return fmt.Errorf("error writing to latencies file: %v", err)
 		}
@@ -235,4 +245,69 @@ func CalculateLatenciesToFile(logFilePath string) error {
 	metricsWriter.Flush()
 
 	return nil
+}
+
+// calculateSuccessFailure reads a FIX log file and calculates the success (filled) and failure (rejected) percentages
+func calculateSuccessFailure() (float64, float64, error) {
+	file, err := os.Open(LogFilePath)
+	if err != nil {
+		return 0, 0, fmt.Errorf("failed to open log file: %v", err)
+	}
+	defer file.Close()
+
+	var filledCount, rejectedCount, totalCount int
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// Check if the message type is an Execution Report (35=8)
+		if strings.Contains(line, "35=8") {
+			totalCount++
+
+			// Check for filled (150=F) or rejected (150=8) execution status
+			if strings.Contains(line, "150=F") {
+				filledCount++
+			} else if strings.Contains(line, "150=8") {
+				rejectedCount++
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return 0, 0, fmt.Errorf("failed to scan log file: %v", err)
+	}
+
+	if totalCount == 0 {
+		return 0, 0, fmt.Errorf("no execution reports found in log")
+	}
+
+	filledPercentage := (float64(filledCount) / float64(totalCount)) * 100
+	rejectedPercentage := (float64(rejectedCount) / float64(totalCount)) * 100
+
+	return filledPercentage, rejectedPercentage, nil
+}
+
+// writeMetricsToFile writes the filled and rejected percentages to the metrics file
+func writeMetricsToFile(dir string, filledPct, rejectedPct float64) error {
+	metricsFile, err := os.OpenFile(filepath.Join(dir, "tmp/metrics.txt"), os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("error opening metrics file: %v", err)
+	}
+	defer metricsFile.Close()
+
+	metricsWriter := bufio.NewWriter(metricsFile)
+
+	// Write filled and rejected percentages to the metrics file
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Filled Percentage: %.2f%%\n", filledPct))
+	if err != nil {
+		return fmt.Errorf("error writing filled percentage to metrics file: %v", err)
+	}
+
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Rejected Percentage: %.2f%%\n", rejectedPct))
+	if err != nil {
+		return fmt.Errorf("error writing rejected percentage to metrics file: %v", err)
+	}
+
+	return metricsWriter.Flush()
 }
