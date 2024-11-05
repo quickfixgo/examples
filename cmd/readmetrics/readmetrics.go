@@ -132,7 +132,7 @@ func parseFIXMessage(line string) (LogMetricsEntry, error) {
 }
 
 // CalculateLatenciesToFile reads a log file, calculates latencies for 35=D messages,
-// and writes the latencies to a file in the /tmp directory.
+// and writes the latencies and throughput to a file in the /tmp directory.
 func CalculateLatenciesToFile(logFilePath string) error {
 	file, err := os.Open(logFilePath)
 	if err != nil {
@@ -142,6 +142,7 @@ func CalculateLatenciesToFile(logFilePath string) error {
 
 	dMessages := make(map[string]LogMetricsEntry)
 	latencies := []string{}
+	throughputCounts := make(map[time.Time]int)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -152,18 +153,20 @@ func CalculateLatenciesToFile(logFilePath string) error {
 			continue
 		}
 
+		// Track 35=D message timestamps for latency and throughput
 		if msg.msgType == "D" {
-			// Store 35=D message by ClOrdID
 			dMessages[msg.clOrdID] = msg
+
+			// Round down timestamp to the nearest minute for throughput calculation
+			minute := msg.timestamp.Truncate(time.Minute)
+			throughputCounts[minute]++
 		} else if msg.msgType == "8" && msg.clOrdID != "" {
-			// Calculate latency if a matching 35=D exists
+			// Calculate latency
 			if dMsg, found := dMessages[msg.clOrdID]; found {
 				latency := msg.timestamp.Sub(dMsg.timestamp)
 				latencyMs := latency.Milliseconds()
 				latencies = append(latencies, fmt.Sprintf("ClOrdID: %s, Latency: %d ms", msg.clOrdID, latencyMs))
-
-				// Remove entry to ensure only one latency per ClOrdID
-				delete(dMessages, msg.clOrdID)
+				delete(dMessages, msg.clOrdID) // Remove to avoid multiple calculations for same ClOrdID
 			}
 		}
 	}
@@ -172,6 +175,7 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		return fmt.Errorf("error reading file: %v", err)
 	}
 
+	// Write output to the log_metrics file
 	dir, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("error getting working directory: %v", err)
@@ -183,12 +187,24 @@ func CalculateLatenciesToFile(logFilePath string) error {
 	defer outputFile.Close()
 
 	writer := bufio.NewWriter(outputFile)
+
+	// Write latency data
 	for _, latency := range latencies {
 		_, err := writer.WriteString(latency + "\n")
 		if err != nil {
 			return fmt.Errorf("error writing to log file: %v", err)
 		}
 	}
+
+	// Write throughput data
+	for minute, count := range throughputCounts {
+		throughputStr := fmt.Sprintf("Minute: %s, Throughput: %d orders/min", minute.Format("2006-01-02 15:04"), count)
+		_, err := writer.WriteString(throughputStr + "\n")
+		if err != nil {
+			return fmt.Errorf("error writing throughput to log file: %v", err)
+		}
+	}
+
 	writer.Flush()
 
 	return nil
