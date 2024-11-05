@@ -135,7 +135,7 @@ func parseFIXMessage(line string) (LogMetricsEntry, error) {
 }
 
 // CalculateLatenciesToFile reads a log file, calculates latencies for 35=D messages,
-// and writes the latencies and throughput to a file in the /tmp directory.
+// and writes the latencies and throughput to separate files in the /tmp directory.
 func CalculateLatenciesToFile(logFilePath string) error {
 	file, err := os.Open(logFilePath)
 	if err != nil {
@@ -177,24 +177,24 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		return fmt.Errorf("error reading file: %v", err)
 	}
 
-	// Write output to the log_metrics file
+	// Write latencies to a separate file
 	dir, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("error getting working directory: %v", err)
 	}
-	outputFile, err := os.Create(filepath.Join(dir, "tmp/log_metrics.txt"))
+	latencyFile, err := os.Create(filepath.Join(dir, "tmp/latencies.txt"))
 	if err != nil {
-		return fmt.Errorf("error creating log file: %v", err)
+		return fmt.Errorf("error creating latencies file: %v", err)
 	}
-	defer outputFile.Close()
+	defer latencyFile.Close()
 
-	writer := bufio.NewWriter(outputFile)
+	writer := bufio.NewWriter(latencyFile)
 
 	// Write latency data
 	for _, latency := range latencies {
 		_, err := writer.WriteString(fmt.Sprintf("Latency: %d ms\n", latency))
 		if err != nil {
-			return fmt.Errorf("error writing to log file: %v", err)
+			return fmt.Errorf("error writing to latencies file: %v", err)
 		}
 	}
 
@@ -207,22 +207,32 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		averageLatency /= float64(len(latencies))
 	}
 
-	// Write the average latency to the log file
-	_, err = writer.WriteString(fmt.Sprintf("Average Latency: %.2f ms\n", averageLatency))
+	// Write output for average latency and throughput to another file
+	metricsFile, err := os.Create(filepath.Join(dir, "tmp/metrics.txt"))
 	if err != nil {
-		return fmt.Errorf("error writing average latency to log file: %v", err)
+		return fmt.Errorf("error creating metrics file: %v", err)
+	}
+	defer metricsFile.Close()
+
+	metricsWriter := bufio.NewWriter(metricsFile)
+
+	// Write the average latency to the metrics file
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Average Latency: %.2f ms\n", averageLatency))
+	if err != nil {
+		return fmt.Errorf("error writing average latency to metrics file: %v", err)
 	}
 
 	// Write throughput data
 	for minute, count := range throughputCounts {
 		throughputStr := fmt.Sprintf("Minute: %s, Throughput: %d orders/min\n", minute.Format("2006-01-02 15:04"), count)
-		_, err := writer.WriteString(throughputStr)
+		_, err := metricsWriter.WriteString(throughputStr)
 		if err != nil {
-			return fmt.Errorf("error writing throughput to log file: %v", err)
+			return fmt.Errorf("error writing throughput to metrics file: %v", err)
 		}
 	}
 
 	writer.Flush()
+	metricsWriter.Flush()
 
 	return nil
 }
