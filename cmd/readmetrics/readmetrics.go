@@ -80,7 +80,10 @@ func Execute() error {
 		return fmt.Errorf("error saving to JSON: %v", err)
 	}
 
-	CalculateLatenciesToFile(LogFilePath)
+	if err := CalculateLatenciesToFile(LogFilePath); err != nil {
+		return fmt.Errorf("error calculating latencies: %v", err)
+	}
+
 	fmt.Printf("Raw Data saved to %s\n", OutputFilePath)
 	return nil
 }
@@ -141,7 +144,7 @@ func CalculateLatenciesToFile(logFilePath string) error {
 	defer file.Close()
 
 	dMessages := make(map[string]LogMetricsEntry)
-	latencies := []string{}
+	latencies := []int64{} // Store latencies in an array for average calculation
 	throughputCounts := make(map[time.Time]int)
 
 	scanner := bufio.NewScanner(file)
@@ -163,9 +166,8 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		} else if msg.msgType == "8" && msg.clOrdID != "" {
 			// Calculate latency
 			if dMsg, found := dMessages[msg.clOrdID]; found {
-				latency := msg.timestamp.Sub(dMsg.timestamp)
-				latencyMs := latency.Milliseconds()
-				latencies = append(latencies, fmt.Sprintf("ClOrdID: %s, Latency: %d ms", msg.clOrdID, latencyMs))
+				latency := msg.timestamp.Sub(dMsg.timestamp).Milliseconds()
+				latencies = append(latencies, latency)
 				delete(dMessages, msg.clOrdID) // Remove to avoid multiple calculations for same ClOrdID
 			}
 		}
@@ -190,16 +192,31 @@ func CalculateLatenciesToFile(logFilePath string) error {
 
 	// Write latency data
 	for _, latency := range latencies {
-		_, err := writer.WriteString(latency + "\n")
+		_, err := writer.WriteString(fmt.Sprintf("Latency: %d ms\n", latency))
 		if err != nil {
 			return fmt.Errorf("error writing to log file: %v", err)
 		}
 	}
 
+	// Calculate average latency
+	averageLatency := float64(0)
+	if len(latencies) > 0 {
+		for _, latency := range latencies {
+			averageLatency += float64(latency)
+		}
+		averageLatency /= float64(len(latencies))
+	}
+
+	// Write the average latency to the log file
+	_, err = writer.WriteString(fmt.Sprintf("Average Latency: %.2f ms\n", averageLatency))
+	if err != nil {
+		return fmt.Errorf("error writing average latency to log file: %v", err)
+	}
+
 	// Write throughput data
 	for minute, count := range throughputCounts {
-		throughputStr := fmt.Sprintf("Minute: %s, Throughput: %d orders/min", minute.Format("2006-01-02 15:04"), count)
-		_, err := writer.WriteString(throughputStr + "\n")
+		throughputStr := fmt.Sprintf("Minute: %s, Throughput: %d orders/min\n", minute.Format("2006-01-02 15:04"), count)
+		_, err := writer.WriteString(throughputStr)
 		if err != nil {
 			return fmt.Errorf("error writing throughput to log file: %v", err)
 		}
