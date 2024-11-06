@@ -15,8 +15,6 @@ clean:
 	rm -rf ./bin
 	rm -rf ./tmp
 	rm -rf ./dist
-	rm -f output.log
-	rm -f metrics.log
 
 # Commands for docker images.
 # ----------------------------

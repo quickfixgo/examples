@@ -568,7 +568,7 @@ func QueryEnterOrder(senderCompId, targetCompId string) (err error) {
 
 	case quickfix.BeginStringFIX44:
 		symbol := "BTC-USD"
-		price := "60000"
+		price := "60"
 		var side, qty string
 
 		midsize := 0.01
