@@ -70,7 +70,7 @@ const (
 	// Constants for file paths
 	LogFilePath    = "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log"
 	OutputFilePath = "tmp/log_data.json"
-	TmpDir = "tmp/"
+	TmpDir         = "tmp/"
 )
 
 // ToAdmin implemented as part of Application interface
@@ -132,7 +132,7 @@ func (e TradeClient) sign(logonmsg *quickfix.Message) (string, error) {
 
 // ToApp implemented as part of Application interface
 func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
-	utils.PrintInfo(fmt.Sprintf("Sending: %s", msg.String()))
+	// utils.PrintInfo(fmt.Sprintf("Sending: %s", msg.String()))
 	return
 }
 
