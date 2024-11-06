@@ -11,6 +11,7 @@ import (
 
 // Mock function to simulate reading from a fixed logfile and generating expected latencies
 func TestCalculateLatenciesToFile(t *testing.T) {
+	// Prepare paths for log and temp directory
 	logFilePath := "test_data/test.log"
 	tmpDir := "test_data"
 
@@ -28,6 +29,8 @@ func TestCalculateLatenciesToFile(t *testing.T) {
 	require.NoError(t, err)
 
 	// Define the expected latencies based on the mock data
+	// Latency 1: Time difference between first D message and first 8 message
+	// Latency 2: Time difference between second D message and second 8 message
 	expectedLatencies := []string{
 		"Latency 1: 151 ms\n",
 		"Latency 2: 156 ms\n",
@@ -45,4 +48,7 @@ func TestCalculateLatenciesToFile(t *testing.T) {
 
 	// Verify that the average latency is present and matches the expected value
 	assert.Contains(t, string(metricsData), "Average Latency: 153.50 ms\n", "Average latency is incorrect")
+
+	// Verify that the throughput data is correct
+	assert.Contains(t, string(metricsData), "Minute: 2024-11-06 13:48, Throughput: 2 orders/min", "Throughput data is incorrect")
 }

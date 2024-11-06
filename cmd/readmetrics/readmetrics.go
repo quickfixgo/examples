@@ -80,13 +80,14 @@ func Execute(logFilePath, outputFilePath, tmpDir string) error {
 		return fmt.Errorf("error calculating latencies: %v", err)
 	}
 
-	// Calculate success and failure percentages and write to metrics file
-	filledPct, rejectedPct, err := calculateSuccessFailure(logFilePath)
+	// Count filled and new orders and calculate success rate
+	filledCount, newOrderCount, successRate, err := countFilledOrders(logFilePath)
 	if err != nil {
 		return fmt.Errorf("error calculating success/failure percentages: %v", err)
 	}
 
-	if err := writeMetricsToFile(tmpDir, filledPct, rejectedPct); err != nil {
+	// Write metrics (new orders, filled orders, success rate) to the metrics file
+	if err := writeMetricsToFile(tmpDir, filledCount, newOrderCount, successRate); err != nil {
 		return fmt.Errorf("error writing metrics to file: %v", err)
 	}
 
@@ -239,49 +240,47 @@ func CalculateLatenciesToFile(logFilePath, tmpDir string) error {
 	return nil
 }
 
-// calculateSuccessFailure reads a FIX log file and calculates the success (filled) and failure (rejected) percentages
-func calculateSuccessFailure(logFilePath string) (float64, float64, error) {
+// countFilledOrders reads a FIX log file and counts how many orders were filled (150=F),
+// as well as the number of new orders (35=D), and calculates the success rate.
+func countFilledOrders(logFilePath string) (int, int, float64, error) {
 	file, err := os.Open(logFilePath)
 	if err != nil {
-		return 0, 0, fmt.Errorf("failed to open log file: %v", err)
+		return 0, 0, 0, fmt.Errorf("failed to open log file: %v", err)
 	}
 	defer file.Close()
 
-	var filledCount, rejectedCount, totalCount int
+	var filledCount, newOrderCount int
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		// Check if the message type is an Execution Report (35=8)
-		if strings.Contains(line, "35=8") {
-			totalCount++
+		// Check if the line contains 35=D (new order)
+		if strings.Contains(line, "35=D") {
+			newOrderCount++
+		}
 
-			// Check for filled (150=F) or rejected (150=8) execution status
-			if strings.Contains(line, "150=F") {
-				filledCount++
-			} else if strings.Contains(line, "150=8") {
-				rejectedCount++
-			}
+		// Check if the line contains 150=F (filled order)
+		if strings.Contains(line, "150=F") {
+			filledCount++
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		return 0, 0, fmt.Errorf("failed to scan log file: %v", err)
+		return 0, 0, 0, fmt.Errorf("failed to scan log file: %v", err)
 	}
 
-	if totalCount == 0 {
-		return 0, 0, fmt.Errorf("no execution reports found in log")
+	// Calculate success rate (if newOrderCount > 0 to avoid division by zero)
+	var successRate float64
+	if newOrderCount > 0 {
+		successRate = float64(filledCount) / float64(newOrderCount) * 100
 	}
 
-	filledPercentage := (float64(filledCount) / float64(totalCount)) * 100
-	rejectedPercentage := (float64(rejectedCount) / float64(totalCount)) * 100
-
-	return filledPercentage, rejectedPercentage, nil
+	return filledCount, newOrderCount, successRate, nil
 }
 
-// writeMetricsToFile writes the filled and rejected percentages to the metrics file
-func writeMetricsToFile(tmpDir string, filledPct, rejectedPct float64) error {
+// writeMetricsToFile writes the filled and new orders count, and the success rate to the metrics file
+func writeMetricsToFile(tmpDir string, filledCount, newOrderCount int, successRate float64) error {
 	metricsFile, err := os.OpenFile(filepath.Join(tmpDir, "metrics.txt"), os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening metrics file: %v", err)
@@ -290,15 +289,20 @@ func writeMetricsToFile(tmpDir string, filledPct, rejectedPct float64) error {
 
 	metricsWriter := bufio.NewWriter(metricsFile)
 
-	// Write filled and rejected percentages to the metrics file
-	_, err = metricsWriter.WriteString(fmt.Sprintf("Filled Percentage: %.2f%%\n", filledPct))
+	// Write filled and new orders count, and success rate to the metrics file
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Total New Orders: %v\n", newOrderCount))
 	if err != nil {
-		return fmt.Errorf("error writing filled percentage to metrics file: %v", err)
+		return fmt.Errorf("error writing new orders count to metrics file: %v", err)
 	}
 
-	_, err = metricsWriter.WriteString(fmt.Sprintf("Rejected Percentage: %.2f%%\n", rejectedPct))
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Total Orders Successfully Filled: %v\n", filledCount))
 	if err != nil {
-		return fmt.Errorf("error writing rejected percentage to metrics file: %v", err)
+		return fmt.Errorf("error writing filled orders count to metrics file: %v", err)
+	}
+
+	_, err = metricsWriter.WriteString(fmt.Sprintf("Success Rate: %.2f%%\n", successRate))
+	if err != nil {
+		return fmt.Errorf("error writing success rate to metrics file: %v", err)
 	}
 
 	return metricsWriter.Flush()
