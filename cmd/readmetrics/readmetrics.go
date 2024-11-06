@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-// Constants for file paths
-const LogFilePath = "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log"
-const OutputFilePath = "tmp/log_data.json"
-
 // LogEntry represents a structure for the relevant log information
 type LogEntry struct {
 	MessageType string            `json:"message_type"`
@@ -29,13 +25,13 @@ type LogMetricsEntry struct {
 }
 
 // Execute reads the log file, extracts relevant information, and saves it as JSON
-func Execute() error {
+func Execute(logFilePath, outputFilePath, tmpDir string) error {
 	dir, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("error getting working directory: %v", err)
 	}
 
-	logFile, err := os.Open(filepath.Join(dir, LogFilePath))
+	logFile, err := os.Open(filepath.Join(dir, logFilePath))
 	if err != nil {
 		return fmt.Errorf("error opening log file: %v", err)
 	}
@@ -76,30 +72,30 @@ func Execute() error {
 		return fmt.Errorf("error reading log file: %v", err)
 	}
 
-	if err := saveToJSON(entries); err != nil {
+	if err := saveToJSON(entries, outputFilePath); err != nil {
 		return fmt.Errorf("error saving to JSON: %v", err)
 	}
 
-	if err := CalculateLatenciesToFile(LogFilePath); err != nil {
+	if err := CalculateLatenciesToFile(logFilePath, tmpDir); err != nil {
 		return fmt.Errorf("error calculating latencies: %v", err)
 	}
 
 	// Calculate success and failure percentages and write to metrics file
-	filledPct, rejectedPct, err := calculateSuccessFailure()
+	filledPct, rejectedPct, err := calculateSuccessFailure(logFilePath)
 	if err != nil {
 		return fmt.Errorf("error calculating success/failure percentages: %v", err)
 	}
 
-	if err := writeMetricsToFile(dir, filledPct, rejectedPct); err != nil {
+	if err := writeMetricsToFile(tmpDir, filledPct, rejectedPct); err != nil {
 		return fmt.Errorf("error writing metrics to file: %v", err)
 	}
 
-	fmt.Printf("Raw Data saved to %s\n", OutputFilePath)
+	fmt.Printf("Raw Data saved to %s\n", outputFilePath)
 	return nil
 }
 
 // saveToJSON converts entries to JSON format and saves to a file
-func saveToJSON(entries []LogEntry) error {
+func saveToJSON(entries []LogEntry, outputFilePath string) error {
 	jsonData, err := json.MarshalIndent(entries, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error converting to JSON: %v", err)
@@ -109,7 +105,7 @@ func saveToJSON(entries []LogEntry) error {
 	if err != nil {
 		return fmt.Errorf("error getting working directory: %v", err)
 	}
-	outputFile, err := os.Create(filepath.Join(dir, OutputFilePath))
+	outputFile, err := os.Create(filepath.Join(dir, outputFilePath))
 	if err != nil {
 		return fmt.Errorf("error creating output file: %v", err)
 	}
@@ -145,8 +141,8 @@ func parseFIXMessage(line string) (LogMetricsEntry, error) {
 }
 
 // CalculateLatenciesToFile reads a log file, calculates latencies for 35=D messages,
-// and writes the latencies and throughput to separate files in the /tmp directory.
-func CalculateLatenciesToFile(logFilePath string) error {
+// and writes the latencies and throughput to separate files in the specified directory.
+func CalculateLatenciesToFile(logFilePath, tmpDir string) error {
 	file, err := os.Open(logFilePath)
 	if err != nil {
 		return fmt.Errorf("error opening file: %v", err)
@@ -187,12 +183,8 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		return fmt.Errorf("error reading file: %v", err)
 	}
 
-	// Write latencies to a separate file
-	dir, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("error getting working directory: %v", err)
-	}
-	latencyFile, err := os.Create(filepath.Join(dir, "tmp/latencies.txt"))
+	// Write latencies to a separate file in the tmpDir directory
+	latencyFile, err := os.Create(filepath.Join(tmpDir, "latencies.txt"))
 	if err != nil {
 		return fmt.Errorf("error creating latencies file: %v", err)
 	}
@@ -217,8 +209,8 @@ func CalculateLatenciesToFile(logFilePath string) error {
 		averageLatency /= float64(len(latencies))
 	}
 
-	// Write output for average latency and throughput to another file
-	metricsFile, err := os.Create(filepath.Join(dir, "tmp/metrics.txt"))
+	// Write output for average latency and throughput to another file in tmpDir
+	metricsFile, err := os.Create(filepath.Join(tmpDir, "metrics.txt"))
 	if err != nil {
 		return fmt.Errorf("error creating metrics file: %v", err)
 	}
@@ -248,8 +240,8 @@ func CalculateLatenciesToFile(logFilePath string) error {
 }
 
 // calculateSuccessFailure reads a FIX log file and calculates the success (filled) and failure (rejected) percentages
-func calculateSuccessFailure() (float64, float64, error) {
-	file, err := os.Open(LogFilePath)
+func calculateSuccessFailure(logFilePath string) (float64, float64, error) {
+	file, err := os.Open(logFilePath)
 	if err != nil {
 		return 0, 0, fmt.Errorf("failed to open log file: %v", err)
 	}
@@ -289,8 +281,8 @@ func calculateSuccessFailure() (float64, float64, error) {
 }
 
 // writeMetricsToFile writes the filled and rejected percentages to the metrics file
-func writeMetricsToFile(dir string, filledPct, rejectedPct float64) error {
-	metricsFile, err := os.OpenFile(filepath.Join(dir, "tmp/metrics.txt"), os.O_APPEND|os.O_WRONLY, 0644)
+func writeMetricsToFile(tmpDir string, filledPct, rejectedPct float64) error {
+	metricsFile, err := os.OpenFile(filepath.Join(tmpDir, "metrics.txt"), os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening metrics file: %v", err)
 	}

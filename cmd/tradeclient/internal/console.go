@@ -94,7 +94,8 @@ func QueryAction() (string, error) {
 	fmt.Println("2) Cancel Order")
 	fmt.Println("3) Request Market Data")
 	fmt.Println("4) Run Load Test")
-	fmt.Println("5) Quit") // Updated the option for quitting
+	fmt.Println("5) Read metrics")
+	fmt.Println("6) Quit")
 	fmt.Print("Action: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()

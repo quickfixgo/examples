@@ -21,10 +21,12 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path"
 	"strconv"
 
+	"github.com/quickfixgo/examples/cmd/readmetrics"
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
 	"github.com/quickfixgo/examples/cmd/tradeclient/loadtest"
 	"github.com/quickfixgo/examples/cmd/utils"
@@ -40,7 +42,7 @@ type TradeClient struct {
 
 // OnCreate implemented as part of Application interface
 func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {
-	fmt.Printf("initiator session Id: %s\n", sessionID)
+	// fmt.Printf("initiator session Id: %s\n", sessionID)
 }
 
 // OnLogon implemented as part of Application interface
@@ -48,12 +50,12 @@ func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
 
 // OnLogout implemented as part of Application interface
 func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {
-	fmt.Printf("OnLogout: %s\n", sessionID)
+	// fmt.Printf("OnLogout: %s\n", sessionID)
 }
 
 // FromAdmin implemented as part of Application interface
 func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
-	utils.PrintInfo(fmt.Sprintf("FromAdmin: %s\n", msg.String()))
+	// utils.PrintInfo(fmt.Sprintf("FromAdmin: %s\n", msg.String()))
 	return nil
 }
 
@@ -64,7 +66,11 @@ const (
 
 	Privatekey = "b"
 
-	APIKey = "c"
+	APIKey = "4b"
+	// Constants for file paths
+	LogFilePath    = "tmp/FIX.4.4-CUST2_Order-ANCHORAGE.messages.current.log"
+	OutputFilePath = "tmp/log_data.json"
+	TmpDir = "tmp/"
 )
 
 // ToAdmin implemented as part of Application interface
@@ -83,7 +89,7 @@ func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID
 		msg.Body.Set(field.NewRawData(signature))
 	}
 
-	utils.PrintInfo(fmt.Sprintf("ToAdmin: %s", msg.String()))
+	// utils.PrintInfo(fmt.Sprintf("ToAdmin: %s", msg.String()))
 }
 
 func (e TradeClient) sign(logonmsg *quickfix.Message) (string, error) {
@@ -132,7 +138,7 @@ func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) 
 
 // FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
 func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
-	utils.PrintInfo(fmt.Sprintf("FromApp: %s", msg.String()))
+	// utils.PrintInfo(fmt.Sprintf("FromApp: %s", msg.String()))
 	return
 }
 
@@ -258,6 +264,13 @@ Loop:
 			loadtest.RunLoadTest(loadTestConfig)
 
 		case "5":
+			// Call readmetrics after the load test
+			err := readmetrics.Execute(LogFilePath, OutputFilePath, TmpDir)
+			if err != nil {
+				log.Fatalf("Error executing readmetrics: %v", err)
+			}
+
+		case "6":
 			//quit
 			break Loop
 
