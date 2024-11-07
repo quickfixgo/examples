@@ -16,11 +16,11 @@ type LoadTestConfig struct {
 	TargetCompID    string
 }
 
-// RunLoadTest sends orders based on the provided configuration.
+// sends orders based on the provided configuration.
 func RunLoadTest(cfg LoadTestConfig) {
 	var wg sync.WaitGroup
 
-	// Launch goroutines to send orders at the specified rate
+	// send orders at the specified rate
 	for i := 0; i < cfg.TotalOrders; i++ {
 		wg.Add(1)
 		go func(orderID int) {
@@ -34,4 +34,9 @@ func RunLoadTest(cfg LoadTestConfig) {
 		// Delay to maintain order rate
 		time.Sleep(time.Second / time.Duration(cfg.OrdersPerSecond))
 	}
+
+	// Wait for all goroutines to complete
+	wg.Wait()
+
+	fmt.Println("Load test finished, all orders have been processed.")
 }

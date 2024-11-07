@@ -25,6 +25,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"time"
 
 	"github.com/quickfixgo/examples/cmd/readmetrics"
 	"github.com/quickfixgo/examples/cmd/tradeclient/internal"
@@ -233,10 +234,8 @@ Loop:
 			err = internal.QueryMarketDataRequest("CUST2_Marketdata", "ANCHORAGE")
 
 		case "4":
-			var ordersPerSecond int
-			var totalOrders int
-
 			// Prompt the user for orders per second
+			var ordersPerSecond int
 			fmt.Print("Enter orders per second: ")
 			_, err := fmt.Scanf("%d", &ordersPerSecond)
 			if err != nil {
@@ -245,10 +244,20 @@ Loop:
 			}
 
 			// Prompt the user for total number of orders
+			var totalOrders int
 			fmt.Print("Enter total number of orders: ")
 			_, err = fmt.Scanf("%d", &totalOrders)
 			if err != nil {
 				utils.PrintBad("Invalid input for total orders")
+				break
+			}
+
+			// Ask if the user wants to set a cadency
+			var setCadency string
+			fmt.Print("Do you want to set a cadency for the load test? (yes/no): ")
+			_, err = fmt.Scanf("%s", &setCadency)
+			if err != nil {
+				utils.PrintBad("Invalid input for cadency choice")
 				break
 			}
 
@@ -260,8 +269,41 @@ Loop:
 				TargetCompID:    "ANCHORAGE",
 			}
 
-			// Run the load test
-			loadtest.RunLoadTest(loadTestConfig)
+			if setCadency == "yes" {
+				// Prompt the user for cadency
+				var cadencyInput string
+				fmt.Print("Enter the cadency (e.g., '10m' for 10 minutes, '1d' for every day, '3d' for every 3 days): ")
+				_, err = fmt.Scanf("%s", &cadencyInput)
+				if err != nil {
+					utils.PrintBad("Invalid input for cadency")
+					break
+				}
+
+				// Parse the cadency input into a time.Duration
+				interval, err := time.ParseDuration(cadencyInput)
+				if err != nil {
+					utils.PrintBad("Invalid cadency format")
+					break
+				}
+
+				// Run the load test at the specified interval
+				fmt.Printf("Starting load test every %v...\n", interval)
+
+				// Loop to run the load test at the specified interval
+				for {
+					// Run the load test
+					loadtest.RunLoadTest(loadTestConfig)
+
+					// Wait for the next interval
+					fmt.Printf("Waiting for next load test after %v...\n", interval)
+					time.Sleep(interval)
+				}
+			} else if setCadency == "no" {
+				// Run once without cadency
+				loadtest.RunLoadTest(loadTestConfig)
+			} else {
+				utils.PrintBad("Invalid input for cadency choice")
+			}
 
 		case "5":
 			// Call readmetrics after the load test
