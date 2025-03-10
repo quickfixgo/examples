@@ -319,7 +319,7 @@ func (e *executor) OnFIX43NewOrderSingle(msg fix43nos.NewOrderSingle, sessionID 
 	execReport := fix43er.New(
 		e.genOrderID(),
 		e.genExecID(),
-		field.NewExecType(enum.ExecType_FILL),
+		field.NewExecType(enum.ExecType_TRADE),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
@@ -388,7 +388,7 @@ func (e *executor) OnFIX44NewOrderSingle(msg fix44nos.NewOrderSingle, sessionID 
 	execReport := fix44er.New(
 		e.genOrderID(),
 		e.genExecID(),
-		field.NewExecType(enum.ExecType_FILL),
+		field.NewExecType(enum.ExecType_TRADE),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
@@ -457,7 +457,7 @@ func (e *executor) OnFIX50NewOrderSingle(msg fix50nos.NewOrderSingle, sessionID 
 	execReport := fix50er.New(
 		e.genOrderID(),
 		e.genExecID(),
-		field.NewExecType(enum.ExecType_FILL),
+		field.NewExecType(enum.ExecType_TRADE),
 		field.NewOrdStatus(enum.OrdStatus_FILLED),
 		field.NewSide(side),
 		field.NewLeavesQty(decimal.Zero, 2),
