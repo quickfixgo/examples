@@ -28,6 +28,8 @@ jobs:
         with:
           version: v1.57
           skip-cache: true
+          skip-pkg-cache: true
+          skip-build-cache: true
 
   build:
     name: build
