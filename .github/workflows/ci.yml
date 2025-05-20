@@ -27,7 +27,7 @@ jobs:
         uses: golangci/golangci-lint-action@v4
         with:
           version: v1.57
-          cache: 'skip-cache'
+          skip-cache: true
 
   build:
     name: build
