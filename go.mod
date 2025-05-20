@@ -1,6 +1,8 @@
 module github.com/quickfixgo/examples
 
-go 1.21
+go 1.23
+
+toolchain go1.23.9
 
 require (
 	github.com/fatih/color v1.16.0
