@@ -33,7 +33,7 @@ func Execute() error {
 
 	c := &cobra.Command{
 		Use: "qf",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			if versionF {
 				version.PrintVersion()
 				return nil
