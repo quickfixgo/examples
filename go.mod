@@ -2,8 +2,6 @@ module github.com/quickfixgo/examples
 
 go 1.23
 
-toolchain go1.23.8
-
 require (
 	github.com/fatih/color v1.16.0
 	github.com/gosuri/uitable v0.0.4
