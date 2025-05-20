@@ -150,7 +150,7 @@ func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, _ quic
 	return nil
 }
 
-func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelRequest, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelRequest, _ quickfix.SessionID) quickfix.MessageRejectError {
 	origClOrdID, err := msg.GetOrigClOrdID()
 	if err != nil {
 		return err
@@ -174,7 +174,7 @@ func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelReq
 	return nil
 }
 
-func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
+func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, _ quickfix.SessionID) (err quickfix.MessageRejectError) {
 	fmt.Printf("%+v\n", msg)
 	return
 }

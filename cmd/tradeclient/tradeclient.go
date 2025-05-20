@@ -35,30 +35,30 @@ type TradeClient struct {
 }
 
 // OnCreate implemented as part of Application interface
-func (e TradeClient) OnCreate(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnCreate(_ quickfix.SessionID) {}
 
 // OnLogon implemented as part of Application interface
-func (e TradeClient) OnLogon(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnLogon(_ quickfix.SessionID) {}
 
 // OnLogout implemented as part of Application interface
-func (e TradeClient) OnLogout(sessionID quickfix.SessionID) {}
+func (e TradeClient) OnLogout(_ quickfix.SessionID) {}
 
 // FromAdmin implemented as part of Application interface
-func (e TradeClient) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (e TradeClient) FromAdmin(_ *quickfix.Message, _ quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	return nil
 }
 
 // ToAdmin implemented as part of Application interface
-func (e TradeClient) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
+func (e TradeClient) ToAdmin(_ *quickfix.Message, _ quickfix.SessionID) {}
 
 // ToApp implemented as part of Application interface
-func (e TradeClient) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) (err error) {
+func (e TradeClient) ToApp(msg *quickfix.Message, _ quickfix.SessionID) (err error) {
 	utils.PrintInfo(fmt.Sprintf("Sending: %s", msg.String()))
 	return
 }
 
 // FromApp implemented as part of Application interface. This is the callback for all Application level messages from the counter party.
-func (e TradeClient) FromApp(msg *quickfix.Message, sessionID quickfix.SessionID) (reject quickfix.MessageRejectError) {
+func (e TradeClient) FromApp(msg *quickfix.Message, _ quickfix.SessionID) (reject quickfix.MessageRejectError) {
 	utils.PrintInfo(fmt.Sprintf("FromApp: %s", msg.String()))
 	return
 }
