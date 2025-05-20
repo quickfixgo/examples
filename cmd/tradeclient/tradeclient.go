@@ -27,6 +27,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/quickfixgo/quickfix"
+	"github.com/quickfixgo/quickfix/log/file"
 )
 
 // TradeClient implements the quickfix.Application interface
@@ -117,7 +118,7 @@ func execute(cmd *cobra.Command, args []string) error {
 	}
 
 	app := TradeClient{}
-	fileLogFactory, err := quickfix.NewFileLogFactory(appSettings)
+	fileLogFactory, err := file.NewLogFactory(appSettings)
 
 	if err != nil {
 		return fmt.Errorf("error creating file log factory: %s,", err)
