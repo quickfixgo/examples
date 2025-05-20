@@ -250,7 +250,7 @@ var (
 	}
 )
 
-func execute(cmd *cobra.Command, args []string) error {
+func execute(_ *cobra.Command, args []string) error {
 	var cfgFileName string
 	argLen := len(args)
 	switch argLen {

@@ -79,12 +79,12 @@ func (e *executor) genExecID() field.ExecIDField {
 }
 
 // quickfix.Application interface
-func (e executor) OnCreate(sessionID quickfix.SessionID)                           {}
-func (e executor) OnLogon(sessionID quickfix.SessionID)                            {}
-func (e executor) OnLogout(sessionID quickfix.SessionID)                           {}
-func (e executor) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID)     {}
-func (e executor) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error { return nil }
-func (e executor) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (e executor) OnCreate(_ quickfix.SessionID)                         {}
+func (e executor) OnLogon(_ quickfix.SessionID)                          {}
+func (e executor) OnLogout(_ quickfix.SessionID)                         {}
+func (e executor) ToAdmin(_ *quickfix.Message, _ quickfix.SessionID)     {}
+func (e executor) ToApp(_ *quickfix.Message, _ quickfix.SessionID) error { return nil }
+func (e executor) FromAdmin(_ *quickfix.Message, _ quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
 
@@ -505,7 +505,7 @@ var (
 	}
 )
 
-func execute(cmd *cobra.Command, args []string) error {
+func execute(_ *cobra.Command, args []string) error {
 	var cfgFileName string
 	argLen := len(args)
 	switch argLen {
