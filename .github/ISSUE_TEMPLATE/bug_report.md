@@ -19,8 +19,8 @@ A clear description of what you expected to happen.
 
 **system information:**
  - OS: [e.g. Linux]
- - Go version [e.g. Go 1.21.xx]
- - QF/Go Version [e.g. v0.8.1]
+ - Go version [e.g. Go 1.23.xx]
+ - QF/Go Version [e.g. v0.9.7]
 
 **Additional context**
 Add any other context about the problem here.

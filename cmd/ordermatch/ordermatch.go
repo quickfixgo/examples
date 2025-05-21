@@ -59,24 +59,24 @@ func newApplication() *Application {
 }
 
 // OnCreate implemented as part of Application interface
-func (a Application) OnCreate(sessionID quickfix.SessionID) {}
+func (a Application) OnCreate(_ quickfix.SessionID) {}
 
 // OnLogon implemented as part of Application interface
-func (a Application) OnLogon(sessionID quickfix.SessionID) {}
+func (a Application) OnLogon(_ quickfix.SessionID) {}
 
 // OnLogout implemented as part of Application interface
-func (a Application) OnLogout(sessionID quickfix.SessionID) {}
+func (a Application) OnLogout(_ quickfix.SessionID) {}
 
 // ToAdmin implemented as part of Application interface
-func (a Application) ToAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) {}
+func (a Application) ToAdmin(_ *quickfix.Message, _ quickfix.SessionID) {}
 
 // ToApp implemented as part of Application interface
-func (a Application) ToApp(msg *quickfix.Message, sessionID quickfix.SessionID) error {
+func (a Application) ToApp(_ *quickfix.Message, _ quickfix.SessionID) error {
 	return nil
 }
 
 // FromAdmin implemented as part of Application interface
-func (a Application) FromAdmin(msg *quickfix.Message, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (a Application) FromAdmin(_ *quickfix.Message, _ quickfix.SessionID) quickfix.MessageRejectError {
 	return nil
 }
 
@@ -85,7 +85,7 @@ func (a *Application) FromApp(msg *quickfix.Message, sessionID quickfix.SessionI
 	return a.Route(msg, sessionID)
 }
 
-func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, _ quickfix.SessionID) quickfix.MessageRejectError {
 	clOrdID, err := msg.GetClOrdID()
 	if err != nil {
 		return err
@@ -150,7 +150,7 @@ func (a *Application) onNewOrderSingle(msg newordersingle.NewOrderSingle, sessio
 	return nil
 }
 
-func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelRequest, sessionID quickfix.SessionID) quickfix.MessageRejectError {
+func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelRequest, _ quickfix.SessionID) quickfix.MessageRejectError {
 	origClOrdID, err := msg.GetOrigClOrdID()
 	if err != nil {
 		return err
@@ -174,7 +174,7 @@ func (a *Application) onOrderCancelRequest(msg ordercancelrequest.OrderCancelReq
 	return nil
 }
 
-func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, sessionID quickfix.SessionID) (err quickfix.MessageRejectError) {
+func (a *Application) onMarketDataRequest(msg marketdatarequest.MarketDataRequest, _ quickfix.SessionID) (err quickfix.MessageRejectError) {
 	fmt.Printf("%+v\n", msg)
 	return
 }
@@ -250,7 +250,7 @@ var (
 	}
 )
 
-func execute(cmd *cobra.Command, args []string) error {
+func execute(_ *cobra.Command, args []string) error {
 	var cfgFileName string
 	argLen := len(args)
 	switch argLen {

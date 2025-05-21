@@ -40,7 +40,7 @@ type Order struct {
 }
 
 func (o Order) IsClosed() bool {
-	return o.OpenQuantity().Equals(decimal.Zero)
+	return o.OpenQuantity().Equal(decimal.Zero)
 }
 
 func (o Order) OpenQuantity() decimal.Decimal {
